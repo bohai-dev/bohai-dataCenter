@@ -16,7 +16,7 @@
       <setting name="useGeneratedKeys" value="false"/>
       <setting name="autoMappingBehavior" value="PARTIAL"/>
       <setting name="defaultExecutorType" value="SIMPLE"/>
-      <setting name="defaultStatementTimeout" value="25"/>
+      <setting name="defaultStatementTimeout" value="500"/>
       <setting name="defaultFetchSize" value="100"/>
       <setting name="safeRowBoundsEnabled" value="false"/>
       <setting name="mapUnderscoreToCamelCase" value="false"/>

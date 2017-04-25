@@ -15,5 +15,12 @@ public interface TradeDataService {
 	 * @throws BohaiException
 	 */
 	public void saveOrUpdate(TradeData tradeData) throws BohaiException;
+	
+	/**
+	 * 根据时间删除数据
+	 * @param dateSte
+	 * @throws BohaiException
+	 */
+	public void removeByDate(String dateStr) throws BohaiException;
 
 }

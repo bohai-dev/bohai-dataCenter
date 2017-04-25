@@ -27,6 +27,6 @@ public interface CloseDataMapper {
     @Select("select count(1) from t_close_data where DEAL_SERIAL = #{1} and INVESTOR_NO = #{0} and TRADE_DATE = #{2}")
     int countByInvestorNoAndSerial(String investor, String serial, String tradeDate);
     
-    @Delete("delete from t_close_data where tradeDate = #{0}")
+    @Delete("delete from t_close_data where trade_Date = #{0}")
     int removeByDate(String date);
 }

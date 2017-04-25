@@ -1,5 +1,6 @@
 package com.bohai.dataCenter.persistence;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
 
 import com.bohai.dataCenter.entity.TradeData;
@@ -21,6 +22,9 @@ public interface TradeDataMapper {
      */
     int insertSelective(TradeData record);
     
-    @Select("select count(1) from t_trade_data where SERIAL_NO = #{1} and INVESTOR_NO = #{0} and TRADE_DATE = #{2}")
-    int countByInvestorNoAndSerial(String investor, String serial, String tradeDate);
+    @Select("select count(1) from t_trade_data where SERIAL_NO = #{1} and INVESTOR_NO = #{0} and TRADE_DATE = #{2} and INSTRUMENT = #{3}")
+    int countByInvestorNoAndSerial(String investor, String serial, String tradeDate, String instrument);
+    
+    @Delete("delete from t_trade_data where TRADE_DATE = #{0}")
+    int deleteByDate(String dateStr);
 }

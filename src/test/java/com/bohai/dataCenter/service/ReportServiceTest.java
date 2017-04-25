@@ -20,7 +20,7 @@ public class ReportServiceTest extends AbstractJUnit4SpringContextTests{
 
 
 		CountExchangeRebateParamVO paramVO = new CountExchangeRebateParamVO();
-		paramVO.setMonth("2017-04");
+		paramVO.setMonth("2017-03");
 		
 		this.reportService.countExchangeRebate(paramVO);
 	}

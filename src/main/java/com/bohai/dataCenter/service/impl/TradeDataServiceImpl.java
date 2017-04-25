@@ -21,23 +21,35 @@ public class TradeDataServiceImpl implements TradeDataService {
 	@Override
 	public void saveOrUpdate(TradeData tradeData) throws BohaiException {
 
-		String investor = tradeData.getInvestorNo();
+		/*String investor = tradeData.getInvestorNo();
 		
 		String serial = tradeData.getSerialNo();
 		
 		String tradeDate = tradeData.getTradeDate();
 		
-		int count = this.tradeDataMapper.countByInvestorNoAndSerial(investor, serial, tradeDate);
+		String instrument = tradeData.getInstrument();
+		*/
 		
-		if(count == 0){
-			try {
-				this.tradeDataMapper.insert(tradeData);
-			} catch (Exception e) {
-				logger.error("保存期货交易明细失败:"+JSON.toJSONString(tradeData),e);
-				throw new BohaiException("", "保存期货交易明细失败");
-			}
+		//自成交查询     交易流水号相同   投资者编号相同  
+		//int count = this.tradeDataMapper.countByInvestorNoAndSerial(investor, serial, tradeDate, instrument);
+		
+		/*if(count == 0){
+			
+		}*/
+		
+		try {
+			this.tradeDataMapper.insert(tradeData);
+		} catch (Exception e) {
+			logger.error("保存期货交易明细失败:"+JSON.toJSONString(tradeData),e);
+			throw new BohaiException("", "保存期货交易明细失败");
 		}
+	}
 
+	@Override
+	public void removeByDate(String dateStr) throws BohaiException {
+
+		int count = this.tradeDataMapper.deleteByDate(dateStr);
+		logger.debug("共删除"+count+"条成交明细");
 	}
 
 }

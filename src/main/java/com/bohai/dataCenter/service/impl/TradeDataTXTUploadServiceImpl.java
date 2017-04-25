@@ -3,6 +3,9 @@ package com.bohai.dataCenter.service.impl;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -16,6 +19,7 @@ import com.bohai.dataCenter.controller.exception.BohaiException;
 import com.bohai.dataCenter.entity.TradeData;
 import com.bohai.dataCenter.service.FileUploadService;
 import com.bohai.dataCenter.service.TradeDataService;
+import com.bohai.dataCenter.util.DateFormatterUtil;
 
 @Service("tradeDataTXTUploadService")
 public class TradeDataTXTUploadServiceImpl implements FileUploadService {
@@ -29,6 +33,23 @@ public class TradeDataTXTUploadServiceImpl implements FileUploadService {
 	public void upload(MultipartFile file,Object... objects) throws BohaiException {
 		
 		logger.debug("上传期货交易明细数据");
+		
+		//文件名
+		String fileName = (String) objects[0];
+		//获取日期
+		String dateStr = fileName.substring(11,19);
+		logger.debug("交易日为："+dateStr);
+		try {
+			Date tradeDate = DateFormatterUtil.getDateyyyyMMdd(dateStr);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			dateStr = sdf.format(tradeDate);
+			//删除历史数据
+			this.tradeDataService.removeByDate(dateStr);
+		} catch (ParseException e1) {
+			logger.error("时间格式转换错误");
+			throw new BohaiException("", "时间格式转换错误");
+		}
+		
 		
 		try {
 			Reader in = new InputStreamReader(file.getInputStream(),"GBK");

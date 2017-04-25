@@ -93,7 +93,7 @@ public class FileUploadController {
 		try {
 			fileName = new String(file.getOriginalFilename().getBytes("ISO-8859-1"),"UTF-8");
 			logger.debug(fileName);
-			exchangeRebateUploadFactory.createService(fileName).upload(file);
+			exchangeRebateUploadFactory.createService(fileName).upload(file,fileName);
 			
 		} catch (UnsupportedEncodingException e1) {
 			logger.error("格式不支持",e1);

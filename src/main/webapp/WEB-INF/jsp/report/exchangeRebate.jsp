@@ -137,6 +137,29 @@
              }); 
         }
         
+        function queryExchangeRebateReport(){
+        	var reportMonth = $("#reportMonth").val();
+            if(reportMonth == "" || reportMonth == undefined || reportMonth == null){
+                alert("请先选择统计年月！");
+                return;
+            }
+            
+            var param = {month:reportMonth,
+            		depName:$("#depName").val()};
+            
+            
+            
+            $.ajax({
+                type: "POST",
+                url: "countRebatReport",
+                data: JSON.stringify(param),
+                contentType: "application/json;charset=UTF-8",
+                success: function (date, status){
+                    alert("统计完成！");
+                }
+             }); 
+        }
+        
         
     </script>
   </head>
@@ -179,7 +202,7 @@
           <h4 class="page-header"><a href="toHome" style="text-decoration: none;"><i class="glyphicon glyphicon-home"></i></a> --> <a href="toRebateReport" style="text-decoration: none;">统计报表</a> --> <a href="toExchangeRebateReport" style="text-decoration: none;">交易所返还统计表</a></h1>
           </h4>
           <div class="row placeholders">
-            <label class="control-label">请上传****trddata****.txt文件</label>
+            <label class="control-label">请上传成交明细和平仓明细文件</label>
             <input id="finput" type="file" class="file" multiple >
             <script type="text/javascript">
                $("#finput").fileinput({
@@ -210,10 +233,8 @@
 
               <!-- Nav tabs -->
               <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">返利息统计表</a></li>
-                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">返利息明细</a></li>
-                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
-                <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">交易所返佣月统计表</a></li>
+                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"></a></li>
               </ul>
             
               <!-- Tab panes -->
@@ -224,36 +245,14 @@
                       <form class="form-horizontal" style="margin-top: 30px">
                           <div class="form-group">
                           
-	                            <label for="reportMonth" class="col-sm-2 col-md-1 col-md-offset-1 control-label">统计年月</label>
+	                            <label for="reportMonth" class="col-sm-2 col-md-1 col-md-offset-2 control-label">统计年月</label>
 	                            <div class="col-sm-10 col-md-2">
 	                              <input type="text" class="form-control" id="reportMonth">
 	                            </div>
 	                            
-	                            <label for="depName" class="col-sm-2 col-md-1 control-label">营业部名称</label>
+	                            <label for="depName" class="col-sm-2 col-md-1 control-label">机构名称</label>
 	                            <div class="col-sm-10 col-md-2">
 	                              <input type="text" class="form-control" id="depName">
-	                            </div>
-	                            
-	                            <label for="investorNo" class="col-sm-2 col-md-1 control-label">投资者账号</label>
-	                            <div class="col-sm-10 col-md-2">
-	                              <input type="text" class="form-control" id="investorNo">
-	                            </div>
-                            
-                          </div>
-                          <div class="form-group">
-                                <label for="investorName" class="col-sm-2 col-md-1 col-md-offset-1 control-label">投资者姓名</label>
-	                            <div class="col-sm-10 col-md-2">
-	                              <input type="text" class="form-control" id="investorName">
-	                            </div>
-                                
-                                <label for="mediatorNo" class="col-sm-2 col-md-1 control-label">居间人编号</label>
-	                            <div class="col-sm-10 col-md-2">
-	                              <input type="text" class="form-control" id="mediatorNo">
-	                            </div>
-	                            
-	                            <label for="mediatorName" class="col-sm-2 col-md-1 control-label">居间人姓名</label>
-	                            <div class="col-sm-10 col-md-2">
-	                              <input type="text" class="form-control" id="mediatorName">
 	                            </div>
                           </div>
                           
@@ -277,22 +276,23 @@
                                data-show-columns="true"
                                data-detail-view="true"
                                data-detail-formatter="detailFormatter"
-                               data-height="542"
-                               data-url="queryRebateReport"
+                               data-height="564"
+                               data-url="queryExchangeRebateReport"
                                data-pagination="true"
                                data-method="get"
                                data-page-list="[5, 10, 20, 50]"
                                data-search="true"
-                               data-height="300">
+                               data-show-footer="true">
                             <thead>
                             <tr>
                                 <!-- <th data-field="state" data-checkbox="true"></th> -->
-                                <th data-field="INVESTOR_NO" data-align="center" >投资者编号</th>
-                                <th data-field="INVESTOR_NAME" data-align="center" >投资者姓名</th>
-                                <th data-field="MEDIATOR_NAME" data-align="center" >居间人姓名姓名</th>
-                                <th data-field="DEPT_NAME" data-align="center" >营业部</th>
-                                <th data-field="AVAILABLE_FUNDS" data-align="center" >可用资金</th>
-                                <th data-field="INTEREST_AMOUNT" data-align="center" >利息</th>
+                                <th data-field="month" data-align="center" >统计月份</th>
+                                <th data-field="depName" data-align="center" >机构名称</th>
+                                <th data-field="srebate" data-align="center" >上期所返还</th>
+                                <th data-field="zrebate" data-align="center" >郑商所返还</th>
+                                <th data-field="drebate" data-align="center" >大商所返还</th>
+                                <th data-field="jrebate" data-align="center" >中金所返还</th>
+                                <th data-field="sum" data-align="center" >合计</th>
                             </tr>
                             </thead>
                         </table>
@@ -300,7 +300,7 @@
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="profile">
                 
-                    <!-- 返利息明细查询条件表单 -->
+                    <!-- 交易所返佣查询条件表单-->
                       <form class="form-horizontal" style="margin-top: 30px">
                           <div class="form-group">
                           
@@ -319,41 +319,12 @@
                                   <input type="text" class="form-control" id="depName">
                                 </div>
                                 
-                          </div>
-                          <div class="form-group">
-                          
-                                <label for="investorNo" class="col-sm-2 col-md-1 col-md-offset-1 control-label">投资者账号</label>
-                                <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="investorNo">
-                                </div>
-                                
-                                <label for="investorName" class="col-sm-2 col-md-1 control-label">投资者姓名</label>
-                                <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="investorName">
-                                </div>
-                                
-                                <label for="mediatorNo" class="col-sm-2 col-md-1 control-label">居间人编号</label>
-                                <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="mediatorNo">
-                                </div>
-                                
-                          </div>
-                          
-                          <div class="form-group">
-                          
-                            <label for="mediatorName" class="col-sm-2 col-md-1 col-md-offset-1 control-label">居间人姓名</label>
-                            <div class="col-sm-10 col-md-2">
-                              <input type="text" class="form-control" id="mediatorName">
-                            </div>
-                            
-                            <div class="col-sm-offset-2 col-sm-10 col-md-2 col-md-offset-1">
-                              <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="">
-                            </div>
-                            
+                                <div class="col-sm-offset-2 col-sm-10 col-md-2 col-md-offset-1">
+	                              <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryExchangeRebateReport()">
+	                            </div>
                           </div>
                       </form>
-                      <!-- 返利息明细查询条件表单结束 -->
-                      
+                      <!-- 交易所返佣查询条件表单结束 -->
                       
                     <div class="table-responsive">
                         <table class="table table-striped"

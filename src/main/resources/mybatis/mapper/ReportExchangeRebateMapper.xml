@@ -132,4 +132,25 @@
     where MONTH = #{0,jdbcType=VARCHAR}
     and DEP_NAME = #{1,jdbcType=VARCHAR}
   </select>
+  
+  <!-- 根据条件查询交易所返佣 selectByCondition -->
+  <select id="selectByCondition" parameterType="com.bohai.dataCenter.vo.QueryExchangeRebateParamVO" resultMap="BaseResultMap">
+    select MONTH ,
+	DEP_NAME ,
+	DEP_CODE ,
+	SREBATE ,
+	ZREBATE ,
+	JREBATE ,
+	round(DREBATE,2) as DREBATE ,
+	CREATE_TIME ,
+	UPDATE_TIME  from T_REPORT_EXCHANGE_REBATE
+	<where>
+	   <if test="month != null">
+	       MONTH = #{month,jdbcType=VARCHAR}
+	   </if>
+	   <if test="depName != null" >
+	       and DEP_NAME like CONCAT('%',#{depName,jdbcType=VARCHAR},'%')
+	   </if>
+	</where> 
+  </select>
 </mapper>

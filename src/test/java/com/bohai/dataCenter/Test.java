@@ -7,6 +7,6 @@ public class Test {
 		
 		System.out.println("10000000-20000000".indexOf("-"));
 		System.out.println("10000000-20000000".substring(0, "10000000-20000000".indexOf("-")));
-		System.out.println("10000000-20000000".substring(8+1));
+		System.out.println("0008trddata20170301".substring(11,19));
 	}
 }

@@ -18,6 +18,7 @@ import com.bohai.dataCenter.entity.ReportRebate;
 import com.bohai.dataCenter.service.ReportExchangeRebateService;
 import com.bohai.dataCenter.service.ReportRebateService;
 import com.bohai.dataCenter.service.ReportService;
+import com.bohai.dataCenter.vo.CountExchangeRebateParamVO;
 import com.bohai.dataCenter.vo.CountRebatReportParamVO;
 import com.bohai.dataCenter.vo.QueryExchangeRebateParamVO;
 
@@ -70,9 +71,9 @@ public class ReportController {
 	
 	@RequestMapping(value="countExchangeRebate",method=RequestMethod.POST)
 	@ResponseBody
-	public void countExchangeRebate(@RequestBody CountRebatReportParamVO paramVO) throws BohaiException{
+	public void countExchangeRebate(@RequestBody CountExchangeRebateParamVO paramVO) throws BohaiException{
 		logger.debug("统计交易所返还报表入参："+JSON.toJSONString(paramVO));
-		this.reportService.countRebatReport(paramVO);
+		this.reportService.countExchangeRebate(paramVO);
 		logger.debug("统计完成");
 	}
 	
@@ -104,7 +105,7 @@ public class ReportController {
 	 */
 	@RequestMapping(value="queryExchangeRebateReport")
 	@ResponseBody
-	public List<ReportExchangeRebate> queryExchangeRebateReport(@RequestBody QueryExchangeRebateParamVO paramVO) throws BohaiException{
+	public List<ReportExchangeRebate> queryExchangeRebateReport(@RequestBody(required=false) QueryExchangeRebateParamVO paramVO) throws BohaiException{
 		
 		return this.reportExchangeRebateService.queryExchangeRebate(paramVO);
 	}

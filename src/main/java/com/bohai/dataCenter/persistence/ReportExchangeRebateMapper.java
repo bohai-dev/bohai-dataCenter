@@ -1,8 +1,11 @@
 package com.bohai.dataCenter.persistence;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Select;
 
 import com.bohai.dataCenter.entity.ReportExchangeRebate;
+import com.bohai.dataCenter.vo.QueryExchangeRebateParamVO;
 
 public interface ReportExchangeRebateMapper {
     /**
@@ -32,4 +35,6 @@ public interface ReportExchangeRebateMapper {
     int countByMonthAndDep(String month,String depName);
     
     ReportExchangeRebate selectByMonthAndDep(String month,String depName);
+    
+    List<ReportExchangeRebate> selectByCondition(QueryExchangeRebateParamVO paramVO);
 }
