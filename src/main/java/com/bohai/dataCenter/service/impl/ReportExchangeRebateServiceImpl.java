@@ -102,6 +102,8 @@ public class ReportExchangeRebateServiceImpl implements ReportExchangeRebateServ
 
 	@Override
 	public List<ReportExchangeRebate> queryExchangeRebate(QueryExchangeRebateParamVO paramVO) throws BohaiException {
+		
+		
 		return this.reportExchangeRebateMapper.selectByCondition(paramVO);
 	}
 

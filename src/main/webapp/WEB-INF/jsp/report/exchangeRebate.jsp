@@ -138,28 +138,23 @@
         }
         
         function queryExchangeRebateReport(){
-        	var reportMonth = $("#reportMonth").val();
+            var reportMonth = $("#reportMonth").val();
             if(reportMonth == "" || reportMonth == undefined || reportMonth == null){
                 alert("请先选择统计年月！");
                 return;
             }
             
             var param = {month:reportMonth,
-            		depName:$("#depName").val()};
+                    depName:$("#depName").val()};
             
-            
-            
-            $.ajax({
-                type: "POST",
-                url: "countRebatReport",
-                data: JSON.stringify(param),
-                contentType: "application/json;charset=UTF-8",
-                success: function (date, status){
-                    alert("统计完成！");
-                }
-             }); 
+            $("#exchangeRebateTable").bootstrapTable(
+                'refresh',{url:"queryExchangeRebateReport",
+                           query: {month:reportMonth,
+                                   depName:$("#depName").val()
+                                   }
+                          }
+            );
         }
-        
         
     </script>
   </head>
@@ -245,20 +240,20 @@
                       <form class="form-horizontal" style="margin-top: 30px">
                           <div class="form-group">
                           
-	                            <label for="reportMonth" class="col-sm-2 col-md-1 col-md-offset-2 control-label">统计年月</label>
-	                            <div class="col-sm-10 col-md-2">
-	                              <input type="text" class="form-control" id="reportMonth">
-	                            </div>
-	                            
-	                            <label for="depName" class="col-sm-2 col-md-1 control-label">机构名称</label>
-	                            <div class="col-sm-10 col-md-2">
-	                              <input type="text" class="form-control" id="depName">
-	                            </div>
+                                <label for="reportMonth" class="col-sm-2 col-md-1 col-md-offset-2 control-label">统计年月</label>
+                                <div class="col-sm-10 col-md-2">
+                                  <input type="text" class="form-control" id="reportMonth">
+                                </div>
+                                
+                                <label for="depName" class="col-sm-2 col-md-1 control-label">机构名称</label>
+                                <div class="col-sm-10 col-md-2">
+                                  <input type="text" class="form-control" id="depName">
+                                </div>
                           </div>
                           
                           <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10 col-md-2 col-md-offset-5 ">
-                              <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="">
+                              <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryExchangeRebateReport()">
                             </div>
                           </div>
                       </form>
@@ -268,7 +263,8 @@
                         <div id="toolbar" class="btn-group">
                             
                         </div>
-                        <table class="table table-striped"
+                        <!-- data-url="queryExchangeRebateReport" -->
+                        <table class="table table-striped" id="exchangeRebateTable"
                                data-toggle="table" 
                                data-toolbar="#toolbar"
                                data-show-refresh="true"
@@ -277,9 +273,8 @@
                                data-detail-view="true"
                                data-detail-formatter="detailFormatter"
                                data-height="564"
-                               data-url="queryExchangeRebateReport"
                                data-pagination="true"
-                               data-method="get"
+                               data-method="post"
                                data-page-list="[5, 10, 20, 50]"
                                data-search="true"
                                data-show-footer="true">
@@ -320,8 +315,8 @@
                                 </div>
                                 
                                 <div class="col-sm-offset-2 col-sm-10 col-md-2 col-md-offset-1">
-	                              <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryExchangeRebateReport()">
-	                            </div>
+                                  <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryExchangeRebateReport()">
+                                </div>
                           </div>
                       </form>
                       <!-- 交易所返佣查询条件表单结束 -->

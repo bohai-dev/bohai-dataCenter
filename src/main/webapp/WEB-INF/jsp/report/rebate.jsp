@@ -92,6 +92,18 @@
                   todayHighlight: true
             });
             
+            $('#reportMonth1').datepicker({
+                format: "yyyy-mm",
+                  startView: 1,
+                  minViewMode: 1,
+                  maxViewMode: 2,
+                  todayBtn: "linked",
+                  clearBtn: true,
+                  language: "zh-CN",
+                  autoclose: true,
+                  todayHighlight: true
+            });
+            
             $('#beginDate').datepicker({
                 format: "yyyy-mm-dd",
                   startView: 0,
@@ -138,6 +150,62 @@
                     alert("统计完成！");
                 }
              }); 
+        }
+        
+        //查询返利息报表
+        function queryRebateReport(){
+            var reportMonth = $("#reportMonth").val();
+            if(reportMonth == "" || reportMonth == undefined || reportMonth == null){
+                alert("请先选择统计年月！");
+                return;
+            }
+            
+            $("#rebateTable").bootstrapTable(
+                'refresh',{url:"queryRebateReport",
+                           query: {month:reportMonth,
+                                   depName:$("#depName").val(),
+                                  }
+                          }
+            );
+        }
+        
+        //查询营业部返利息报表
+        function queryMarketRebateReport(){
+            var reportMonth = $("#reportMonth1").val();
+            if(reportMonth == "" || reportMonth == undefined || reportMonth == null){
+                alert("请先选择统计年月！");
+                return;
+            }
+            
+            $("#marketRebateTable").bootstrapTable(
+                'refresh',{url:"queryMarketRebateReport",
+                           query: {month:reportMonth,
+                                   depName:$("#depName1").val(),
+                                  }
+                          }
+            );
+        }
+        
+        //营业部统计合计
+        function footer(data){
+            
+            var interest = 0;
+            for(var i=0;i<data.length;i++){
+                  interest += parseFloat(data[i].INTEREST_AMOUNT);
+                }
+            //保留两位小数
+            return interest.toFixed(2);
+        }
+        
+        //客户统计合计
+        function rebateTableFooter(data){
+        	
+        	var interest = 0;
+            for(var i=0;i<data.length;i++){
+                  interest += parseFloat(data[i].INTEREST_AMOUNT);
+                }
+            //保留两位小数
+            return interest.toFixed(2);
         }
         
     </script>
@@ -212,56 +280,56 @@
 
               <!-- Nav tabs -->
               <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">返利息统计表</a></li>
+                <li role="presentation" class="active"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">营业部返利息统计表</a></li>
+                <li role="presentation"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">客户返利息统计表</a></li>
                 <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">返利息明细</a></li>
-                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
                 <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
               </ul>
             
               <!-- Tab panes -->
               <div class="tab-content">
-                <div role="tabpanel" class="tab-pane fade in active" id="home">
+                <div role="tabpanel" class="tab-pane fade" id="home">
                       
                       <!-- 查询条件表单 -->
                       <form class="form-horizontal" style="margin-top: 30px">
                           <div class="form-group">
                           
-	                            <label for="reportMonth" class="col-sm-2 col-md-1 col-md-offset-1 control-label">统计年月</label>
-	                            <div class="col-sm-10 col-md-2">
-	                              <input type="text" class="form-control" id="reportMonth">
-	                            </div>
-	                            
-	                            <label for="depName" class="col-sm-2 col-md-1 control-label">营业部名称</label>
-	                            <div class="col-sm-10 col-md-2">
-	                              <input type="text" class="form-control" id="depName">
-	                            </div>
-	                            
-	                            <label for="investorNo" class="col-sm-2 col-md-1 control-label">投资者账号</label>
-	                            <div class="col-sm-10 col-md-2">
-	                              <input type="text" class="form-control" id="investorNo">
-	                            </div>
+                                <label for="reportMonth" class="col-sm-2 col-md-1 col-md-offset-1 control-label">统计年月</label>
+                                <div class="col-sm-10 col-md-2">
+                                  <input type="text" class="form-control" id="reportMonth">
+                                </div>
+                                
+                                <label for="depName" class="col-sm-2 col-md-1 control-label">营业部名称</label>
+                                <div class="col-sm-10 col-md-2">
+                                  <input type="text" class="form-control" id="depName">
+                                </div>
+                                
+                                <label for="investorNo" class="col-sm-2 col-md-1 control-label">投资者账号</label>
+                                <div class="col-sm-10 col-md-2">
+                                  <input type="text" class="form-control" id="investorNo">
+                                </div>
                             
                           </div>
                           <div class="form-group">
                                 <label for="investorName" class="col-sm-2 col-md-1 col-md-offset-1 control-label">投资者姓名</label>
-	                            <div class="col-sm-10 col-md-2">
-	                              <input type="text" class="form-control" id="investorName">
-	                            </div>
+                                <div class="col-sm-10 col-md-2">
+                                  <input type="text" class="form-control" id="investorName">
+                                </div>
                                 
                                 <label for="mediatorNo" class="col-sm-2 col-md-1 control-label">居间人编号</label>
-	                            <div class="col-sm-10 col-md-2">
-	                              <input type="text" class="form-control" id="mediatorNo">
-	                            </div>
-	                            
-	                            <label for="mediatorName" class="col-sm-2 col-md-1 control-label">居间人姓名</label>
-	                            <div class="col-sm-10 col-md-2">
-	                              <input type="text" class="form-control" id="mediatorName">
-	                            </div>
+                                <div class="col-sm-10 col-md-2">
+                                  <input type="text" class="form-control" id="mediatorNo">
+                                </div>
+                                
+                                <label for="mediatorName" class="col-sm-2 col-md-1 control-label">居间人姓名</label>
+                                <div class="col-sm-10 col-md-2">
+                                  <input type="text" class="form-control" id="mediatorName">
+                                </div>
                           </div>
                           
                           <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10 col-md-2 col-md-offset-5 ">
-                              <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="">
+                              <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryRebateReport()">
                             </div>
                           </div>
                       </form>
@@ -271,7 +339,7 @@
                         <div id="toolbar" class="btn-group">
                             
                         </div>
-                        <table class="table table-striped"
+                        <table class="table table-striped" id="rebateTable"
                                data-toggle="table" 
                                data-show-refresh="true"
                                data-show-toggle="true"
@@ -280,22 +348,22 @@
                                data-toolbar="#toolbar"
                                data-detail-view="true"
                                data-detail-formatter="detailFormatter"
-                               data-url="queryRebateReport"
                                data-pagination="true"
-                               data-method="get"
+                               data-method="post"
                                data-page-list="[5, 10, 20, 50]"
                                data-search="true"
                                data-height="566"
-                               data-show-footer="true">
+                               data-show-footer="true"
+                               data-url="queryRebateReport">
                             <thead>
                             <tr>
                                 <!-- <th data-field="state" data-checkbox="true"></th> -->
-                                <th data-field="INVESTOR_NO" data-align="center" >投资者编号</th>
+                                <th data-field="INVESTOR_NO" data-align="center" data-footer-formatter="合计">投资者编号</th>
                                 <th data-field="INVESTOR_NAME" data-align="center" >投资者姓名</th>
                                 <th data-field="MEDIATOR_NAME" data-align="center" >居间人姓名姓名</th>
                                 <th data-field="DEPT_NAME" data-align="center" >营业部</th>
-                                <th data-field="AVAILABLE_FUNDS" data-align="center" >可用资金</th>
-                                <th data-field="INTEREST_AMOUNT" data-align="center" >利息</th>
+                                <th data-field="AVAILABLE_FUNDS" data-align="center">可用资金</th>
+                                <th data-field="INTEREST_AMOUNT" data-align="center" data-footer-formatter="rebateTableFooter">利息</th>
                             </tr>
                             </thead>
                         </table>
@@ -389,50 +457,66 @@
                         </table>
                       </div>
                 </div>
-                <div role="tabpanel" class="tab-pane fade" id="messages">...</div>
+                <!-- 营业部返利息统计表 -->
+                <div role="tabpanel" class="tab-pane fade  in active" id="messages">
+                    <form class="form-horizontal" style="margin-top: 30px">
+                          <div class="form-group">
+                          
+                                <label for="reportMonth1" class="col-sm-2 col-md-1 col-md-offset-1 control-label">统计年月</label>
+                                <div class="col-sm-10 col-md-2">
+                                  <input type="text" class="form-control" id="reportMonth1">
+                                </div>
+                                
+                                <label for="depName1" class="col-sm-2 col-md-1 control-label">营业部名称</label>
+                                <div class="col-sm-10 col-md-2">
+                                  <input type="text" class="form-control" id="depName1">
+                                </div>
+                                
+                                <div class="col-sm-10 col-md-2 col-md-offset-1 ">
+                                    <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryMarketRebateReport()">
+                                </div>
+                          </div>
+                          
+                      </form>
+                      <!-- 查询条件表单结束 -->
+                      
+                      <div class="table-responsive">
+                        <div id="toolbar1" class="btn-group">
+                            
+                        </div>
+                        <table class="table table-striped" id="marketRebateTable"
+                               data-toggle="table" 
+                               data-show-refresh="true"
+                               data-show-toggle="true"
+                               data-show-export="true"
+                               data-show-columns="true"
+                               data-toolbar="#toolbar1"
+                               data-detail-view="true"
+                               data-detail-formatter="detailFormatter"
+                               data-pagination="true"
+                               data-method="post"
+                               data-page-list="[5, 10, 20, 50]"
+                               data-search="true"
+                               data-height="566"
+                               data-show-footer="true"
+                               data-url="queryMarketRebateReport">
+                            <thead>
+                            <tr>
+                                <!-- <th data-field="state" data-checkbox="true"></th> -->
+                                <th data-field="DEPT_NAME" data-align="center" data-footer-formatter="合计">营业部</th>
+                                <th data-field="AVAILABLE_FUNDS" data-align="center">可用资金</th>
+                                <th data-field="INTEREST_AMOUNT" data-align="center" data-footer-formatter="footer">利息</th>
+                            </tr>
+                            </thead>
+                        </table>
+                      </div>
+                </div>
                 <div role="tabpanel" class="tab-pane fade" id="settings">...</div>
               </div>
             
           </div>
 
-          <!-- <h2 class="sub-header">用户信息</h2>
-          <div class="table-responsive">
-            <div id="toolbar" class="btn-group">
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addModal" title="创建任务">
-                    <i class="glyphicon glyphicon-plus"></i>
-                </button>
-            </div>
-            <table class="table table-striped"
-                   data-toggle="table" 
-                   data-toolbar="#toolbar"
-                   data-show-refresh="true"
-                   data-show-toggle="true"
-                   data-show-columns="true"
-                   data-show-export="true"
-                   data-detail-view="true"
-                   data-detail-formatter="detailFormatter"
-                   data-height="542"
-                   data-url="user/queryUsers"
-                   data-pagination="true"
-                   data-side-pagination="server"
-                   data-method="get"
-                   data-page-list="[5, 10, 20, 50]"
-                   data-search="true"
-                   data-height="300">
-                <thead>
-                <tr>
-                    <th data-field="state" data-checkbox="true"></th>
-                    <th data-field="username" data-align="center" >用户名</th>
-                    <th data-field="password" data-formatter="********" data-align="center" >密码</th>
-                    <th data-field="dept" data-align="center" >部门</th>
-                    <th data-field="locked" data-align="center" >状态</th>
-                    <th data-field="createTime" data-align="center" data-sortable="true">创建时间</th>
-                    <th data-field="updateTime" data-align="center" >更新时间</th>
-                    <th data-field="" data-formatter="operationFormatter">操作</th>
-                </tr>
-                </thead>
-            </table>
-          </div> -->
+         
           
           
         </div>

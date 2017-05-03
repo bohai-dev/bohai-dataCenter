@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Select;
 
 import com.bohai.dataCenter.entity.ReportRebate;
+import com.bohai.dataCenter.vo.QueryRebateReportParamVO;
 
 public interface ReportRebateMapper {
     /**
@@ -62,7 +63,11 @@ public interface ReportRebateMapper {
     
     List<ReportRebate> selectDistinctInvestorByYearAndMonth(String year, String month);
     
-    @Select("select t.INVESTOR_NO,t.INVESTOR_NAME,t.MEDIATOR_NAME,t.DEPT_NAME,sum(t.AVAILABLE_FUNDS) as AVAILABLE_FUNDS,to_char(sum(t.INTEREST_AMOUNT),'fm9999999999990.0099') as INTEREST_AMOUNT "
-    		+ "from T_REPORT_REBATE t group by t.INVESTOR_NO,t.INVESTOR_NAME,t.MEDIATOR_NAME,t.DEPT_NAME")
-    List<Map<String, Object>> selectReport();
+    /*@Select("select t.INVESTOR_NO,t.INVESTOR_NAME,t.MEDIATOR_NAME,t.DEPT_NAME,sum(t.AVAILABLE_FUNDS) as AVAILABLE_FUNDS,to_char(sum(t.INTEREST_AMOUNT),'fm9999999999990.0099') as INTEREST_AMOUNT "
+    		+ "from T_REPORT_REBATE t group by t.INVESTOR_NO,t.INVESTOR_NAME,t.MEDIATOR_NAME,t.DEPT_NAME")*/
+    List<Map<String, Object>> selectReport(QueryRebateReportParamVO paramVO);
+    
+    
+    List<Map<String, Object>> selectMarketReport(QueryRebateReportParamVO paramVO);
+    
 }

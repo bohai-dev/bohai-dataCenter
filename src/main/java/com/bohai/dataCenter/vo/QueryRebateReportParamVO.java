@@ -6,13 +6,9 @@ package com.bohai.dataCenter.vo;
  */
 public class QueryRebateReportParamVO {
 
-	/**
-	 * 统计年份
-	 */
-	private String year;
 	
 	/**
-	 * 统计月份
+	 * 统计月份  yyyy-mm
 	 */
 	private String month;
 	
@@ -41,13 +37,6 @@ public class QueryRebateReportParamVO {
 	 */
 	private String mediatorName;
 
-	public String getYear() {
-		return year;
-	}
-
-	public void setYear(String year) {
-		this.year = year;
-	}
 
 	public String getMonth() {
 		return month;

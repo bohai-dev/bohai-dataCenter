@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.bohai.dataCenter.controller.exception.BohaiException;
 import com.bohai.dataCenter.entity.ReportRebate;
+import com.bohai.dataCenter.vo.QueryRebateReportParamVO;
 
 /**
  * 返利息报表
@@ -21,6 +22,20 @@ public interface ReportRebateService {
 	
 	List<ReportRebate> queryRebateDetail();
 	
-	List<Map<String,Object>> queryRebateReport();
+	/**
+	 * 查询返利息报表
+	 * @param paramVO
+	 * @return
+	 */
+	List<Map<String,Object>> queryRebateReport(QueryRebateReportParamVO paramVO);
+	
+	
+	/**
+	 * 查询返利息统计表(以营业部为维度)
+	 * @param paramVO
+	 * @return
+	 */
+	List<Map<String,Object>> queryMarketRebateReport(QueryRebateReportParamVO paramVO);
+	
 	
 }

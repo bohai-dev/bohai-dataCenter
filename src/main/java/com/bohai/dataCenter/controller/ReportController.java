@@ -21,6 +21,7 @@ import com.bohai.dataCenter.service.ReportService;
 import com.bohai.dataCenter.vo.CountExchangeRebateParamVO;
 import com.bohai.dataCenter.vo.CountRebatReportParamVO;
 import com.bohai.dataCenter.vo.QueryExchangeRebateParamVO;
+import com.bohai.dataCenter.vo.QueryRebateReportParamVO;
 
 @Controller
 public class ReportController {
@@ -88,14 +89,28 @@ public class ReportController {
 	}
 	
 	/**
-	 * 查询返利统计表
+	 * 查询返利统计表(以客户为维度)
 	 */
 	@RequestMapping(value="queryRebateReport")
 	@ResponseBody
-	public List<Map<String, Object>> queryRebateReport(){
+	public List<Map<String, Object>> queryRebateReport(@RequestBody(required=false) QueryRebateReportParamVO paramVO){
 		
-		return this.reportRebateService.queryRebateReport();
+		return this.reportRebateService.queryRebateReport(paramVO);
 	}
+	
+	/**
+	 * 查询返利息统计表(以营业部为维度)
+	 * @param paramVO
+	 * @return
+	 */
+	@RequestMapping(value="queryMarketRebateReport")
+	@ResponseBody
+	public List<Map<String, Object>> queryMarketRebateReport(@RequestBody(required=false) QueryRebateReportParamVO paramVO){
+		
+		return this.reportRebateService.queryMarketRebateReport(paramVO);
+	}
+	
+	
 	
 	/**
 	 * 查询交易所返佣统计

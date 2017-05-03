@@ -145,11 +145,11 @@
 	CREATE_TIME ,
 	UPDATE_TIME  from T_REPORT_EXCHANGE_REBATE
 	<where>
-	   <if test="month != null">
+	   <if test="month != null and month != ''">
 	       MONTH = #{month,jdbcType=VARCHAR}
 	   </if>
-	   <if test="depName != null" >
-	       and DEP_NAME like CONCAT('%',#{depName,jdbcType=VARCHAR},'%')
+	   <if test="depName != null and depName != ''" >
+	       and DEP_NAME like '%'||#{depName,jdbcType=VARCHAR}||'%'
 	   </if>
 	</where> 
   </select>
