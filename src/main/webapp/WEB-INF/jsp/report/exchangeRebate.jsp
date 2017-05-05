@@ -156,6 +156,39 @@
             );
         }
         
+      //上期所合计
+        function sfooter(data){
+            
+            var interest = 0;
+            for(var i=0;i<data.length;i++){
+                  interest += parseFloat(data[i].srebate);
+                }
+            //保留两位小数
+            return interest.toFixed(2);
+        }
+      
+      //郑商所合计
+        function zfooter(data){
+            
+            var interest = 0;
+            for(var i=0;i<data.length;i++){
+                  interest += parseFloat(data[i].zrebate);
+                }
+            //保留两位小数
+            return interest.toFixed(2);
+        }
+      
+      //大商所合计
+        function dfooter(data){
+            
+            var interest = 0;
+            for(var i=0;i<data.length;i++){
+                  interest += parseFloat(data[i].drebate);
+                }
+            //保留两位小数
+            return interest.toFixed(2);
+        }
+        
     </script>
   </head>
 
@@ -281,11 +314,11 @@
                             <thead>
                             <tr>
                                 <!-- <th data-field="state" data-checkbox="true"></th> -->
-                                <th data-field="month" data-align="center" >统计月份</th>
+                                <th data-field="month" data-align="center" data-footer-formatter="合计">统计月份</th>
                                 <th data-field="depName" data-align="center" >机构名称</th>
-                                <th data-field="srebate" data-align="center" >上期所返还</th>
-                                <th data-field="zrebate" data-align="center" >郑商所返还</th>
-                                <th data-field="drebate" data-align="center" >大商所返还</th>
+                                <th data-field="srebate" data-align="center" data-footer-formatter="sfooter">上期所返还</th>
+                                <th data-field="zrebate" data-align="center" data-footer-formatter="zfooter">郑商所返还</th>
+                                <th data-field="drebate" data-align="center" data-footer-formatter="dfooter">大商所返还</th>
                                 <th data-field="jrebate" data-align="center" >中金所返还</th>
                                 <th data-field="sum" data-align="center" >合计</th>
                             </tr>

@@ -197,6 +197,17 @@
             return interest.toFixed(2);
         }
         
+        /* 扣减后剩余利息合计 */
+        function interestRemainfooter(data){
+            
+            var interest = 0;
+            for(var i=0;i<data.length;i++){
+                  interest += parseFloat(data[i].INTEREST_REMAIN);
+                }
+            //保留两位小数
+            return interest.toFixed(2);
+        }
+        
         //客户统计合计
         function rebateTableFooter(data){
         	
@@ -288,6 +299,63 @@
             
               <!-- Tab panes -->
               <div class="tab-content">
+                <!-- 营业部返利息统计表 -->
+                <div role="tabpanel" class="tab-pane fade  in active" id="messages">
+                    <form class="form-horizontal" style="margin-top: 30px">
+                          <div class="form-group">
+                          
+                                <label for="reportMonth1" class="col-sm-2 col-md-1 col-md-offset-1 control-label">统计年月</label>
+                                <div class="col-sm-10 col-md-2">
+                                  <input type="text" class="form-control" id="reportMonth1">
+                                </div>
+                                
+                                <label for="depName1" class="col-sm-2 col-md-1 control-label">营业部名称</label>
+                                <div class="col-sm-10 col-md-2">
+                                  <input type="text" class="form-control" id="depName1">
+                                </div>
+                                
+                                <div class="col-sm-10 col-md-2 col-md-offset-1 ">
+                                    <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryMarketRebateReport()">
+                                </div>
+                          </div>
+                          
+                      </form>
+                      <!-- 查询条件表单结束 -->
+                      
+                      <div class="table-responsive">
+                        <div id="toolbar1" class="btn-group">
+                            
+                        </div>
+                        <table class="table table-striped" id="marketRebateTable"
+                               data-toggle="table" 
+                               data-show-refresh="true"
+                               data-show-toggle="true"
+                               data-show-export="true"
+                               data-show-columns="true"
+                               data-toolbar="#toolbar1"
+                               data-detail-view="true"
+                               data-detail-formatter="detailFormatter"
+                               data-pagination="true"
+                               data-method="post"
+                               data-page-list="[5, 10, 20, 50]"
+                               data-search="true"
+                               data-height="566"
+                               data-show-footer="true"
+                               data-url="queryMarketRebateReport">
+                            <thead>
+                            <tr>
+                                <!-- <th data-field="state" data-checkbox="true"></th> -->
+                                <th data-field="DEPT_NAME" data-align="center" data-footer-formatter="合计">营业部</th>
+                                <th data-field="AVAILABLE_FUNDS" data-align="center">可用资金</th>
+                                <th data-field="INTEREST_AMOUNT" data-align="center" data-footer-formatter="footer">利息</th>
+                                <th data-field="INTEREST_REMAIN" data-align="center" data-footer-formatter="interestRemainfooter">扣减后剩余利息</th>
+                            </tr>
+                            </thead>
+                        </table>
+                      </div>
+                </div>
+                
+                <!-- 客户返利息统计表 -->
                 <div role="tabpanel" class="tab-pane fade" id="home">
                       
                       <!-- 查询条件表单 -->
@@ -457,60 +525,7 @@
                         </table>
                       </div>
                 </div>
-                <!-- 营业部返利息统计表 -->
-                <div role="tabpanel" class="tab-pane fade  in active" id="messages">
-                    <form class="form-horizontal" style="margin-top: 30px">
-                          <div class="form-group">
-                          
-                                <label for="reportMonth1" class="col-sm-2 col-md-1 col-md-offset-1 control-label">统计年月</label>
-                                <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="reportMonth1">
-                                </div>
-                                
-                                <label for="depName1" class="col-sm-2 col-md-1 control-label">营业部名称</label>
-                                <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="depName1">
-                                </div>
-                                
-                                <div class="col-sm-10 col-md-2 col-md-offset-1 ">
-                                    <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryMarketRebateReport()">
-                                </div>
-                          </div>
-                          
-                      </form>
-                      <!-- 查询条件表单结束 -->
-                      
-                      <div class="table-responsive">
-                        <div id="toolbar1" class="btn-group">
-                            
-                        </div>
-                        <table class="table table-striped" id="marketRebateTable"
-                               data-toggle="table" 
-                               data-show-refresh="true"
-                               data-show-toggle="true"
-                               data-show-export="true"
-                               data-show-columns="true"
-                               data-toolbar="#toolbar1"
-                               data-detail-view="true"
-                               data-detail-formatter="detailFormatter"
-                               data-pagination="true"
-                               data-method="post"
-                               data-page-list="[5, 10, 20, 50]"
-                               data-search="true"
-                               data-height="566"
-                               data-show-footer="true"
-                               data-url="queryMarketRebateReport">
-                            <thead>
-                            <tr>
-                                <!-- <th data-field="state" data-checkbox="true"></th> -->
-                                <th data-field="DEPT_NAME" data-align="center" data-footer-formatter="合计">营业部</th>
-                                <th data-field="AVAILABLE_FUNDS" data-align="center">可用资金</th>
-                                <th data-field="INTEREST_AMOUNT" data-align="center" data-footer-formatter="footer">利息</th>
-                            </tr>
-                            </thead>
-                        </table>
-                      </div>
-                </div>
+                
                 <div role="tabpanel" class="tab-pane fade" id="settings">...</div>
               </div>
             

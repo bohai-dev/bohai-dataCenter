@@ -347,7 +347,8 @@
   
   <select id="selectMarketReport" resultType="java.util.Map" parameterType="com.bohai.dataCenter.vo.QueryRebateReportParamVO">
     select t.DEPT_NAME,sum(t.AVAILABLE_FUNDS) as AVAILABLE_FUNDS,
-    to_char(sum(t.INTEREST_AMOUNT),'fm9999999999990.0099') as INTEREST_AMOUNT 
+    to_char(sum(t.INTEREST_AMOUNT),'fm9999999999990.0099') as INTEREST_AMOUNT,
+    to_char(sum(round(t.AVAILABLE_FUNDS*0.0195/360,2) - t.INTEREST_AMOUNT),'fm9999999999990.0099') as INTEREST_REMAIN
     from T_REPORT_REBATE t
     <where>
         <if test="month != null and month != ''">

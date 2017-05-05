@@ -64,6 +64,40 @@
             
         });
         
+        
+        //软件服务费合计
+        function tbfooter(data){
+            
+            var interest = 0;
+            for(var i=0;i<data.length;i++){
+                  interest += parseFloat(data[i].SOFT_CHARGE);
+                }
+            //保留两位小数
+            return interest.toFixed(2);
+        }
+        
+        //总佣金合计
+        function tbfooter0(data){
+            
+            var interest = 0;
+            for(var i=0;i<data.length;i++){
+                  interest += parseFloat(data[i].CHARGE);
+                }
+            //保留两位小数
+            return interest.toFixed(2);
+        }
+        
+        //交易所佣金合计
+		function tbfooter1(data){
+		    
+		    var interest = 0;
+		    for(var i=0;i<data.length;i++){
+		          interest += parseFloat(data[i].ONHAND_CHARGE);
+		        }
+		    //保留两位小数
+		    return interest.toFixed(2);
+		}
+        
     </script>
   </head>
 
@@ -184,26 +218,23 @@
 			                   data-show-refresh="true"
 			                   data-show-toggle="true"
 			                   data-show-columns="true"
-			                   data-detail-view="true"
-			                   data-detail-formatter="detailFormatter"
-			                   data-height="542"
-			                   data-url="user/queryUsers"
+			                   data-height="566"
 			                   data-pagination="true"
-			                   data-side-pagination="server"
-			                   data-method="get"
+			                   data-method="post"
 			                   data-page-list="[5, 10, 20, 50]"
 			                   data-search="true"
-			                   data-height="300">
+			                   data-show-footer="true"
+			                   data-url="querySoftCharge">
 			                <thead>
 			                <tr>
 			                    <!-- <th data-field="state" data-checkbox="true"></th> -->
-			                    <th data-field="username" data-align="center" >客户账号</th>
-			                    <th data-field="password" data-formatter="********" data-align="center" >姓名</th>
-			                    <th data-field="dept" data-align="center" >所在营业部</th>
-			                    <th data-field="locked" data-align="center" >总佣金</th>
-			                    <th data-field="createTime" data-align="center" data-sortable="true">交易所佣金</th>
-			                    <th data-field="updateTime" data-align="center" >软件服务费</th>
-			                    <th data-field="" data-formatter="operationFormatter">计费起始日期</th>
+			                    <th data-field="INVESTOR_NO" data-align="center" data-footer-formatter="合计">投资者编号</th>
+			                    <th data-field="INVESTOR_NAME" data-align="center" >投资者姓名</th>
+			                    <th data-field="DEPT" data-align="center" >所在营业部</th>
+			                    <th data-field="CHARGE" data-align="center" data-footer-formatter="tbfooter0">总佣金</th>
+			                    <th data-field="ONHAND_CHARGE" data-align="center" data-footer-formatter="tbfooter1">交易所佣金</th>
+			                    <th data-field="SOFT_CHARGE" data-align="center" data-footer-formatter="tbfooter" data-sortable="true">软件服务费</th>
+			                    <th data-field="BATCH_NO" data-align="center">计费时间段</th>
 			                </tr>
 			                </thead>
 			            </table>

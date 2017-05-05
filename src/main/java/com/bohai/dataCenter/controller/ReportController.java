@@ -36,7 +36,7 @@ public class ReportController {
 	
 	@Autowired
 	private ReportExchangeRebateService reportExchangeRebateService;
-
+	
 	
 	@RequestMapping(value="toBusinessReport")
 	public String toBusinessReport(){
@@ -111,7 +111,6 @@ public class ReportController {
 	}
 	
 	
-	
 	/**
 	 * 查询交易所返佣统计
 	 * @param paramVO
@@ -123,6 +122,17 @@ public class ReportController {
 	public List<ReportExchangeRebate> queryExchangeRebateReport(@RequestBody(required=false) QueryExchangeRebateParamVO paramVO) throws BohaiException{
 		
 		return this.reportExchangeRebateService.queryExchangeRebate(paramVO);
+	}
+	
+	/**
+	 * 查询TB软件服务费
+	 * @return
+	 */
+	@RequestMapping(value="querySoftCharge")
+	@ResponseBody
+	public List<Map<String, Object>> querySoftCharge(){
+		
+		return reportService.queryTBSoftReport();
 	}
 
 }
