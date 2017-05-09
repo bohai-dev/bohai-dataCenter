@@ -64,19 +64,19 @@ public class CapitalStatementCSVUploadServiceImpl implements FileUploadService {
 							continue;
 						}
 						
-						if(colName.indexOf("交易日")>-1){
+						if(colName.replace(" ", "").equals("交易日")){
 							tradeDateIndex = i;
-						}else if (colName.indexOf("投资者代码")>-1) {
+						}else if (colName.replace(" ", "").equals("投资者代码")) {
 							investorNoIndex = i;
-						}else if (colName.indexOf("投资者名称")>-1){
+						}else if (colName.replace(" ", "").equals("投资者名称")){
 							investorNameIndex = i;
-						}else if (colName.indexOf("组织架构代码")>-1) {
+						}else if (colName.replace(" ", "").equals("组织架构代码")) {
 							deptNoIndex = i;
-						}else if (colName.indexOf("组织架构名称")>-1) {
+						}else if (colName.replace(" ", "").equals("组织架构名称")) {
 							deptNameIndex = i;
-						}else if (colName.indexOf("可用资金")>-1) {
+						}else if (colName.replace(" ", "").equals("可用资金")) {
 							availableIndex = i;
-						}else if (colName.indexOf("投资者权益")>-1) {
+						}else if (colName.replace(" ", "").equals("投资者权益")) {
 							investorRightsIndex = i;
 						}
 					}

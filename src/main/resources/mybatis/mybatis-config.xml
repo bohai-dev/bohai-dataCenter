@@ -94,6 +94,7 @@
         <mapper resource="mybatis/mapper/InstrumentAttributeMapper.xml"/>
         <mapper resource="mybatis/mapper/CloseDataMapper.xml"/>
         <mapper resource="mybatis/mapper/ReportExchangeRebateMapper.xml"/>
+        <mapper resource="mybatis/mapper/CtpTradeDataMapper.xml"/>
 
         <!-- 视图 -->
         <mapper resource="mybatis/mapper/VTradeDetailMapper.xml"/>

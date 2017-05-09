@@ -183,6 +183,9 @@
             
             var interest = 0;
             for(var i=0;i<data.length;i++){
+                  if(data[i].drebate == "" || data[i].drebate == undefined || data[i].drebate == null){
+                	  continue;
+                  }
                   interest += parseFloat(data[i].drebate);
                 }
             //保留两位小数
@@ -230,7 +233,7 @@
           <h4 class="page-header"><a href="toHome" style="text-decoration: none;"><i class="glyphicon glyphicon-home"></i></a> --> <a href="toRebateReport" style="text-decoration: none;">统计报表</a> --> <a href="toExchangeRebateReport" style="text-decoration: none;">交易所返还统计表</a></h1>
           </h4>
           <div class="row placeholders">
-            <label class="control-label">请上传成交明细和平仓明细文件</label>
+            <label class="control-label">请上传各交易所成交明细</label>
             <input id="finput" type="file" class="file" multiple >
             <script type="text/javascript">
                $("#finput").fileinput({
@@ -239,8 +242,10 @@
                    uploadUrl: "uploadExchangeRebate", //异步上传地址
                    maxFileCount: 10,//最大上传文件数限制
                    showCaption: true,//是否显示标题
+                   showPreview:false,//默认true
+                   'previewFileType':'image',
                    showUpload: true,//是否显示上传按钮
-                   allowedFileExtensions: ["xls", "xlsx","csv","txt"], //接收的文件后缀 
+                   allowedFileExtensions: ["csv","txt"], //接收的文件后缀 
                    //previewFileIcon: "<i class='glyphicon glyphicon-king'></i>" //选择文件后缩略图
                });
             </script>

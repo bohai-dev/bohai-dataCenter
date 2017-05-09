@@ -340,15 +340,14 @@
                                data-page-list="[5, 10, 20, 50]"
                                data-search="true"
                                data-height="566"
-                               data-show-footer="true"
-                               data-url="queryMarketRebateReport">
+                               data-show-footer="true">
                             <thead>
                             <tr>
                                 <!-- <th data-field="state" data-checkbox="true"></th> -->
                                 <th data-field="DEPT_NAME" data-align="center" data-footer-formatter="合计">营业部</th>
                                 <th data-field="AVAILABLE_FUNDS" data-align="center">可用资金</th>
                                 <th data-field="INTEREST_AMOUNT" data-align="center" data-footer-formatter="footer">利息</th>
-                                <th data-field="INTEREST_REMAIN" data-align="center" data-footer-formatter="interestRemainfooter">扣减后剩余利息</th>
+                                <!-- <th data-field="INTEREST_REMAIN" data-align="center" data-footer-formatter="interestRemainfooter">扣减后剩余利息</th> -->
                             </tr>
                             </thead>
                         </table>
@@ -422,7 +421,7 @@
                                data-search="true"
                                data-height="566"
                                data-show-footer="true"
-                               data-url="queryRebateReport">
+                               data-url="#">
                             <thead>
                             <tr>
                                 <!-- <th data-field="state" data-checkbox="true"></th> -->

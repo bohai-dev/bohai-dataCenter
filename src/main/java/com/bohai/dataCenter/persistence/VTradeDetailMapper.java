@@ -32,6 +32,10 @@ public interface VTradeDetailMapper {
 	 * @param exchangeId
 	 * @return
 	 */
-	@Select("select GETDEPNAME(INVESTOR_NO) as DEP_NAME ,sum(CHARGE) as CHARGE from V_TRADE_DETAIL where substr(TRADE_DATE,0,7) = #{0} and EXCHANGE_ID = #{1} group by GETDEPNAME(INVESTOR_NO)")
+	//@Select("select GETDEPNAME(INVESTOR_NO) as DEP_NAME ,sum(CHARGE) as CHARGE from V_TRADE_DETAIL where substr(TRADE_DATE,0,7) = #{0} and EXCHANGE_ID = #{1} group by GETDEPNAME(INVESTOR_NO)")
+	@Select("select GETDEPNAME(t.INVESTOR_NO) as DEP_NAME,sum(t.EXCHANGE_CHARGE) as CHARGE "
+			+ "from T_CTPTRADE_DATA t where t.EXCHANGE_NAME = #{1}"
+			+ "and substr(TRADE_DATE,0,6) = #{0}"
+			+ " group by GETDEPNAME(t.INVESTOR_NO)")
 	List<Map<String,Object>> selectSumCharge(String month, String exchangeId);
 }

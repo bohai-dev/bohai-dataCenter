@@ -130,10 +130,19 @@
   </insert>
   
   <select id="selectTradeInfo" resultType="java.util.Map" parameterType="com.bohai.dataCenter.entity.VTradeDetail" >
-    select t.DEP_NAME ,t.INSTRUMENT,t.HADGE_FLAG,sum(t.VOLUME) as VOLUME,sum(t.TURNOVER) as TURNOVER,
+    <!-- select t.DEP_NAME ,t.INSTRUMENT,t.HADGE_FLAG,sum(t.VOLUME) as VOLUME,sum(t.TURNOVER) as TURNOVER,
     sum(t.CLOSE_TODAY) as CLOSE_TODAY,sum(t.CLOSE_TODAY_VOLUME) as CLOSE_TODAY_VOLUME
 	from V_TRADE_FINAL t
 	where substr(t.TRADE_DATE,0,7) = #{tradeDate,jdbcType=VARCHAR}
-	group by t.DEP_NAME ,t.INSTRUMENT,t.HADGE_FLAG
+	group by t.DEP_NAME ,t.INSTRUMENT,t.HADGE_FLAG -->
+	
+	select DEP_NAME ,
+	INSTRUMENT ,
+	HEDGE_FLAG ,
+	VOLUME ,
+	TRUNOVER ,
+	CLOSE_TODAY_VOLUME ,
+	CLOSE_TODAY_TRUNOVER  from V_CTPTRADE_DALIAN
+	where TRADE_MONTH = #{tradeDate,jdbcType=VARCHAR}
   </select>
 </mapper>

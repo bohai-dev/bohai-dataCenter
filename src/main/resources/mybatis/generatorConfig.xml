@@ -151,16 +151,22 @@
     </table> -->
     
     <!-- 交易所返还统计表  T_REPORT_EXCHANGE_REBATE-->
-    <table schema="" tableName="T_REPORT_EXCHANGE_REBATE" domainObjectName="ReportExchangeRebate" 
+    <!-- <table schema="" tableName="T_REPORT_EXCHANGE_REBATE" domainObjectName="ReportExchangeRebate" 
         enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
         enableUpdateByExample="false" selectByExampleQueryId="false">
-    </table>
+    </table> -->
     
     <!-- 平今平昨交易明细视图 V_TRADE_DETAIL -->
     <!-- <table schema="" tableName="V_TRADE_DETAIL" domainObjectName="VTradeDetail" 
         enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
         enableUpdateByExample="false" selectByExampleQueryId="false">
     </table> -->
+    
+    <!-- CTP交易明细表 T_CTPTRADE_DATA -->
+    <table schema="" tableName="T_CTPTRADE_DATA" domainObjectName="CtpTradeData" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table>
     
   </context>
 </generatorConfiguration>
