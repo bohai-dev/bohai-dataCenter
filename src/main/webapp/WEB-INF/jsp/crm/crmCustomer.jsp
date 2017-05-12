@@ -36,7 +36,7 @@
 
     <script type="text/javascript">
         function operationFormatter(value,row,index) {
-            var html = '<button type="button" id="cog'+index+'" class="btn btn-default btn-sm" title="设置" data-toggle="modal" data-target="#editModal">'
+            var html = '<button type="button" id="cog'+row.investorNo+'" class="btn btn-default btn-sm" title="设置">'
                          + '<i class="glyphicon glyphicon-cog"></i>'
                      + '</button> &nbsp;'
                      
@@ -51,7 +51,28 @@
                      + '<button type="button" id="trash'+index+'" class="btn btn-default btn-sm" title="删除">'
                          + '<i class="glyphicon glyphicon-trash"></i>'
                      + '</button>';
+                     
+            $("#investorTable").off("click","#cog"+row.investorNo);
+            $("#investorTable").on("click","#cog"+row.investorNo,row,function(event){
+                config(row);
+            });
             return html;
+        }
+        
+        /* 修改任务模态框 */
+        function config(row){
+        	
+        	$("#deptName1").val(row.deptName);
+            $("#investorNo1").val(row.investorNo);
+            $("#investorName1").val(row.investorName);
+            $("#certType1").val(row.certType);
+            $("#certNo1").val(row.certNo);
+            $("#openDate1").val(row.openDate);
+            $("#effectDate1").val(row.effectDate);
+            $("#email1").val(row.email);
+            $("#mobilePhone1").val(row.mobilePhone);
+            $("#contractNo1").val(row.contractNo);
+            $("#editModal").modal('show');
         }
         
         $(function(){
@@ -60,7 +81,7 @@
             $('li a[href="toCrmCustomer"]').parent().addClass("active");
             
             
-            $('#birthday').datepicker({
+            $('#openDate').datepicker({
                 format: "yyyy-mm-dd",
                   startView: 0,
                   minViewMode: 0,
@@ -72,16 +93,64 @@
                   todayHighlight: true
             });
             
-            $('#entryDate').datepicker({
+            $('#openDate1').datepicker({
                 format: "yyyy-mm-dd",
-                  startView: 0,
-                  minViewMode: 0,
-                  maxViewMode: 2,
-                  todayBtn: "linked",
-                  clearBtn: true,
-                  language: "zh-CN",
-                  autoclose: true,
-                  todayHighlight: true
+                startView: 0,
+                minViewMode: 0,
+                maxViewMode: 2,
+                todayBtn: "linked",
+                clearBtn: true,
+                language: "zh-CN",
+                autoclose: true,
+                todayHighlight: true
+            });
+            
+            $('#effectDate').datepicker({
+                format: "yyyy-mm-dd",
+                startView: 0,
+                minViewMode: 0,
+                maxViewMode: 2,
+                todayBtn: "linked",
+                clearBtn: true,
+                language: "zh-CN",
+                autoclose: true,
+                todayHighlight: true
+            });
+            
+            $('#effectDate1').datepicker({
+                format: "yyyy-mm-dd",
+                startView: 0,
+                minViewMode: 0,
+                maxViewMode: 2,
+                todayBtn: "linked",
+                clearBtn: true,
+                language: "zh-CN",
+                autoclose: true,
+                todayHighlight: true
+            });
+            
+            $('#expireDate').datepicker({
+                format: "yyyy-mm-dd",
+                startView: 0,
+                minViewMode: 0,
+                maxViewMode: 2,
+                todayBtn: "linked",
+                clearBtn: true,
+                language: "zh-CN",
+                autoclose: true,
+                todayHighlight: true
+            });
+            
+            $('#expireDate1').datepicker({
+                format: "yyyy-mm-dd",
+                startView: 0,
+                minViewMode: 0,
+                maxViewMode: 2,
+                todayBtn: "linked",
+                clearBtn: true,
+                language: "zh-CN",
+                autoclose: true,
+                todayHighlight: true
             });
             
             //初始化
@@ -97,7 +166,7 @@
                         dataType: 'json',
                         success: function (data) {
                             var len = data.length;
-                             var optionString = "";
+                             var optionString = "<option> </option>";
                              for (i = 0; i < len; i++) {
                                  optionString += "<option value=\'"+ data[i].mediatorNo +"\'>" + data[i].mediatorName + "(" +data[i].mediatorNo+")</option>";
                              }
@@ -114,7 +183,7 @@
                         dataType: 'json',
                         success: function (data) {
                             var len = data.length;
-                             var optionString = "";
+                             var optionString = "<option> </option>";
                              for (i = 0; i < len; i++) {
                                  optionString += "<option value=\'"+ data[i].marketerNo +"\'>" + data[i].marketerName + "(" +data[i].marketerNo+")</option>";
                              }
@@ -130,7 +199,7 @@
             	            dataType: 'json',
             	            success: function (data) {
             	            	var len = data.length;
-            	            	 var optionString = "";
+            	            	 var optionString = "<option> </option>";
             	                 for (i = 0; i < len; i++) {
             	                     optionString += "<option value=\'"+ data[i].deptCode +"\'>" + data[i].deptName + "</option>";
             	                 }
@@ -211,7 +280,8 @@
                     <i class="glyphicon glyphicon-plus">新增客户</i>
                 </button>
             </div>
-            <table class="table table-striped"
+            <table id="investorTable"
+                   class="table table-striped"
                    data-toggle="table" 
                    data-toolbar="#toolbar"
                    data-show-refresh="true"
@@ -388,65 +458,129 @@
       </div>
     </div>
     
-    <!-- 修改营业部信息 -->
+    <!-- 修改客户基本信息 -->
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title" id="myModalLabel">修改营业部信息</h4>
+            <h4 class="modal-title" id="myModalLabel">修改客户信息</h4>
           </div>
           <div class="modal-body">
               <form class="form-horizontal" role="form">
+                  
                   <div class="form-group">
-                    <label for="deptNo" class="col-sm-3 control-label">营业部编号</label>
+                    <label for="deptName1" class="col-sm-3 control-label">营业部名称</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" id="deptNo" placeholder="" readonly>
+                      <input type="text" class="form-control" id="deptName1" placeholder="" readOnly>
                     </div>
                   </div>
                   
                   <div class="form-group">
-                    <label for="deptName" class="col-sm-3 control-label">营业部名称</label>
+                    <label for="investorNo1" class="col-sm-3 control-label">客户编号</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" id="deptName" placeholder="">
+                      <input type="text" class="form-control" id="investorNo1" placeholder="">
                     </div>
                   </div>
                   
                   <div class="form-group">
-                    <label for="deptHead" class="col-sm-3 control-label">营业部负责人</label>
+                    <label for="investorName1" class="col-sm-3 control-label">客户姓名</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" id="deptHead" placeholder="">
+                      <input type="text" class="form-control" id="investorName1" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="belongType1" class="col-sm-3 control-label">归属类型</label>
+                    <div class="col-sm-8">
+                      <select class="selectpicker form-control" id="belongType1" data-live-Search="true">
+                          <option value="0">营业部</option>
+                          <option value="1">居间人</option>
+                          <option value="2">营销人员</option>
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="belongTo1" class="col-sm-3 control-label">归属名称</label>
+                    <div class="col-sm-8">
+                      <select class="selectpicker form-control" id="belongTo1" data-live-Search="true">
+                      </select>
                     </div>
                   </div>
                   
                   <hr>
                   
                   <div class="form-group">
-                    <label for="deptTelephone" class="col-sm-3 control-label">营业部电话</label>
+                    <label for="certType1" class="col-sm-3 control-label">证件类型</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" id="deptTelephone" placeholder="">
+                      <input type="text" class="form-control" id="certType1" placeholder="">
                     </div>
                   </div>
                   
                   <div class="form-group">
-                    <label for="deptAddress" class="col-sm-3 control-label">营业部地址</label>
+                    <label for="certNo1" class="col-sm-3 control-label">证件号码</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="deptAddress" placeholder="">
+                      <input type="text" class="form-control" id="certNo1" placeholder="">
                     </div>
                   </div>
+                  
+                  
                   <div class="form-group">
-                    <label for="establishDate" class="col-sm-3 control-label">成立日期</label>
+                    <label for="openDate1" class="col-sm-3 control-label">开户日期</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" id="establishDate" placeholder="">
+                        <input type="text" class="form-control" id="openDate1" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="effectDate1" class="col-sm-3 control-label">生效日期</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="effectDate1" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="expireDate1" class="col-sm-3 control-label">失效日期</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="expireDate1" placeholder="">
                     </div>
                   </div>
                   
                   <hr>
                   
                   <div class="form-group">
-                    <label for="remark" class="col-sm-3 control-label">备注</label>
+                    <label for="contractNo1" class="col-sm-3 control-label">合同编号</label>
                     <div class="col-sm-8">
-                      <textarea class="form-control" rows="3" id="remark"></textarea>
+                      <input type="text" class="form-control" id="contractNo1" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="email1" class="col-sm-3 control-label">电子邮箱</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="email1" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="address1" class="col-sm-3 control-label">地址</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="address1" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="mobilePhone1" class="col-sm-3 control-label">手机</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="mobilePhone1" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="remark1" class="col-sm-3 control-label">备注</label>
+                    <div class="col-sm-8">
+                      <textarea class="form-control" rows="3" id="remark1"></textarea>
                     </div>
                   </div>
                 </form>

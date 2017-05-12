@@ -169,11 +169,14 @@
                     <th data-field="depName" data-align="center" >所属营业部</th>
                     <th data-field="mediatorNo" data-align="center" >居间人编号</th>
                     <th data-field="mediatorName" data-align="center" >居间人名称</th>
+                    <th data-field="belongType" data-align="center" >归属类型</th>
+                    <th data-field="belongTo" data-align="center" >归属名称</th>
                     <th data-field="status" data-align="center" >在职状态</th>
+                    <th data-field="certType" data-align="center" >证件类型</th>
+                    <th data-field="certNo" data-align="center" >证件号码</th>
                     <th data-field="entryDate" data-align="center" >生效日期</th>
                     <th data-field="leaveDate" data-align="center" >失效日期</th>
                     <th data-field="allocationProportion" data-align="center" >默认分配比例</th>
-                    <th data-field="certNo" data-align="center" >身份证号码</th>
                     <th data-field="telephone" data-align="center" >联系电话</th>
                     <th data-field="" data-formatter="operationFormatter">操作</th>
                 </tr>
@@ -222,7 +225,14 @@
                   </div>
                   
                   <div class="form-group">
-                    <label for="mediatorType" class="col-sm-3 control-label">居间人类型</label>
+                    <label for="belongType" class="col-sm-3 control-label">归属类型</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="mediatorType" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="belongTo" class="col-sm-3 control-label">归属名称</label>
                     <div class="col-sm-8">
                       <input type="text" class="form-control" id="mediatorType" placeholder="">
                     </div>
