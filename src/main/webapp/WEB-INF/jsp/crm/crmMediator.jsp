@@ -51,10 +51,10 @@
         $(function(){
             var treeObj = ${sessionScope.treeView};
             $('#tree').treeview({data: treeObj,enableLinks: true});
-            $('li a[href="toCrmDept"]').parent().addClass("active");
+            $('li a[href="toCrmMediator"]').parent().addClass("active");
             
             
-            $('#establishDate').datepicker({
+            $('#birthday').datepicker({
                 format: "yyyy-mm-dd",
                   startView: 0,
                   minViewMode: 0,
@@ -66,7 +66,7 @@
                   todayHighlight: true
             });
             
-            $('#establishDate1').datepicker({
+            $('#entryDate').datepicker({
                 format: "yyyy-mm-dd",
                   startView: 0,
                   minViewMode: 0,
@@ -117,7 +117,7 @@
             
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h4 class="page-header"><a href="toHome" style="text-decoration: none;"><i class="glyphicon glyphicon-home"></i></a> --> <a href="toCrmOverview" style="text-decoration: none;">客户关系管理</a> --> <a href="toCrmDept" style="text-decoration: none;">营业部信息维护</a></h1>
+          <h4 class="page-header"><a href="toHome" style="text-decoration: none;"><i class="glyphicon glyphicon-home"></i></a> --> <a href="toCrmOverview" style="text-decoration: none;">客户关系管理</a> --> <a href="toCrmMediator" style="text-decoration: none;">居间人信息维护</a></h1>
 
           <div class="row placeholders">
             <div class="col-xs-6 col-sm-3 placeholder">
@@ -141,10 +141,10 @@
             </div>
           </div>
 
-          <h2 class="sub-header">营业部信息</h2>
+          <h2 class="sub-header">居间人信息</h2>
           <div class="table-responsive">
             <div id="toolbar" class="btn-group">
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addModal" title="创建任务">
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addModal" title="新增居间人">
                     <i class="glyphicon glyphicon-plus">新建</i>
                 </button>
             </div>
@@ -158,20 +158,23 @@
                    data-detail-view="true"
                    data-detail-formatter="detailFormatter"
                    data-height="562"
-                   data-url="queryCrmDept"
+                   data-url="queryCrmMediator"
                    data-pagination="true"
-                   data-method="post"
+                   data-method="get"
                    data-page-list="[5, 10, 20, 50]"
                    data-search="true">
                 <thead>
                 <tr>
                     <!-- <th data-field="state" data-checkbox="true"></th> -->
-                    <th data-field="deptCode" data-align="center" >营业部编号</th>
-                    <th data-field="deptName" data-align="center" >营业部名称</th>
-                    <th data-field="deptHead" data-align="center" >营业部负责人</th>
-                    <th data-field="deptTelephone" data-align="center" >营业部联系电话</th>
-                    <th data-field="deptAddress" data-align="center" >营业部联系地址</th>
-                    <th data-field="establishDate" data-align="center" >营业部成立日期</th>
+                    <th data-field="depName" data-align="center" >所属营业部</th>
+                    <th data-field="mediatorNo" data-align="center" >居间人编号</th>
+                    <th data-field="mediatorName" data-align="center" >居间人名称</th>
+                    <th data-field="status" data-align="center" >在职状态</th>
+                    <th data-field="entryDate" data-align="center" >生效日期</th>
+                    <th data-field="leaveDate" data-align="center" >失效日期</th>
+                    <th data-field="allocationProportion" data-align="center" >默认分配比例</th>
+                    <th data-field="certNo" data-align="center" >身份证号码</th>
+                    <th data-field="telephone" data-align="center" >联系电话</th>
                     <th data-field="" data-formatter="operationFormatter">操作</th>
                 </tr>
                 </thead>
@@ -186,22 +189,16 @@
       </div>
     </div>
     
-    <!-- 新建营业部模态框 -->
+    <!-- 新建营销人员模态框 -->
     <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title" id="myModalLabel">新建营业部</h4>
+            <h4 class="modal-title" id="myModalLabel">新增居间人</h4>
           </div>
           <div class="modal-body">
               <form class="form-horizontal" role="form">
-                  <div class="form-group">
-                    <label for="deptNo" class="col-sm-3 control-label">营业部编号</label>
-                    <div class="col-sm-8">
-                      <input type="text" class="form-control" id="deptNo" placeholder="">
-                    </div>
-                  </div>
                   
                   <div class="form-group">
                     <label for="deptName" class="col-sm-3 control-label">营业部名称</label>
@@ -211,35 +208,98 @@
                   </div>
                   
                   <div class="form-group">
-                    <label for="deptHead" class="col-sm-3 control-label">营业部负责人</label>
+                    <label for="mediatorNo" class="col-sm-3 control-label">居间人编号</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" id="deptHead" placeholder="">
+                      <input type="text" class="form-control" id="mediatorNo" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="mediatorName" class="col-sm-3 control-label">居间人姓名</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="mediatorName" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="mediatorType" class="col-sm-3 control-label">居间人类型</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="mediatorType" placeholder="">
                     </div>
                   </div>
                   
                   <hr>
                   
                   <div class="form-group">
-                    <label for="deptTelephone" class="col-sm-3 control-label">营业部电话</label>
+                    <label for="certNo" class="col-sm-3 control-label">身份证号码</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" id="deptTelephone" placeholder="">
+                      <input type="text" class="form-control" id="certNo" placeholder="">
                     </div>
                   </div>
                   
                   <div class="form-group">
-                    <label for="deptAddress" class="col-sm-3 control-label">营业部地址</label>
+                    <label for="effectiveDate" class="col-sm-3 control-label">生效日期</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="deptAddress" placeholder="">
+                        <input type="text" class="form-control" id="birthday" placeholder="">
                     </div>
                   </div>
+                  
                   <div class="form-group">
-                    <label for="establishDate1" class="col-sm-3 control-label">成立日期</label>
+                    <label for="expireDate" class="col-sm-3 control-label">失效日期</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" id="establishDate1" placeholder="">
+                      <input type="text" class="form-control" id="entryDate" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="gender" class="col-sm-3 control-label">返佣周期</label>
+                    <div class="col-sm-8">
+                      <!-- <input type="text" class="form-control" id="gender" placeholder=""> -->
+                      <label class="btn btn-default col-sm-3">
+					    <input type="radio" name="options" id="option1" autocomplete="off"> 按月返佣
+					  </label>
+					  <label class="btn btn-default col-sm-3 col-sm-offset-1">
+					    <input type="radio" name="options" id="option0" autocomplete="off"> 按年返佣
+					  </label>
                     </div>
                   </div>
                   
                   <hr>
+                  
+                  <div class="form-group">
+                    <label for="rebateRate" class="col-sm-3 control-label">默认返佣比例</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="rebateRate" placeholder="例：如果返50%就填写0.5">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="accountRate" class="col-sm-3 control-label">居间人核算比例</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="accountRate" placeholder="例：如果返50%就填写0.5">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="email" class="col-sm-3 control-label">电子邮箱</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="email" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="address" class="col-sm-3 control-label">地址</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="address" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="telephone" class="col-sm-3 control-label">手机</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="telephone" placeholder="">
+                    </div>
+                  </div>
                   
                   <div class="form-group">
                     <label for="remark" class="col-sm-3 control-label">备注</label>

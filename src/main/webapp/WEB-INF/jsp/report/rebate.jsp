@@ -518,7 +518,7 @@
                                 <th data-field="dailyRights" data-align="center" >日均权益利率</th>
                                 <th data-field="interestAmount" data-align="center" data-sortable="true">利息</th>
                                 <th data-field="availableFunds" data-align="center" data-sortable="true">可用资金</th>
-                                <th data-field="rights" data-align="center" data-sortable="true">客户权益</th>
+                                <th data-field="rights" data-align="center" data-sortable="true">客户日均权益</th>
                             </tr>
                             </thead>
                         </table>

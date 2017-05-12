@@ -163,7 +163,31 @@
     </table> -->
     
     <!-- CTP交易明细表 T_CTPTRADE_DATA -->
-    <table schema="" tableName="T_CTPTRADE_DATA" domainObjectName="CtpTradeData" 
+    <!-- <table schema="" tableName="T_CTPTRADE_DATA" domainObjectName="CtpTradeData" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- CRM客户信息表 T_CRM_CUSTOMER -->
+    <!-- <table schema="" tableName="T_CRM_CUSTOMER" domainObjectName="CrmCustomer" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- CRM 居间人信息表 T_CRM_MEDIATOR -->
+    <!-- <table schema="" tableName="T_CRM_MEDIATOR" domainObjectName="CrmMediator" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- CRM 营销人员信息表 -->
+    <table schema="" tableName="T_CRM_MARKETER" domainObjectName="CrmMarketer" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table>
+    
+    <!-- CRM营业部信息表 -->
+    <table schema="" tableName="T_CRM_DEPT" domainObjectName="CrmDept" 
         enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
         enableUpdateByExample="false" selectByExampleQueryId="false">
     </table>

@@ -241,7 +241,13 @@
   
   <select id="selectByMediatorNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
-    <include refid="Base_Column_List" />
+     ID,TRADE_DATE_STR,TRADE_DATE,INVESTOR_NO,INVESTOR_NAME,DEPT_CODE,DEPT_NAME,AVAILABLE_FUNDS,CREATE_TIME,UPDATE_TIME,CREATE_BY,UPDATE_BY,
+     (select round(avg(INVESTOR_RIGHTS),2)
+        from T_CAPITAL_STATEMENT t2 
+        where t.INVESTOR_NO = t2.INVESTOR_NO 
+        and to_char(t2.TRADE_DATE,'yyyy')= #{1}
+        and to_char(t2.TRADE_DATE,'mm') = #{2}
+        ) as INVESTOR_RIGHTS
     from T_CAPITAL_STATEMENT t 
     where EXISTS (select 1 from T_MEDIATOR_CUST t1 
                   where t1.MEDIATOR_NO = #{0,jdbcType=VARCHAR}
@@ -252,8 +258,14 @@
   
   <select id="selectByInvestorNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
-    <include refid="Base_Column_List" />
-    from T_CAPITAL_STATEMENT
+    ID,TRADE_DATE_STR,TRADE_DATE,INVESTOR_NO,INVESTOR_NAME,DEPT_CODE,DEPT_NAME,AVAILABLE_FUNDS,CREATE_TIME,UPDATE_TIME,CREATE_BY,UPDATE_BY,
+     (select round(avg(INVESTOR_RIGHTS),2)
+        from T_CAPITAL_STATEMENT t2 
+        where t.INVESTOR_NO = t2.INVESTOR_NO 
+        and to_char(t2.TRADE_DATE,'yyyy')= #{1}
+        and to_char(t2.TRADE_DATE,'mm') = #{2}
+      ) as INVESTOR_RIGHTS
+    from T_CAPITAL_STATEMENT t
     where INVESTOR_NO = #{0,jdbcType=VARCHAR}
     and to_char(TRADE_DATE,'yyyy') = #{1}
     and to_char(TRADE_DATE,'mm') = #{2}

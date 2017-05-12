@@ -28,6 +28,12 @@
     <!-- datepicker -->
     <script src="resources/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
     <script src="resources/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+    
+    <!-- bootstrap-select -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+
+
     <script type="text/javascript">
         function operationFormatter(value,row,index) {
             var html = '<button type="button" id="cog'+index+'" class="btn btn-default btn-sm" title="设置" data-toggle="modal" data-target="#editModal">'
@@ -51,10 +57,10 @@
         $(function(){
             var treeObj = ${sessionScope.treeView};
             $('#tree').treeview({data: treeObj,enableLinks: true});
-            $('li a[href="toCrmDept"]').parent().addClass("active");
+            $('li a[href="toCrmCustomer"]').parent().addClass("active");
             
             
-            $('#establishDate').datepicker({
+            $('#birthday').datepicker({
                 format: "yyyy-mm-dd",
                   startView: 0,
                   minViewMode: 0,
@@ -66,7 +72,7 @@
                   todayHighlight: true
             });
             
-            $('#establishDate1').datepicker({
+            $('#entryDate').datepicker({
                 format: "yyyy-mm-dd",
                   startView: 0,
                   minViewMode: 0,
@@ -78,6 +84,63 @@
                   todayHighlight: true
             });
             
+            //初始化
+            $('.selectpicker').selectpicker();
+            
+            $('#belongType').on('changed.bs.select loaded.bs.select', function (e) {
+            	var belongType = $('#belongType').val();
+            	if(belongType == "1"){
+            		//居间人
+            		$.ajax({
+                        url: 'queryCrmMediator',
+                        type: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+                            var len = data.length;
+                             var optionString = "";
+                             for (i = 0; i < len; i++) {
+                                 optionString += "<option value=\'"+ data[i].mediatorNo +"\'>" + data[i].mediatorName + "(" +data[i].mediatorNo+")</option>";
+                             }
+                             
+                             $('#belongTo').html(optionString);
+                             $('#belongTo').selectpicker('refresh');
+                        }
+                 });
+            	}else if(belongType == "2"){
+            		//营销人员
+            		$.ajax({
+                        url: 'queryCrmMarketer',
+                        type: 'post',
+                        dataType: 'json',
+                        success: function (data) {
+                            var len = data.length;
+                             var optionString = "";
+                             for (i = 0; i < len; i++) {
+                                 optionString += "<option value=\'"+ data[i].marketerNo +"\'>" + data[i].marketerName + "(" +data[i].marketerNo+")</option>";
+                             }
+                             
+                             $('#belongTo').html(optionString);
+                             $('#belongTo').selectpicker('refresh');
+                        }
+                 });
+            	}else if(belongType == "0"){
+            		 $.ajax({
+            	            url: 'queryCrmDept',
+            	            type: 'post',
+            	            dataType: 'json',
+            	            success: function (data) {
+            	            	var len = data.length;
+            	            	 var optionString = "";
+            	                 for (i = 0; i < len; i++) {
+            	                     optionString += "<option value=\'"+ data[i].deptCode +"\'>" + data[i].deptName + "</option>";
+            	                 }
+            	                 
+            	                 $('#belongTo').html(optionString);
+            	                 $('#belongTo').selectpicker('refresh');
+            	            }
+            		 });
+                }
+            });
         });
     </script>
   </head>
@@ -117,7 +180,7 @@
             
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h4 class="page-header"><a href="toHome" style="text-decoration: none;"><i class="glyphicon glyphicon-home"></i></a> --> <a href="toCrmOverview" style="text-decoration: none;">客户关系管理</a> --> <a href="toCrmDept" style="text-decoration: none;">营业部信息维护</a></h1>
+          <h4 class="page-header"><a href="toHome" style="text-decoration: none;"><i class="glyphicon glyphicon-home"></i></a> --> <a href="toCrmOverview" style="text-decoration: none;">客户关系管理</a> --> <a href="toCrmCustomer" style="text-decoration: none;">客户信息维护</a></h1>
 
           <div class="row placeholders">
             <div class="col-xs-6 col-sm-3 placeholder">
@@ -141,11 +204,11 @@
             </div>
           </div>
 
-          <h2 class="sub-header">营业部信息</h2>
+          <h2 class="sub-header">客户基本信息</h2>
           <div class="table-responsive">
             <div id="toolbar" class="btn-group">
                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addModal" title="创建任务">
-                    <i class="glyphicon glyphicon-plus">新建</i>
+                    <i class="glyphicon glyphicon-plus">新增客户</i>
                 </button>
             </div>
             <table class="table table-striped"
@@ -158,7 +221,7 @@
                    data-detail-view="true"
                    data-detail-formatter="detailFormatter"
                    data-height="562"
-                   data-url="queryCrmDept"
+                   data-url="queryCrmCustomer"
                    data-pagination="true"
                    data-method="post"
                    data-page-list="[5, 10, 20, 50]"
@@ -166,12 +229,16 @@
                 <thead>
                 <tr>
                     <!-- <th data-field="state" data-checkbox="true"></th> -->
-                    <th data-field="deptCode" data-align="center" >营业部编号</th>
-                    <th data-field="deptName" data-align="center" >营业部名称</th>
-                    <th data-field="deptHead" data-align="center" >营业部负责人</th>
-                    <th data-field="deptTelephone" data-align="center" >营业部联系电话</th>
-                    <th data-field="deptAddress" data-align="center" >营业部联系地址</th>
-                    <th data-field="establishDate" data-align="center" >营业部成立日期</th>
+                    <th data-field="deptName" data-align="center" >所属营业部</th>
+                    <th data-field="investorNo" data-align="center" >客户编号</th>
+                    <th data-field="investorName" data-align="center" >客户名称</th>
+                    <th data-field="belongType" data-align="center" >归属类型</th>
+                    <th data-field="belongToName" data-align="center" >归属名称</th>
+                    <th data-field="openDate" data-align="center" >开户日期</th>
+                    <th data-field="cancelDate" data-align="center" >销户日期</th>
+                    <th data-field="certType" data-align="center" >证件类型</th>
+                    <th data-field="certNo" data-align="center" >证件号码</th>
+                    <th data-field="mobilePhone" data-align="center" >手机</th>
                     <th data-field="" data-formatter="operationFormatter">操作</th>
                 </tr>
                 </thead>
@@ -186,60 +253,124 @@
       </div>
     </div>
     
-    <!-- 新建营业部模态框 -->
+    <!-- 新建客户模态框 -->
     <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title" id="myModalLabel">新建营业部</h4>
+            <h4 class="modal-title" id="myModalLabel">新建客户信息</h4>
           </div>
           <div class="modal-body">
               <form class="form-horizontal" role="form">
-                  <div class="form-group">
-                    <label for="deptNo" class="col-sm-3 control-label">营业部编号</label>
-                    <div class="col-sm-8">
-                      <input type="text" class="form-control" id="deptNo" placeholder="">
-                    </div>
-                  </div>
                   
                   <div class="form-group">
                     <label for="deptName" class="col-sm-3 control-label">营业部名称</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" id="deptName" placeholder="">
+                      <input type="text" class="form-control" id="deptName" placeholder="" readOnly>
                     </div>
                   </div>
                   
                   <div class="form-group">
-                    <label for="deptHead" class="col-sm-3 control-label">营业部负责人</label>
+                    <label for="custNo" class="col-sm-3 control-label">客户编号</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" id="deptHead" placeholder="">
+                      <input type="text" class="form-control" id="custNo" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="custName" class="col-sm-3 control-label">客户姓名</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="custName" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="belongType" class="col-sm-3 control-label">归属类型</label>
+                    <div class="col-sm-8">
+                      <select class="selectpicker form-control" id="belongType" data-live-Search="true">
+						  <option value="0">营业部</option>
+						  <option value="1">居间人</option>
+						  <option value="2">营销人员</option>
+					  </select>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="belongTo" class="col-sm-3 control-label">归属名称</label>
+                    <div class="col-sm-8">
+                      <select class="selectpicker form-control" id="belongTo" data-live-Search="true">
+                      </select>
                     </div>
                   </div>
                   
                   <hr>
                   
                   <div class="form-group">
-                    <label for="deptTelephone" class="col-sm-3 control-label">营业部电话</label>
+                    <label for="certType" class="col-sm-3 control-label">证件类型</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" id="deptTelephone" placeholder="">
+                      <input type="text" class="form-control" id="certType" placeholder="">
                     </div>
                   </div>
                   
                   <div class="form-group">
-                    <label for="deptAddress" class="col-sm-3 control-label">营业部地址</label>
+                    <label for="certNo" class="col-sm-3 control-label">证件号码</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="deptAddress" placeholder="">
+                      <input type="text" class="form-control" id="certNo" placeholder="">
                     </div>
                   </div>
+                  
+                  
                   <div class="form-group">
-                    <label for="establishDate1" class="col-sm-3 control-label">成立日期</label>
+                    <label for="openDate" class="col-sm-3 control-label">开户日期</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" id="establishDate1" placeholder="">
+                        <input type="text" class="form-control" id="openDate" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="effectDate" class="col-sm-3 control-label">生效日期</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="effectDate" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="expireDate" class="col-sm-3 control-label">销户日期</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="expireDate" placeholder="">
                     </div>
                   </div>
                   
                   <hr>
+                  
+                  <div class="form-group">
+                    <label for="contractNo" class="col-sm-3 control-label">合同编号</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="contractNo" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="email" class="col-sm-3 control-label">电子邮箱</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="email" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="address" class="col-sm-3 control-label">地址</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="address" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="telephone" class="col-sm-3 control-label">手机</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="telephone" placeholder="">
+                    </div>
+                  </div>
                   
                   <div class="form-group">
                     <label for="remark" class="col-sm-3 control-label">备注</label>

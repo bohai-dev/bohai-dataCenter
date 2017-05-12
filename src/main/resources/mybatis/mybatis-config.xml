@@ -95,6 +95,10 @@
         <mapper resource="mybatis/mapper/CloseDataMapper.xml"/>
         <mapper resource="mybatis/mapper/ReportExchangeRebateMapper.xml"/>
         <mapper resource="mybatis/mapper/CtpTradeDataMapper.xml"/>
+        <mapper resource="mybatis/mapper/CrmCustomerMapper.xml"/>
+        <mapper resource="mybatis/mapper/CrmMediatorMapper.xml"/>
+        <mapper resource="mybatis/mapper/CrmMarketerMapper.xml"/>
+        <mapper resource="mybatis/mapper/CrmDeptMapper.xml"/>
 
         <!-- 视图 -->
         <mapper resource="mybatis/mapper/VTradeDetailMapper.xml"/>

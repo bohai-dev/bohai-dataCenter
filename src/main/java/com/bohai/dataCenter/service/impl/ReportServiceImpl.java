@@ -233,7 +233,7 @@ public class ReportServiceImpl implements ReportService {
 						logger.debug("客户权益："+investorRights+"在区间："+entry.getKey()+"范围内");
 						//浮动利率
 						BigDecimal fint = new BigDecimal(entry.getValue().toString()); 
-						interest = available.multiply(fint).divide(new BigDecimal("365"), 2, RoundingMode.HALF_UP);
+						interest = available.multiply(fint).divide(new BigDecimal("360"), 2, RoundingMode.HALF_UP);
 						break;
 					}
 				}
