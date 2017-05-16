@@ -372,6 +372,23 @@
   <!-- 查询客户基本信息 -->
   <select id="selectByCondition" parameterType="com.bohai.dataCenter.vo.QueryCrmCustomerParamVO" resultMap="BaseResultMap">
     select t.*,t1.DEPT_NAME from T_CRM_CUSTOMER t left join T_CRM_DEPT t1 on t.DEPT_CODE = t1.DEPT_CODE
+    <where>
+        <if test="deptCode != null and deptCode != ''">
+            t.DEPT_CODE = #{deptCode}
+        </if>
+        <if test="investorNo != null and investorNo != ''">
+            and t.INVESTOR_NO = #{investorNo}
+        </if>
+        <if test="investorName != null and investorName != ''">
+            and t.INVESTOR_NAME like '%'||#{investorName}||'%'
+        </if>
+        <if test="belongType != null and belongType != ''">
+            and t.BELONG_TYPE = #{belongType}
+        </if>
+        <if test="belongTo != null and belongTo != ''">
+            and t.BELONG_TO = #{belongTo}
+        </if>
+    </where>
   </select>
   
 </mapper>

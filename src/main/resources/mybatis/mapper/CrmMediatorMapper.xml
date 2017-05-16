@@ -26,6 +26,8 @@
     <result column="EFFECT_DATE" property="effectDate" jdbcType="VARCHAR" />
     <result column="EXPIRE_DATE" property="expireDate" jdbcType="VARCHAR" />
     <result column="CERT_TYPE" property="certType" jdbcType="VARCHAR" />
+    <result column="BELONG_TYPE" property="belongType" jdbcType="VARCHAR" />
+    <result column="BELONG_TO" property="belongTo" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     <!--
@@ -35,7 +37,7 @@
     -->
     MEDIATOR_NO, MEDIATOR_NAME, MEDIATOR_SHORT_NAME, STATUS, DEP_CODE, DEP_NAME, ALLOCATION_PROPORTION, 
     PAY_TYPE, TELEPHONE, FAX, ADDRESS, EMAIL, CERT_NO, REMARK, CREATE_TIME, UPDATE_TIME, 
-    EFFECT_DATE, EXPIRE_DATE, CERT_TYPE
+    EFFECT_DATE, EXPIRE_DATE, CERT_TYPE,BELONG_TYPE,BELONG_TO
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     <!--
@@ -69,14 +71,14 @@
       FAX, ADDRESS, EMAIL, 
       CERT_NO, REMARK, CREATE_TIME, 
       UPDATE_TIME, EFFECT_DATE, EXPIRE_DATE, 
-      CERT_TYPE)
+      CERT_TYPE,BELONG_TYPE,BELONG_TO)
     values (#{mediatorNo,jdbcType=VARCHAR}, #{mediatorName,jdbcType=VARCHAR}, #{mediatorShortName,jdbcType=VARCHAR}, 
       #{status,jdbcType=VARCHAR}, #{depCode,jdbcType=VARCHAR}, #{depName,jdbcType=VARCHAR}, 
       #{allocationProportion,jdbcType=VARCHAR}, #{payType,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, 
       #{fax,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
       #{certNo,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{effectDate,jdbcType=VARCHAR}, #{expireDate,jdbcType=VARCHAR}, 
-      #{certType,jdbcType=VARCHAR})
+      #{certType,jdbcType=VARCHAR},#{belongType,jdbcType=VARCHAR},#{belongTo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.bohai.dataCenter.entity.CrmMediator" >
     <!--
@@ -143,6 +145,12 @@
       <if test="certType != null" >
         CERT_TYPE,
       </if>
+      <if test="certType != null" >
+        BELONG_TYPE,
+      </if>
+      <if test="certType != null" >
+        BELONG_TO,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="mediatorNo != null" >
@@ -201,6 +209,12 @@
       </if>
       <if test="certType != null" >
         #{certType,jdbcType=VARCHAR},
+      </if>
+      <if test="belongType != null" >
+        #{belongType,jdbcType=VARCHAR},
+      </if>
+      <if test="belongTo != null" >
+        #{belongTo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -266,6 +280,12 @@
       <if test="certType != null" >
         CERT_TYPE = #{certType,jdbcType=VARCHAR},
       </if>
+      <if test="belongType != null" >
+        BELONG_TYPE = #{belongType,jdbcType=VARCHAR},
+      </if>
+      <if test="belongTo != null" >
+        BELONG_TO = #{belongTo,jdbcType=VARCHAR},
+      </if>
     </set>
     where MEDIATOR_NO = #{mediatorNo,jdbcType=VARCHAR}
   </update>
@@ -293,7 +313,9 @@
       UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
       EFFECT_DATE = #{effectDate,jdbcType=VARCHAR},
       EXPIRE_DATE = #{expireDate,jdbcType=VARCHAR},
-      CERT_TYPE = #{certType,jdbcType=VARCHAR}
+      CERT_TYPE = #{certType,jdbcType=VARCHAR},
+      BELONG_TYPE = #{belongType,jdbcType=VARCHAR},
+      BELONG_TO = #{belongTo,jdbcType=VARCHAR}
     where MEDIATOR_NO = #{mediatorNo,jdbcType=VARCHAR}
   </update>
   
@@ -316,8 +338,35 @@
 			t.UPDATE_TIME ,
 			t.EFFECT_DATE ,
 			t.EXPIRE_DATE ,
-			t.CERT_TYPE
+			t.CERT_TYPE,
+			t.BELONG_TYPE,
+			t.BELONG_TO
         from T_CRM_MEDIATOR t left join T_CRM_DEPT t1 
         on t.DEP_CODE = t1.DEPT_CODE
+        <where>
+            <if test="mediatorNo != null and mediatorNo != ''" >
+                t.MEDIATOR_NO = #{mediatorNo,jdbcType=VARCHAR}
+            </if>
+            <if test="mediatorName != null and mediatorName != ''" >
+                and t.MEDIATOR_NAME like '%'||#{mediatorName,jdbcType=VARCHAR}||'%'
+            </if>
+            <if test="belongType != null and belongType != ''" >
+                and t.BELONG_TYPE = #{belongType,jdbcType=VARCHAR}
+            </if>
+            <if test="belongTo != null and belongTo != ''" >
+                and t.BELONG_TO = #{belongTo,jdbcType=VARCHAR}
+            </if>
+            <if test="deptCode != null and deptCode != ''" >
+                and t.DEP_CODE = #{deptCode,jdbcType=VARCHAR}
+            </if>
+        </where>
+  </select>
+  
+    <select id="selectByMarketer" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+        <include refid="Base_Column_List" />
+        from T_CRM_MEDIATOR 
+        where BELONG_TYPE = '1'
+        and BELONG_TO = #{0}
   </select>
 </mapper>

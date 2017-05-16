@@ -2,6 +2,10 @@ package com.bohai.dataCenter.persistence;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+import com.bohai.dataCenter.entity.CrmMarketer;
 import com.bohai.dataCenter.entity.CrmMediator;
 import com.bohai.dataCenter.vo.QueryCrmMediatorParamVO;
 
@@ -55,4 +59,16 @@ public interface CrmMediatorMapper {
     int updateByPrimaryKey(CrmMediator record);
     
     List<CrmMediator> selectByCondition(QueryCrmMediatorParamVO paramVO);
+    
+    @Update("update T_CRM_MEDIATOR "
+            + "set DEP_CODE = #{depCode},"
+            + "DEP_NAME = #{depName} "
+            + "where BELONG_TYPE = '1' "
+            + "and BELONG_TO = #{marketerNo}")
+    int updateDepByMarketerNo(CrmMarketer marketer);
+    
+    List<CrmMediator> selectByMarketer(String marketerNo);
+    
+    @Select(" SELECT to_char(sysdate,'yymm')||'2'||lpad(SEQ_CRM_MEDIATORNO.nextval,5,'0') from dual")
+    String getMediatorNo();
 }

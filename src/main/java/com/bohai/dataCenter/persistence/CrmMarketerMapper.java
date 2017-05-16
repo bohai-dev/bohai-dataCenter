@@ -2,6 +2,8 @@ package com.bohai.dataCenter.persistence;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Select;
+
 import com.bohai.dataCenter.entity.CrmMarketer;
 import com.bohai.dataCenter.vo.QueryCrmMarketerParamVO;
 
@@ -55,4 +57,7 @@ public interface CrmMarketerMapper {
     int updateByPrimaryKey(CrmMarketer record);
     
     List<CrmMarketer> selectByCondition(QueryCrmMarketerParamVO paramVO);
+    
+    @Select("SELECT to_char(sysdate,'yymm')||'1'||lpad(SEQ_CRM_MARKETERNO.nextval,5,'0') from dual")
+    String getMarketerNo();
 }

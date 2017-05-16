@@ -6,8 +6,14 @@ package com.bohai.dataCenter.vo;
  *
  */
 public class PaginationParamVO {
+    
+    private Integer pageNumber;
+    
+    private Integer pageSize;
 	
 	private Long offset;
+	
+	private Long limit;
 	
 	private Long pages;
 	
@@ -15,7 +21,23 @@ public class PaginationParamVO {
 	
 	private String sort;
 
-	public Long getOffset() {
+	public Integer getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(Integer pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Long getOffset() {
 		return offset;
 	}
 
@@ -23,7 +45,15 @@ public class PaginationParamVO {
 		this.offset = offset;
 	}
 
-	public Long getPages() {
+	public Long getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Long limit) {
+        this.limit = limit;
+    }
+
+    public Long getPages() {
 		return pages;
 	}
 

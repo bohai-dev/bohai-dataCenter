@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -29,5 +30,31 @@ public class CrmDeptController {
 	public List<CrmDept> queryCrmDept(QueryCrmDeptParamVO paramVO){
 		
 		return this.crmDeptMapper.selectByCondition(paramVO);
+	}
+	
+	@RequestMapping(value="saveCrmDept")
+	@ResponseBody
+	public void saveCrmDept(@RequestBody(required=false) CrmDept paramVO){
+	    
+        this.crmDeptMapper.insertSelective(paramVO);
+    }
+	
+	@RequestMapping(value="updateCrmDept")
+	@ResponseBody
+	public void updateCrmDept(@RequestBody(required=false) CrmDept paramVO){
+	    this.crmDeptMapper.updateByPrimaryKey(paramVO);
+	}
+	
+	@RequestMapping(value="removeCrmDept")
+	@ResponseBody
+	public void removeCrmDept(@RequestBody(required=false) CrmDept paramVO){
+	    
+	    this.crmDeptMapper.deleteByPrimaryKey(paramVO.getDeptCode());
+	}
+	
+	@RequestMapping(value="generateDepNo")
+    @ResponseBody
+	public String generateDepNo(){
+	    return this.crmDeptMapper.getDepNo();
 	}
 }

@@ -2,7 +2,12 @@ package com.bohai.dataCenter.persistence;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
 import com.bohai.dataCenter.entity.CrmCustomer;
+import com.bohai.dataCenter.entity.CrmMarketer;
+import com.bohai.dataCenter.entity.CrmMediator;
 import com.bohai.dataCenter.vo.QueryCrmCustomerParamVO;
 
 public interface CrmCustomerMapper {
@@ -55,4 +60,18 @@ public interface CrmCustomerMapper {
     int updateByPrimaryKey(CrmCustomer record);
     
     List<CrmCustomer> selectByCondition(QueryCrmCustomerParamVO paramVO);
+    
+    @Update("update T_CRM_CUSTOMER "
+            + "set DEPT_CODE = #{depCode}"
+            + "where BELONG_TYPE = '1'"
+            + "and BELONG_TO = #{marketerNo}")
+    int updateDepByMarketer(CrmMarketer marketer);
+    
+    @Update("update T_CRM_CUSTOMER "
+            + "set DEPT_CODE = #{depCode} "
+            + "where BELONG_TYPE = '2' "
+            + "and BELONG_TO = #{mediatorNo}")
+    int updateDepByMediator(CrmMediator mediator);
+    
+    
 }

@@ -30,7 +30,7 @@
     <script src="resources/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
     <script type="text/javascript">
         function operationFormatter(value,row,index) {
-            var html = '<button type="button" id="cog'+index+'" class="btn btn-default btn-sm" title="设置" data-toggle="modal" data-target="#editModal">'
+            var html = '<button type="button" id="cog'+row.deptCode+'" class="btn btn-default btn-sm" title="设置">'
                          + '<i class="glyphicon glyphicon-cog"></i>'
                      + '</button> &nbsp;'
                      
@@ -42,10 +42,51 @@
                          + '<i class="glyphicon glyphicon-minus"></i>'
                      + '</button> &nbsp;'
                      
-                     + '<button type="button" id="trash'+index+'" class="btn btn-default btn-sm" title="删除">'
+                     + '<button type="button" id="trash'+row.deptCode+'" class="btn btn-default btn-sm" title="删除">'
                          + '<i class="glyphicon glyphicon-trash"></i>'
                      + '</button>';
+                     
+                     //添加修改事件
+                     $("#deptTable").off("click","#cog"+row.deptCode);
+                     $("#deptTable").on("click","#cog"+row.deptCode,row,function(event){
+                         config(row);
+                     });
+                     //添加删除事件
+                     $("#deptTable").off("click","#trash"+row.deptCode);
+                     $("#deptTable").on("click","#trash"+row.deptCode,row,function(event){
+                         trash(row);
+                     });
             return html;
+        }
+        
+        /* 修改任务模态框 */
+        function config(row){
+            
+            $("#deptCode1").val(row.deptCode);
+            $("#deptName1").val(row.deptName);
+            $("#deptTelephone1").val(row.deptTelephone);
+            $("#deptAddress1").val(row.deptAddress);
+            $("#deptHead1").val(row.deptHead);
+            $("#establishDate1").val(row.establishDate);
+            $("#remark1").val(row.remark);
+            $("#editModal").modal('show');
+        }
+        
+        /* 删除营业部 */
+        function trash(row){
+            if(confirm("删除营业部："+row.deptName+",确定吗？")){
+                var param = {deptCode:row.deptCode};
+                $.ajax({
+                    type: "post",
+                    url: "removeCrmDept",
+                    contentType: "application/json;charset=UTF-8",
+                    data: JSON.stringify(param),
+                    success: function (date, status){
+                    	alert("删除成功");
+                        $("#deptTable").bootstrapTable('refresh');
+                    }
+                });
+            }
         }
         
         $(function(){
@@ -79,6 +120,63 @@
             });
             
         });
+        
+        //保存营业部信息
+        function saveCrmDept(){
+            var param = {deptCode:$('#deptCode').val(),
+                    deptName:$('#deptName').val(),
+                    deptTelephone:$('#deptTelephone').val(),
+                    deptAddress:$('#deptAddress').val(),
+                    deptHead:$('#deptHead').val(),
+                    establishDate:$('#establishDate').val(),
+                    remark:$('#remark').val()
+                    }
+           $.ajax({
+               url: 'saveCrmDept',
+               type: 'post',
+               contentType: "application/json;charset=UTF-8",
+               data: JSON.stringify(param),
+               success: function (data,status) {
+                   $('#addModal').modal('hide')
+                   $("#deptTable").bootstrapTable('refresh');
+                   }
+           });
+        }
+        
+        //更新营业部信息
+        function updateCrmDept(){
+            var param = {deptCode:$('#deptCode1').val(),
+                    deptName:$('#deptName1').val(),
+                    deptTelephone:$('#deptTelephone1').val(),
+                    deptAddress:$('#deptAddress1').val(),
+                    deptHead:$('#deptHead1').val(),
+                    establishDate:$('#establishDate1').val(),
+                    remark:$('#remark1').val()
+                    }
+           $.ajax({
+               url: 'updateCrmDept',
+               type: 'post',
+               contentType: "application/json;charset=UTF-8",
+               data: JSON.stringify(param),
+               success: function (data,status) {
+                   $('#editModal').modal('hide')
+                   $("#deptTable").bootstrapTable('refresh');
+                   }
+           });
+        }
+        
+      //生成居间人编号
+        function generateDepNo(){
+            $.ajax({
+                url: 'generateDepNo',
+                type: 'post',
+                dataType: 'text',
+                contentType: "application/json;charset=UTF-8",
+                success: function (data,status) {
+                    $('#deptCode').val(data);
+                }
+           });
+        }
     </script>
   </head>
 
@@ -120,25 +218,7 @@
           <h4 class="page-header"><a href="toHome" style="text-decoration: none;"><i class="glyphicon glyphicon-home"></i></a> --> <a href="toCrmOverview" style="text-decoration: none;">客户关系管理</a> --> <a href="toCrmDept" style="text-decoration: none;">营业部信息维护</a></h1>
 
           <div class="row placeholders">
-            <div class="col-xs-6 col-sm-3 placeholder">
-                <div class="row placeholders">
-                    <div class="col-xs-3 col-sm-3 placeholder">
-                        <label for="name">用户名：</label>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 placeholder ">
-                        <input type="text" class="form-control" id="name1231" placeholder="">
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-                123
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-                123
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-                123
-            </div>
+            
           </div>
 
           <h2 class="sub-header">营业部信息</h2>
@@ -148,7 +228,8 @@
                     <i class="glyphicon glyphicon-plus">新建</i>
                 </button>
             </div>
-            <table class="table table-striped"
+            <table id="deptTable"
+                   class="table table-striped"
                    data-toggle="table" 
                    data-toolbar="#toolbar"
                    data-show-refresh="true"
@@ -197,80 +278,14 @@
           <div class="modal-body">
               <form class="form-horizontal" role="form">
                   <div class="form-group">
-                    <label for="deptNo" class="col-sm-3 control-label">营业部编号</label>
+                    <label for="deptCode" class="col-sm-3 control-label">营业部编号</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" id="deptNo" placeholder="">
-                    </div>
-                  </div>
-                  
-                  <div class="form-group">
-                    <label for="deptName" class="col-sm-3 control-label">营业部名称</label>
-                    <div class="col-sm-8">
-                      <input type="text" class="form-control" id="deptName" placeholder="">
-                    </div>
-                  </div>
-                  
-                  <div class="form-group">
-                    <label for="deptHead" class="col-sm-3 control-label">营业部负责人</label>
-                    <div class="col-sm-8">
-                      <input type="text" class="form-control" id="deptHead" placeholder="">
-                    </div>
-                  </div>
-                  
-                  <hr>
-                  
-                  <div class="form-group">
-                    <label for="deptTelephone" class="col-sm-3 control-label">营业部电话</label>
-                    <div class="col-sm-8">
-                      <input type="text" class="form-control" id="deptTelephone" placeholder="">
-                    </div>
-                  </div>
-                  
-                  <div class="form-group">
-                    <label for="deptAddress" class="col-sm-3 control-label">营业部地址</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" id="deptAddress" placeholder="">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="establishDate1" class="col-sm-3 control-label">成立日期</label>
-                    <div class="col-sm-8">
-                      <input type="text" class="form-control" id="establishDate1" placeholder="">
-                    </div>
-                  </div>
-                  
-                  <hr>
-                  
-                  <div class="form-group">
-                    <label for="remark" class="col-sm-3 control-label">备注</label>
-                    <div class="col-sm-8">
-                      <textarea class="form-control" rows="3" id="remark"></textarea>
-                    </div>
-                  </div>
-                </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" class="btn btn-primary" onclick="savejob()">保存</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- 修改营业部信息 -->
-    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title" id="myModalLabel">修改营业部信息</h4>
-          </div>
-          <div class="modal-body">
-              <form class="form-horizontal" role="form">
-                  <div class="form-group">
-                    <label for="deptNo" class="col-sm-3 control-label">营业部编号</label>
-                    <div class="col-sm-8">
-                      <input type="text" class="form-control" id="deptNo" placeholder="" readonly>
+                        <div class="input-group">
+                          <span class="input-group-btn">
+                            <button class="btn btn-info" type="button" onclick="generateDepNo()">生成编号</button>
+                          </span>
+                          <input type="text" class="form-control" id="deptCode" placeholder="">
+                      </div>
                     </div>
                   </div>
                   
@@ -322,7 +337,78 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" class="btn btn-primary" onclick="savejob()">修改</button>
+            <button type="button" class="btn btn-primary" onclick="saveCrmDept()">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 修改营业部信息 -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">修改营业部信息</h4>
+          </div>
+          <div class="modal-body">
+              <form class="form-horizontal" role="form">
+                  <div class="form-group">
+                    <label for="deptCode1" class="col-sm-3 control-label">营业部编号</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="deptCode1" placeholder="" readonly>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="deptName1" class="col-sm-3 control-label">营业部名称</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="deptName1" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="deptHead1" class="col-sm-3 control-label">营业部负责人</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="deptHead1" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <hr>
+                  
+                  <div class="form-group">
+                    <label for="deptTelephone1" class="col-sm-3 control-label">营业部电话</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="deptTelephone1" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="deptAddress1" class="col-sm-3 control-label">营业部地址</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="deptAddress1" placeholder="">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="establishDate1" class="col-sm-3 control-label">成立日期</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="establishDate1" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <hr>
+                  
+                  <div class="form-group">
+                    <label for="remark1" class="col-sm-3 control-label">备注</label>
+                    <div class="col-sm-8">
+                      <textarea class="form-control" rows="3" id="remark1"></textarea>
+                    </div>
+                  </div>
+                </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary" onclick="updateCrmDept()">修改</button>
           </div>
         </div>
       </div>

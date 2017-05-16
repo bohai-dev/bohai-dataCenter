@@ -2,6 +2,8 @@ package com.bohai.dataCenter.persistence;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Select;
+
 import com.bohai.dataCenter.entity.CrmDept;
 import com.bohai.dataCenter.vo.QueryCrmDeptParamVO;
 
@@ -55,4 +57,8 @@ public interface CrmDeptMapper {
     int updateByPrimaryKey(CrmDept record);
     
     List<CrmDept> selectByCondition(QueryCrmDeptParamVO paramVO);
+    
+    //@Select(" SELECT SEQ_CRM_DEPNO.nextval from dual")
+    @Select(" select max(DEPT_CODE)+1 from T_CRM_DEPT")
+    String getDepNo();
 }

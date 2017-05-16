@@ -320,5 +320,16 @@
         t.BIRETHDAY
     from T_CRM_MARKETER t left join T_CRM_DEPT t1 
     on t.DEP_CODE = t1.DEPT_CODE
+    <where>
+        <if test="marketerNo != null and marketerNo != ''">
+            t.MARKETER_NO = #{marketerNo,jdbcType=VARCHAR}
+        </if>
+        <if test="marketerName != null and marketerName != ''">
+            and t.MARKETER_NAME like  '%'||#{marketerName,jdbcType=VARCHAR}||'%'
+        </if>
+        <if test="depCode != null and depCode != ''">
+            and t.DEP_CODE = #{depCode,jdbcType=VARCHAR}
+        </if>
+    </where>
   </select>
 </mapper>
