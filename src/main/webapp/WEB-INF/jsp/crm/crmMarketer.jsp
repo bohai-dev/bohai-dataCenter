@@ -193,7 +193,7 @@
                     dataType: 'json',
                     success: function (data) {
                         var len = data.length;
-                         var optionString = "<option> </option>";
+                         var optionString = "<option > </option>";
                          for (i = 0; i < len; i++) {
                              optionString += "<option value=\'"+ data[i].deptCode +"\'>" + data[i].deptName + "</option>";
                          }

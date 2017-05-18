@@ -205,6 +205,18 @@ public class CrmCustomer {
     
     private String deptName;
     
+    private String belongToName;
+    
+    
+    
+    public String getBelongToName() {
+        return belongToName;
+    }
+
+    public void setBelongToName(String belongToName) {
+        this.belongToName = belongToName;
+    }
+
     public String getDeptName() {
 		return deptName;
 	}

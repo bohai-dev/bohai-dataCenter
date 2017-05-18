@@ -691,7 +691,8 @@
                     <th data-field="investorNo" data-align="center" >投资者编号</th>
                     <th data-field="investorName" data-align="center" >投资者姓名</th>
                     <th data-field="belongType" data-align="center" data-formatter="belongTypeFormatter">归属类型</th>
-                    <th data-field="belongTo" data-align="center" >归属名称</th>
+                    <th data-field="belongTo" data-align="center" >归属代码</th>
+                    <th data-field="belongToName" data-align="center" >归属名称</th>
                     <th data-field="openDate" data-align="center" >开户日期</th>
                     <th data-field="cancelDate" data-align="center" >销户日期</th>
                     <th data-field="certType" data-align="center" data-formatter="certTypeFormatter">证件类型</th>

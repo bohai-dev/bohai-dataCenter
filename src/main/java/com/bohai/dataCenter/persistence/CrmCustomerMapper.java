@@ -73,5 +73,10 @@ public interface CrmCustomerMapper {
             + "and BELONG_TO = #{mediatorNo}")
     int updateDepByMediator(CrmMediator mediator);
     
-    
+    @Update("update T_CRM_CUSTOMER "
+            + "set BELONG_TYPE = #{belongType},"
+            + "BELONG_TO = #{belongTo}"
+            + "where BELONG_TYPE = '2' "
+            + "and BELONG_TO = #{mediatorNo}")
+    int updateBelongByMediator(CrmMediator mediator);
 }

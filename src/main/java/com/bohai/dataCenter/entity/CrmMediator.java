@@ -158,8 +158,18 @@ public class CrmMediator {
     private String belongType;
     
     private String belongTo;
+    
+    private String belongToName;
 
     
+    public String getBelongToName() {
+        return belongToName;
+    }
+
+    public void setBelongToName(String belongToName) {
+        this.belongToName = belongToName;
+    }
+
     public String getBelongType() {
         return belongType;
     }

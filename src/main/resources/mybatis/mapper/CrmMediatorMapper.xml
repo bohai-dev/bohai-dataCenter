@@ -28,6 +28,7 @@
     <result column="CERT_TYPE" property="certType" jdbcType="VARCHAR" />
     <result column="BELONG_TYPE" property="belongType" jdbcType="VARCHAR" />
     <result column="BELONG_TO" property="belongTo" jdbcType="VARCHAR" />
+    <result column="BELONG_TO_NAME" property="belongToName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     <!--
@@ -340,7 +341,10 @@
 			t.EXPIRE_DATE ,
 			t.CERT_TYPE,
 			t.BELONG_TYPE,
-			t.BELONG_TO
+			t.BELONG_TO,
+      case t.belong_type 
+      when '0' then (select dept_name from t_crm_dept a  where a.dept_code = t.belong_to) 
+      when '1' then (select b.MARKETER_NAME from t_crm_marketer b where b.marketer_no = t.belong_to) end as BELONG_TO_NAME
         from T_CRM_MEDIATOR t left join T_CRM_DEPT t1 
         on t.DEP_CODE = t1.DEPT_CODE
         <where>
@@ -358,6 +362,12 @@
             </if>
             <if test="deptCode != null and deptCode != ''" >
                 and t.DEP_CODE = #{deptCode,jdbcType=VARCHAR}
+            </if>
+            <if test="expireBegin != null and expireBegin != ''" >
+                and t.EXPIRE_DATE <![CDATA[ >= ]]> #{expireBegin,jdbcType=VARCHAR}
+            </if>
+            <if test="expireEnd != null and expireEnd != ''" >
+                and t.EXPIRE_DATE <![CDATA[ <= ]]> #{expireEnd,jdbcType=VARCHAR}
             </if>
         </where>
   </select>

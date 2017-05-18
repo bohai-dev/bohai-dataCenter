@@ -32,6 +32,7 @@
     <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="BELONG_TYPE" property="belongType" jdbcType="VARCHAR" />
     <result column="BELONG_TO" property="belongTo" jdbcType="VARCHAR" />
+    <result column="BELONG_TO_NAME" property="belongToName" jdbcType="VARCHAR" />
     <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -371,7 +372,12 @@
   
   <!-- 查询客户基本信息 -->
   <select id="selectByCondition" parameterType="com.bohai.dataCenter.vo.QueryCrmCustomerParamVO" resultMap="BaseResultMap">
-    select t.*,t1.DEPT_NAME from T_CRM_CUSTOMER t left join T_CRM_DEPT t1 on t.DEPT_CODE = t1.DEPT_CODE
+    select t.*,t1.DEPT_NAME,
+    case t.belong_type 
+      when '0' then (select dept_name from t_crm_dept a  where a.dept_code = t.belong_to) 
+      when '1' then (select b.MARKETER_NAME from t_crm_marketer b where b.marketer_no = t.belong_to) 
+      when '2' then (select c.MEDIATOR_NAME from t_crm_mediator c where c.MEDIATOR_NO = t.belong_to) end as BELONG_TO_NAME
+    from T_CRM_CUSTOMER t left join T_CRM_DEPT t1 on t.DEPT_CODE = t1.DEPT_CODE
     <where>
         <if test="deptCode != null and deptCode != ''">
             t.DEPT_CODE = #{deptCode}

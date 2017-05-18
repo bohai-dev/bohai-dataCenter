@@ -15,6 +15,29 @@ public class QueryCrmMediatorParamVO {
 	private String belongType;
 	
 	private String belongTo;
+	
+	//开始失效时间
+	private String expireBegin;
+	
+	//结束失效时间
+	private String expireEnd;
+	
+
+    public String getExpireBegin() {
+        return expireBegin;
+    }
+
+    public void setExpireBegin(String expireBegin) {
+        this.expireBegin = expireBegin;
+    }
+
+    public String getExpireEnd() {
+        return expireEnd;
+    }
+
+    public void setExpireEnd(String expireEnd) {
+        this.expireEnd = expireEnd;
+    }
 
     public String getBelongType() {
         return belongType;

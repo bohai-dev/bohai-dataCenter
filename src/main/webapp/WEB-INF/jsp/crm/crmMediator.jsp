@@ -210,6 +210,30 @@
                   todayHighlight: true
             });
             
+            $('#qexpireBegin').datepicker({
+                format: "yyyy-mm-dd",
+                  startView: 0,
+                  minViewMode: 0,
+                  maxViewMode: 2,
+                  todayBtn: "linked",
+                  clearBtn: true,
+                  language: "zh-CN",
+                  autoclose: true,
+                  todayHighlight: true
+            });
+            
+            $('#qexpireEnd').datepicker({
+                format: "yyyy-mm-dd",
+                  startView: 0,
+                  minViewMode: 0,
+                  maxViewMode: 2,
+                  todayBtn: "linked",
+                  clearBtn: true,
+                  language: "zh-CN",
+                  autoclose: true,
+                  todayHighlight: true
+            });
+            
           //初始化
             $('.selectpicker').selectpicker();
             
@@ -430,6 +454,8 @@
                 deptCode : $('#qdepName').val(),
                 belongType : $('#qbelongType').val(),
                 belongTo : $('#qbelongTo').val(),
+                expireBegin : $('#qexpireBegin').val(),
+                expireEnd : $('#qexpireEnd').val(),
                 pageNumber:params.pageNumber,
                 pageSize:params.pageSize}
         }
@@ -445,6 +471,11 @@
                     $('#mediatorNo').val(data);
                 }
            });
+        }
+        
+        //导出excel
+        function exportCrmMediator(){
+        	$('#queryForm').submit();
         }
     </script>
   </head>
@@ -488,23 +519,23 @@
 
           <div class="row placeholders">
             <!-- 查询条件表单 -->
-                      <form class="form-horizontal" style="margin-top: 30px">
+                      <form id="queryForm" method="post" action="exportCrmMediator" enctype="application/json;charset=UTF-8" class="form-horizontal" style="margin-top: 30px">
                           <div class="form-group">
                           
                                 <label for="qdepName" class="col-sm-2 col-md-1 control-label">所在营业部</label>
                                 <div class="col-sm-10 col-md-2">
-                                  <select class="selectpicker form-control" id="qdepName" data-live-Search="true">
+                                  <select class="selectpicker form-control" id="qdepName" name="deptCode" data-live-Search="true">
                                     </select>
                                 </div>
                                 
                                 <label for="qmediatorNo" class="col-sm-2 col-md-1 control-label">居间人编号</label>
                                 <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="qmediatorNo">
+                                  <input type="text" class="form-control" id="qmediatorNo" name="mediatorNo">
                                 </div>
                           
                                 <label for="qmediatorName" class="col-sm-2 col-md-1 control-label">居间人姓名</label>
                                 <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="qmediatorName">
+                                  <input type="text" class="form-control" id="qmediatorName" name="mediatorName">
                                 </div>
                             
                           </div>
@@ -512,23 +543,39 @@
                           <div class="form-group">
                                 <label for="qbelongType" class="col-sm-2 col-md-1 control-label">归属类型</label>
                                 <div class="col-sm-10 col-md-2">
-                                  <select class="selectpicker form-control" id="qbelongType" >
+                                  <select class="selectpicker form-control" id="qbelongType" name="belongType">
 			                          <option > </option>
 			                          <option value="0">营业部</option>
 			                          <option value="1">营销人员</option>
 			                      </select>
                                 </div>
                                 
-                                <label for="qbelongTo" class="col-sm-2 col-md-1 control-label">归属名称</label>
+                                <label for="qbelongTo" class="col-sm-2 col-md-1 control-label">归属代码</label>
                                 <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="qbelongTo">
+                                  <input type="text" class="form-control" id="qbelongTo" name="belongTo">
                                 </div>
                                 
                           </div>
                           
                           <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10 col-md-2 col-md-offset-5 ">
+                                <label for="qexpireBegin" class="col-sm-2 col-md-1 control-label">开始失效日期</label>
+                                <div class="col-sm-10 col-md-2">
+                                  <input type="text" class="form-control" id="qexpireBegin" name="expireBegin">
+                                </div>
+                                
+                                <label for="qexpireEnd" class="col-sm-2 col-md-1 control-label">结束失效日期</label>
+                                <div class="col-sm-10 col-md-2">
+                                  <input type="text" class="form-control" id="qexpireEnd" name="expireEnd">
+                                </div>
+                                
+                          </div>
+                          
+                          <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10 col-md-2 col-md-offset-4 ">
                               <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryCrmMediator()">
+                            </div>
+                            <div class=" col-sm-10 col-md-2 ">
+                              <input class="btn btn-default col-xs-7" type="button" value="导出" onclick="exportCrmMediator()">
                             </div>
                           </div>
                       </form>
@@ -566,8 +613,9 @@
                     <th data-field="mediatorNo" data-align="center" >居间人编号</th>
                     <th data-field="mediatorName" data-align="center" >居间人名称</th>
                     <th data-field="belongType" data-align="center" data-formatter="belongTypeFormatter">归属类型</th>
-                    <th data-field="belongTo" data-align="center" >归属名称</th>
-                    <th data-field="status" data-align="center" >在职状态</th>
+                    <th data-field="belongTo" data-align="center" >归属代码</th>
+                    <th data-field="belongToName" data-align="center" >归属名称</th>
+                    <!-- <th data-field="status" data-align="center" >在职状态</th> -->
                     <th data-field="certType" data-align="center" data-formatter="certTypeFormatter">证件类型</th>
                     <th data-field="certNo" data-align="center" >证件号码</th>
                     <th data-field="effectDate" data-align="center" >生效日期</th>

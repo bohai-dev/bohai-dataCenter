@@ -34,7 +34,7 @@ public class CrmMediatorServiceImpl implements CrmMediatorService {
         try {
             crmMediatorMapper.updateByPrimaryKey(mediator);
         } catch (Exception e) {
-            logger.error("更新居间人信息失败");
+            logger.error("更新居间人信息失败",e);
             throw new BohaiException("", "更新居间人信息失败");
         }
 
@@ -43,7 +43,21 @@ public class CrmMediatorServiceImpl implements CrmMediatorService {
     @Override
     public void removeCrmMediator(CrmMediator mediator) throws BohaiException {
         
-        this.crmMediatorMapper.deleteByPrimaryKey(mediator.getMediatorNo());
+        CrmMediator existsMediator = this.crmMediatorMapper.selectByPrimaryKey(mediator.getMediatorNo());
+        
+        if(existsMediator == null){
+            logger.warn("居间人不存在："+mediator.getMediatorNo());
+            throw new BohaiException("", "居间人不存在："+mediator.getMediatorNo());
+        }
+        
+        try {
+            this.crmCustomerMapper.updateBelongByMediator(existsMediator);
+        } catch (Exception e) {
+            logger.error("更新居间人名下客户信息归属失败",e);
+            throw new BohaiException("", "更新居间人名下客户信息归属失败");
+        }
+        
+        this.crmMediatorMapper.deleteByPrimaryKey(existsMediator.getMediatorNo());
     }
 
 }

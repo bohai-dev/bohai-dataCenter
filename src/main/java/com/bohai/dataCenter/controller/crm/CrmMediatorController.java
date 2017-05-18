@@ -1,9 +1,19 @@
 package com.bohai.dataCenter.controller.crm;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,6 +26,8 @@ import com.bohai.dataCenter.vo.QueryCrmMediatorParamVO;
 
 @Controller
 public class CrmMediatorController {
+    
+    static Logger logger = Logger.getLogger(CrmMediatorController.class);
 	
 	@Autowired
 	private CrmMediatorMapper crmMediatorMapper;
@@ -74,6 +86,88 @@ public class CrmMediatorController {
     public String generateMediatorNo(){
         
         return this.crmMediatorMapper.getMediatorNo();
+    }
+    
+    @RequestMapping("exportCrmMediator")
+    public void exportCrmMediator(QueryCrmMediatorParamVO paramVO, 
+            HttpServletRequest request, HttpServletResponse response) throws BohaiException{
+        
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet=wb.createSheet("居间人信息");
+        
+        String[] head = {"所属营业部","居间人编号","居间人名称","归属类型","归属代码","归属名称","证件类型","证件号码","生效日期","失效日期","默认分配比例","联系电话"};
+        
+        XSSFRow row = sheet.createRow(0);
+        //初始化表头
+        for (int i = 0 ;i < head.length ; i++) {
+            row.createCell(i).setCellValue(head[i]);
+            
+            sheet.setColumnWidth(i, 256*15);
+        }
+        
+        List<CrmMediator> list = this.crmMediatorMapper.selectByCondition(paramVO);
+        if(list != null && list.size() > 0){
+            
+            for (int i = 0 ; i < list.size(); i++) {
+                XSSFRow row2 = sheet.createRow(i+1);
+                //所属营业部
+                row2.createCell(0).setCellValue(list.get(i).getDepName());
+                //居间人编号
+                row2.createCell(1).setCellValue(list.get(i).getMediatorNo());
+                //居间人名称
+                row2.createCell(2).setCellValue(list.get(i).getMediatorName());
+                
+                String belongType = list.get(i).getBelongType();
+                if(StringUtils.isEmpty(belongType)){
+                    belongType = "无归属";
+                }else if(belongType.equals("0")){
+                    belongType = "营业部";
+                }else if (belongType.equals("1")) {
+                    belongType = "营销人员";
+                }else if (belongType.equals("2")) {
+                    belongType = "居间人";
+                }
+                //归属类型
+                row2.createCell(3).setCellValue(belongType);
+                //归属代码
+                row2.createCell(4).setCellValue(list.get(i).getBelongTo());
+                //归属名称
+                row2.createCell(5).setCellValue(list.get(i).getBelongToName());
+                
+                String certType = list.get(i).getCertType();
+                if(!StringUtils.isEmpty(certType)){
+                    if(certType.equals("0")){
+                        certType = "身份证";
+                    }
+                }
+                //证件类型
+                row2.createCell(6).setCellValue(certType);
+                //证件号码
+                row2.createCell(7).setCellValue(list.get(i).getCertNo());
+                //生效日期
+                row2.createCell(8).setCellValue(list.get(i).getEffectDate());
+                //失效日期
+                row2.createCell(9).setCellValue(list.get(i).getExpireDate());
+                //默认分配比例
+                row2.createCell(10).setCellValue(list.get(i).getAllocationProportion());
+                //联系电话
+                row2.createCell(11).setCellValue(list.get(i).getTelephone());
+            }
+        }
+        
+        try {
+            OutputStream output=response.getOutputStream();
+            response.reset();
+            response.setContentType("application/x-xls");  
+            response.setCharacterEncoding("UTF-8");  
+            String FileName = new String("居间人信息".getBytes("UTF-8"),"ISO-8859-1");
+            response.setHeader("Content-Disposition", "attachment;filename="+FileName+".xlsx");
+            wb.write(output);  
+            output.close(); 
+        } catch (IOException e) {
+            logger.error("导出居间人信息失败",e);
+            throw new BohaiException("", "导出居间人信息失败");
+        }
     }
 	
 	
