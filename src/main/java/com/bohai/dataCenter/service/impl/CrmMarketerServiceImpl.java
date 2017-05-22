@@ -79,4 +79,10 @@ public class CrmMarketerServiceImpl implements CrmMarketerService {
 
     }
 
+    @Override
+    public void removeCrmMarketer(CrmMarketer marketer) throws BohaiException {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

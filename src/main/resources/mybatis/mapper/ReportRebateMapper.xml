@@ -360,4 +360,21 @@
     </where>
     group by t.DEPT_NAME
   </select>
+  
+  <select id="selectMarketerReport" resultType="java.util.Map" parameterType="com.bohai.dataCenter.vo.QueryRebateReportParamVO">
+    select marketerNo as MARKETER_NO,b.MARKETER_NAME,b.DEP_NAME,sum(interest) as INTEREST from 
+		(select F_GETMARKETERNO(t.INVESTOR_NO) as marketerNo,t.INVESTOR_NAME,
+		    round(case when 
+		               t.fix_proportion is not null 
+		           then ((0.0195-t.FIX_PROPORTION)/t.FIX_PROPORTION)*t.INTEREST_AMOUNT 
+		           else decode(t.daily_rights,0,0,((0.0195-t.daily_rights)/t.daily_rights)*t.INTEREST_AMOUNT) 
+		           end,2) as interest,
+		    t.DEPT_NAME,t.TRADE_DATE
+		from T_REPORT_REBATE t where F_GETMARKETERNAME(t.INVESTOR_NO) is not null) a,T_MARKETER b 
+	where a.marketerNo = b.MARKETER_NO
+	<if test="month != null and month != ''">
+        and to_char(a.TRADE_DATE,'yyyy-mm') = #{month, jdbcType=VARCHAR}
+    </if>
+	group by marketerNo,b.MARKETER_NAME,b.DEP_NAME
+  </select>
 </mapper>

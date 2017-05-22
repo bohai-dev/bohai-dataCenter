@@ -181,13 +181,19 @@
     </table> -->
     
     <!-- CRM 营销人员信息表 -->
-    <table schema="" tableName="T_CRM_MARKETER" domainObjectName="CrmMarketer" 
+    <!-- <table schema="" tableName="T_CRM_MARKETER" domainObjectName="CrmMarketer" 
         enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
         enableUpdateByExample="false" selectByExampleQueryId="false">
-    </table>
+    </table> -->
     
     <!-- CRM营业部信息表 -->
-    <table schema="" tableName="T_CRM_DEPT" domainObjectName="CrmDept" 
+    <!-- <table schema="" tableName="T_CRM_DEPT" domainObjectName="CrmDept" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- T_REPORTE_INVESTOR_REBATE 交易所返还到客户表 -->
+    <table schema="" tableName="T_REPORTE_INVESTOR_REBATE" domainObjectName="ReporteInvestorRebate" 
         enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
         enableUpdateByExample="false" selectByExampleQueryId="false">
     </table>

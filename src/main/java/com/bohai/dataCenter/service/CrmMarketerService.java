@@ -16,4 +16,11 @@ public interface CrmMarketerService {
      */
     public void modifyCrmMarketer(CrmMarketer marketer) throws BohaiException;
     
+    /**
+     * 营销人员删除
+     * @param marketer
+     * @throws BohaiException
+     */
+    public void removeCrmMarketer(CrmMarketer marketer) throws BohaiException;
+    
 }

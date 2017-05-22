@@ -37,5 +37,13 @@ public interface ReportRebateService {
 	 */
 	List<Map<String,Object>> queryMarketRebateReport(QueryRebateReportParamVO paramVO);
 	
+	/**
+	 * 查询返利息统计表(以营销人员为维度)
+	 * @param paramVO
+	 * @return
+	 */
+	List<Map<String,Object>> queryMarketerRebateReport(QueryRebateReportParamVO paramVO);
+	
+	
 	
 }

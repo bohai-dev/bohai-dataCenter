@@ -70,4 +70,5 @@ public interface ReportRebateMapper {
     
     List<Map<String, Object>> selectMarketReport(QueryRebateReportParamVO paramVO);
     
+    List<Map<String, Object>> selectMarketerReport(QueryRebateReportParamVO paramVO);
 }

@@ -103,6 +103,17 @@
                   autoclose: true,
                   todayHighlight: true
             });
+            $('#reportMonth2').datepicker({
+                format: "yyyy-mm",
+                  startView: 1,
+                  minViewMode: 1,
+                  maxViewMode: 2,
+                  todayBtn: "linked",
+                  clearBtn: true,
+                  language: "zh-CN",
+                  autoclose: true,
+                  todayHighlight: true
+            });
             
             $('#beginDate').datepicker({
                 format: "yyyy-mm-dd",
@@ -186,6 +197,24 @@
             );
         }
         
+        
+        //查询营销人员返利息报表
+        function queryMarketerRebateReport(){
+            var reportMonth = $("#reportMonth2").val();
+            if(reportMonth == "" || reportMonth == undefined || reportMonth == null){
+                alert("请先选择统计年月！");
+                return;
+            }
+            
+            $("#marketerRebateTable").bootstrapTable(
+                'refresh',{url:"queryMarketerRebateReport",
+                           query: {month:reportMonth,
+                                   depName:$("#depName2").val(),
+                                  }
+                          }
+            );
+        }
+        
         //营业部统计合计
         function footer(data){
             
@@ -214,6 +243,17 @@
         	var interest = 0;
             for(var i=0;i<data.length;i++){
                   interest += parseFloat(data[i].INTEREST_AMOUNT);
+                }
+            //保留两位小数
+            return interest.toFixed(2);
+        }
+        
+        //营销人员返利息合计
+        function interestFooter(data){
+            
+            var interest = 0;
+            for(var i=0;i<data.length;i++){
+                  interest += parseFloat(data[i].INTEREST);
                 }
             //保留两位小数
             return interest.toFixed(2);
@@ -294,7 +334,7 @@
                 <li role="presentation" class="active"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">营业部返利息统计表</a></li>
                 <li role="presentation"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">客户返利息统计表</a></li>
                 <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">返利息明细</a></li>
-                <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+                <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">营销人员返利息</a></li>
               </ul>
             
               <!-- Tab panes -->
@@ -525,7 +565,50 @@
                       </div>
                 </div>
                 
-                <div role="tabpanel" class="tab-pane fade" id="settings">...</div>
+                <div role="tabpanel" class="tab-pane fade" id="settings">
+                
+                    <form class="form-horizontal" style="margin-top: 30px">
+                          <div class="form-group">
+                          
+                                <label for="reportMonth2" class="col-sm-2 col-md-1 col-md-offset-1 control-label">统计年月</label>
+                                <div class="col-sm-10 col-md-2">
+                                  <input type="text" class="form-control" id="reportMonth2">
+                                </div>
+                                
+                                <div class="col-sm-10 col-md-2 col-md-offset-1 ">
+                                    <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryMarketerRebateReport()">
+                                </div>
+                          </div>
+                          
+                    </form>
+                
+                    <div class="table-responsive">
+                        <table id="marketerRebateTable"
+                               class="table table-striped"
+                               data-toggle="table" 
+                               data-show-export="true"
+                               data-show-refresh="true"
+                               data-show-toggle="true"
+                               data-show-columns="true"
+                               data-height="564"
+                               data-pagination="true"
+                               data-method="post"
+                               data-page-list="[5, 10, 20, 50]"
+                               data-search="true"
+                               data-show-footer="true">
+                            <thead>
+                            <tr>
+                                <!-- <th data-field="state" data-checkbox="true"></th> -->
+                                <th data-field="MARKETER_NO" data-align="center" >营销人员编号</th>
+                                <th data-field="MARKETER_NAME" data-align="center" >营销人员姓名</th>
+                                <th data-field="DEP_NAME" data-align="center" >营业部</th>
+                                <th data-field="INTEREST" data-align="center" data-footer-formatter="interestFooter" >返利息</th>
+                            </tr>
+                            </thead>
+                        </table>
+                      </div>
+                
+                </div>
               </div>
             
           </div>

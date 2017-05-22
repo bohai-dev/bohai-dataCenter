@@ -83,5 +83,10 @@ public class ReportRebateServiceImpl implements ReportRebateService {
 		
 		return this.reportRebateMapper.selectMarketReport(paramVO);
 	}
+	
+	public List<Map<String, Object>> queryMarketerRebateReport(QueryRebateReportParamVO paramVO) {
+        
+        return this.reportRebateMapper.selectMarketerReport(paramVO);
+    }
 
 }

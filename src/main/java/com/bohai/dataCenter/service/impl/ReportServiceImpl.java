@@ -21,6 +21,7 @@ import com.bohai.dataCenter.entity.Mediator;
 import com.bohai.dataCenter.entity.RebateList;
 import com.bohai.dataCenter.entity.ReportExchangeRebate;
 import com.bohai.dataCenter.entity.ReportRebate;
+import com.bohai.dataCenter.entity.ReporteInvestorRebate;
 import com.bohai.dataCenter.entity.TradingDate;
 import com.bohai.dataCenter.entity.VTradeDetail;
 import com.bohai.dataCenter.persistence.CapitalStatementMapper;
@@ -462,6 +463,35 @@ public class ReportServiceImpl implements ReportService {
 		}
 			
 	}
-		
+	
+	
+	/**
+	 * 统计交易所返还到客户
+	 * @param paramVO
+	 * @throws BohaiException
+	 */
+	public void countExchangeRebateSpecial(CountExchangeRebateParamVO paramVO) throws BohaiException {
+	    logger.debug("交易所返还到客户统计年月："+paramVO.getMonth());
+	    
+	    List<Map<String, Object>> slist = this.vTradeDetailMapper.selectInvestorCharge(paramVO.getMonth().replace("-", ""), "上期所");
+	    if(slist != null){
+            for(Map<String, Object> map : slist){
+                ReporteInvestorRebate investorRebate = new ReporteInvestorRebate();
+                //统计年月
+                investorRebate.setMonth(paramVO.getMonth());
+                //投资者编号
+                investorRebate.setInvestorNo((String) map.get("INVESTOR_NO"));
+                //投资者名称
+                investorRebate.setInvestorName((String) map.get("INVESTOR_NAME"));
+                //手续费 上期所返还上交手续费的40%
+                BigDecimal scharge = (BigDecimal) map.get("CHARGE");
+                scharge = scharge.multiply(new BigDecimal("0.4")).setScale(2, RoundingMode.HALF_UP);
+                investorRebate.setSrebate(scharge.toString());
+                
+                
+                
+            }
+        }
+	}
 
 }

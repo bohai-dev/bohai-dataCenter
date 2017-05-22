@@ -110,6 +110,17 @@ public class ReportController {
 		return this.reportRebateService.queryMarketRebateReport(paramVO);
 	}
 	
+	/**
+     * 查询返利息统计表(以营销人员为维度)
+     * @param paramVO
+     * @return
+     */
+    @RequestMapping(value="queryMarketerRebateReport")
+    @ResponseBody
+	public List<Map<String,Object>> queryMarketerRebateReport(@RequestBody(required=false) QueryRebateReportParamVO paramVO){
+	    return this.reportRebateService.queryMarketerRebateReport(paramVO);
+	}
+	
 	
 	/**
 	 * 查询交易所返佣统计
