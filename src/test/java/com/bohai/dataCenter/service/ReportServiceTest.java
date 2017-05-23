@@ -24,5 +24,14 @@ public class ReportServiceTest extends AbstractJUnit4SpringContextTests{
 		
 		this.reportService.countExchangeRebate(paramVO);
 	}
+	
+	@Test
+	public void countInvestorExchangeRebate() throws BohaiException{
+	    
+	    CountExchangeRebateParamVO paramVO = new CountExchangeRebateParamVO();
+        paramVO.setMonth("2017-03");
+	    
+        this.reportService.countInvestorExchangeRebate(paramVO);
+	}
 
 }

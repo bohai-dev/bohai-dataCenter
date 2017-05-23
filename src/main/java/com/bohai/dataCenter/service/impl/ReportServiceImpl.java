@@ -34,6 +34,7 @@ import com.bohai.dataCenter.persistence.TradingDateMapper;
 import com.bohai.dataCenter.persistence.TransactionStatisticsMapper;
 import com.bohai.dataCenter.persistence.VTradeDetailMapper;
 import com.bohai.dataCenter.service.ReportExchangeRebateService;
+import com.bohai.dataCenter.service.ReportInvestorRebateService;
 import com.bohai.dataCenter.service.ReportRebateService;
 import com.bohai.dataCenter.service.ReportService;
 import com.bohai.dataCenter.util.DateFormatterUtil;
@@ -79,6 +80,9 @@ public class ReportServiceImpl implements ReportService {
 	
 	@Autowired
 	private InstrumentAttributeMapper instrumentAttributeMapper;
+	
+	@Autowired
+	private ReportInvestorRebateService reportInvestorRebateService;
 
 	@Override
 	public List<Map<String, Object>> queryTBSoftReport() {
@@ -470,9 +474,12 @@ public class ReportServiceImpl implements ReportService {
 	 * @param paramVO
 	 * @throws BohaiException
 	 */
-	public void countExchangeRebateSpecial(CountExchangeRebateParamVO paramVO) throws BohaiException {
+	public void countInvestorExchangeRebate(CountExchangeRebateParamVO paramVO) throws BohaiException {
 	    logger.debug("交易所返还到客户统计年月："+paramVO.getMonth());
 	    
+	    this.reportInvestorRebateService.removeByMonth(paramVO.getMonth());
+	    
+	    //统计上期所返还到客户
 	    List<Map<String, Object>> slist = this.vTradeDetailMapper.selectInvestorCharge(paramVO.getMonth().replace("-", ""), "上期所");
 	    if(slist != null){
             for(Map<String, Object> map : slist){
@@ -487,11 +494,139 @@ public class ReportServiceImpl implements ReportService {
                 BigDecimal scharge = (BigDecimal) map.get("CHARGE");
                 scharge = scharge.multiply(new BigDecimal("0.4")).setScale(2, RoundingMode.HALF_UP);
                 investorRebate.setSrebate(scharge.toString());
-                
-                
-                
+                this.reportInvestorRebateService.saveOrUpdate(investorRebate);
             }
         }
+	    
+	    //统计郑商所返还到客户
+        List<Map<String, Object>> zlist = this.vTradeDetailMapper.selectInvestorCharge(paramVO.getMonth().replace("-", ""), "郑商所");
+        if(slist != null){
+            for(Map<String, Object> map : zlist){
+                ReporteInvestorRebate investorRebate = new ReporteInvestorRebate();
+                //统计年月
+                investorRebate.setMonth(paramVO.getMonth());
+                //投资者编号
+                investorRebate.setInvestorNo((String) map.get("INVESTOR_NO"));
+                //投资者名称
+                investorRebate.setInvestorName((String) map.get("INVESTOR_NAME"));
+                //手续费 郑商所返还上交手续费的20%
+                BigDecimal zcharge = (BigDecimal) map.get("CHARGE");
+                zcharge = zcharge.multiply(new BigDecimal("0.2")).setScale(2, RoundingMode.HALF_UP);
+                investorRebate.setZrebate(zcharge.toString());
+                this.reportInvestorRebateService.saveOrUpdate(investorRebate);
+            }
+        }
+        
+        List<Map<String,Object>> dlist = this.vTradeDetailMapper.selectInvestorTradeInfo(paramVO.getMonth().replace("-", ""));
+        if(dlist != null){
+            for(Map<String, Object> map : dlist){
+                //投资者编号
+                String investorNo = (String) map.get("INVESTOR_NO");
+                //投资者名称
+                String investorName = (String) map.get("INVESTOR_NAME");
+                //合约品种
+                String instrument = (String) map.get("INSTRUMENT");
+                //套保标志  H:套保 O:非套保
+                String hadgeFlag = (String) map.get("HEDGE_FLAG");
+                //总成交量
+                BigDecimal volume = (BigDecimal) map.get("VOLUME");
+                //总成交额
+                BigDecimal turnover = (BigDecimal) map.get("TRUNOVER");
+                //平今量
+                BigDecimal closeTodayVolume = (BigDecimal) map.get("CLOSE_TODAY_VOLUME");
+                if(closeTodayVolume == null){
+                    closeTodayVolume = new BigDecimal("0");
+                }
+                
+                //平今额
+                BigDecimal closeToday = (BigDecimal) map.get("CLOSE_TODAY_TRUNOVER");
+                if(closeToday == null){
+                    closeToday = new BigDecimal("0");
+                }
+                
+                //根据合约名称查询合约属性
+                InstrumentAttribute attribute = this.instrumentAttributeMapper.selectByPrimaryKey(instrument);
+                if(attribute == null){
+                    logger.warn("查询合约手续费失败");
+                    throw new BohaiException("", "查询合约手续费失败："+instrument);
+                }
+                
+                //开始计算大连交易所返还
+                
+                //开仓手续费
+                String openCharge = attribute.getExOpenCharge();
+                //开仓手续费比例
+                String openChargeRate = attribute.getExOpenChargeRate();
+                //平今手续费
+                String closetCharge = attribute.getExClosetCharge();
+                //平今手续费比例
+                String closetChargeRate = attribute.getExClosetChargeRate();
+                
+                //日内返还金额
+                BigDecimal inday = new BigDecimal("0");
+                //非日内返还金额
+                BigDecimal outday = new BigDecimal("0");
+                
+                //交易所返还
+                BigDecimal rebate = new BigDecimal("0");
+                
+              //鸡蛋和两版
+                if(instrument.equals("jd")||instrument.equals("bb")||instrument.equals("fb")){
+                    if(hadgeFlag.equals("保")){
+                        //套保日内 90%  非日内  98%
+                        if(!StringUtils.isEmpty(openCharge) && !StringUtils.isEmpty(closetCharge)){
+                            inday = new BigDecimal(closetCharge).multiply(closeTodayVolume).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.9"));
+                            outday = (volume.subtract(closeTodayVolume.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openCharge)).multiply(new BigDecimal("0.98"));
+                        }else if (!StringUtils.isEmpty(openChargeRate) && !StringUtils.isEmpty(closetChargeRate)) {
+                            //inday = 
+                            inday = new BigDecimal(closetChargeRate).multiply(closeToday).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.9"));
+                            //outday = 
+                            outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.98"));
+                        }
+                    }else if (hadgeFlag.equals("投")) {
+                        //非套保日内 0     非日内 80%
+                        if(!StringUtils.isEmpty(openCharge)){
+                            outday = (volume.subtract(closeTodayVolume.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openCharge)).multiply(new BigDecimal("0.8"));
+                        }else if (!StringUtils.isEmpty(openChargeRate)) {
+                            outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.8"));
+                        }
+                    }
+                }else {//非鸡蛋和两板
+                    if(hadgeFlag.equals("保")){
+                        //套保日内 92.5%  非日内  98.5%
+                        if(!StringUtils.isEmpty(openCharge) && !StringUtils.isEmpty(closetCharge)){
+                            inday = new BigDecimal(closetCharge).multiply(closeTodayVolume).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.925"));
+                            outday = (volume.subtract(closeTodayVolume.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openCharge)).multiply(new BigDecimal("0.985"));
+                        }else if (!StringUtils.isEmpty(openChargeRate) && !StringUtils.isEmpty(closetChargeRate)) {
+                            //inday = 
+                            inday = new BigDecimal(closetChargeRate).multiply(closeToday).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.925"));
+                            //outday = 
+                            outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.985"));
+                        }
+                    }else if (hadgeFlag.equals("投")) {
+                        //非套保日内 25%     非日内 85%
+                        if(!StringUtils.isEmpty(openCharge) && !StringUtils.isEmpty(closetCharge)){
+                            inday = new BigDecimal(closetCharge).multiply(closeTodayVolume).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.25"));
+                            outday = (volume.subtract(closeTodayVolume.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openCharge)).multiply(new BigDecimal("0.85"));
+                        }else if (!StringUtils.isEmpty(openChargeRate) && !StringUtils.isEmpty(closetChargeRate)) {
+                            
+                            inday = new BigDecimal(closetChargeRate).multiply(closeToday).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.25"));
+                            outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.85"));
+                        }
+                    }
+                }
+                
+                rebate = inday.add(outday);
+                
+                ReporteInvestorRebate investorRebate = new ReporteInvestorRebate();
+                investorRebate.setMonth(paramVO.getMonth());
+                investorRebate.setDrebate(rebate.toString());
+                investorRebate.setInvestorNo(investorNo);
+                investorRebate.setInvestorName(investorName);
+                this.reportInvestorRebateService.updateRebate(investorRebate);
+            }
+        }
+        
 	}
 
 }

@@ -31,4 +31,11 @@ public interface ReportService {
 	 * @throws BohaiException
 	 */
 	void countExchangeRebate(CountExchangeRebateParamVO paramVO) throws BohaiException;
+	
+	/**
+	 * 统计交易所返还（以客户为维度）
+	 * @param paramVO
+	 * @throws BohaiException
+	 */
+	public void countInvestorExchangeRebate(CountExchangeRebateParamVO paramVO) throws BohaiException;
 }

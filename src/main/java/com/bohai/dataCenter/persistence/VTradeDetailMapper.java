@@ -24,10 +24,17 @@ public interface VTradeDetailMapper {
      */
     //int insertSelective(VTradeDetail record);
     
+    /**
+     * 查询以营业部，合约品种，投保标志为维度的大连交易所交易统计信息
+     * @param vTradeDetail
+     * @return
+     */
 	List<Map<String,Object>> selectTradeInfo(VTradeDetail vTradeDetail);
 	
+	List<Map<String,Object>> selectInvestorTradeInfo(String tradeMonth);
+	
 	/**
-	 * 查询郑商所和上期所手续费
+	 * 查询郑商所和上期所手续费(以营业部为维度)
 	 * @param month
 	 * @param exchangeId
 	 * @return
@@ -39,7 +46,13 @@ public interface VTradeDetailMapper {
 			+ " group by GETDEPNAME(t.INVESTOR_NO)")
 	List<Map<String,Object>> selectSumCharge(String month, String exchangeId);
 	
-	@Select("select t.INVESTOR_NO,t.INVESTOR_NAME,sum(t.EXCHANGE_CHARGE)*0.4 as CHARGE from T_CTPTRADE_DATA t "
+	/**
+	 * 查询交易所返还手续费(以客户为维度)
+	 * @param month
+	 * @param exchangeId
+	 * @return
+	 */
+	@Select("select t.INVESTOR_NO,t.INVESTOR_NAME,sum(t.EXCHANGE_CHARGE) as CHARGE from T_CTPTRADE_DATA t "
 	        + "where t.EXCHANGE_NAME = #{1} "
 	        + "and substr(TRADE_DATE,0,6) = #{0} "
 	        + "group by t.INVESTOR_NO,t.INVESTOR_NAME")

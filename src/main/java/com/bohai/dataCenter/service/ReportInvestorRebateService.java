@@ -16,4 +16,18 @@ public interface ReportInvestorRebateService {
      * @throws BohaiException
      */
     public void saveOrUpdate(ReporteInvestorRebate investorRebate) throws BohaiException;
+    
+    /**
+     * 更新客户大连交易所手续费
+     * @param investorRebate
+     * @throws BohaiException
+     */
+    public void updateRebate(ReporteInvestorRebate investorRebate) throws BohaiException;
+    
+    /**
+     * 根据月份删除统计数据
+     * @param month
+     * @throws BohaiException
+     */
+    public void removeByMonth(String month) throws BohaiException;
 }

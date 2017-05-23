@@ -98,4 +98,33 @@
       </if>
     </trim>
   </insert>
+  
+  <update id="updateSelective" parameterType="com.bohai.dataCenter.entity.ReporteInvestorRebate">
+    update T_REPORTE_INVESTOR_REBATE
+    <set >
+      <if test="srebate != null" >
+        SREBATE = #{srebate},
+      </if>
+      <if test="zrebate != null" >
+        ZREBATE = #{zrebate},
+      </if>
+      <if test="jrebate != null" >
+        JREBATE = #{jrebate},
+      </if>
+      <if test="drebate != null" >
+        DREBATE = #{drebate},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where MONTH = #{month,jdbcType=VARCHAR}
+    and INVESTOR_NO = #{investorNo,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectByMonthAndInvestorNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from T_REPORTE_INVESTOR_REBATE
+    where MONTH = #{0}
+    and INVESTOR_NO = #{1}
+  </select>
 </mapper>

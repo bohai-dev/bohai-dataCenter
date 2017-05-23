@@ -145,4 +145,18 @@
 	CLOSE_TODAY_TRUNOVER  from V_CTPTRADE_DALIAN
 	where TRADE_MONTH = #{tradeDate,jdbcType=VARCHAR}
   </select>
+  
+  <select id="selectInvestorTradeInfo" resultType="java.util.Map" parameterType="java.lang.String" >
+	select TRADE_MONTH ,
+	INVESTOR_NO ,
+	INVESTOR_NAME ,
+	INSTRUMENT ,
+	HEDGE_FLAG ,
+	VOLUME ,
+	TRUNOVER ,
+	CLOSE_TODAY_VOLUME ,
+	CLOSE_TODAY_TRUNOVER  
+	from V_CTPTRADE_INVESTOR_DALIAN  
+	where TRADE_MONTH= #{tradeMonth,jdbcType=VARCHAR}
+  </select>
 </mapper>
