@@ -20,8 +20,11 @@ import com.bohai.dataCenter.entity.InstrumentAttribute;
 import com.bohai.dataCenter.entity.Mediator;
 import com.bohai.dataCenter.entity.RebateList;
 import com.bohai.dataCenter.entity.ReportExchangeRebate;
+import com.bohai.dataCenter.entity.ReportMarketerInterest;
 import com.bohai.dataCenter.entity.ReportRebate;
+import com.bohai.dataCenter.entity.ReportSpecialReturn;
 import com.bohai.dataCenter.entity.ReporteInvestorRebate;
+import com.bohai.dataCenter.entity.SpecialReturn;
 import com.bohai.dataCenter.entity.TradingDate;
 import com.bohai.dataCenter.entity.VTradeDetail;
 import com.bohai.dataCenter.persistence.CapitalStatementMapper;
@@ -29,7 +32,11 @@ import com.bohai.dataCenter.persistence.InstrumentAttributeMapper;
 import com.bohai.dataCenter.persistence.MarketerMapper;
 import com.bohai.dataCenter.persistence.MediatorMapper;
 import com.bohai.dataCenter.persistence.RebateListMapper;
+import com.bohai.dataCenter.persistence.ReportMarketerInterestMapper;
 import com.bohai.dataCenter.persistence.ReportRebateMapper;
+import com.bohai.dataCenter.persistence.ReportSpecialReturnMapper;
+import com.bohai.dataCenter.persistence.ReporteInvestorRebateMapper;
+import com.bohai.dataCenter.persistence.SpecialReturnMapper;
 import com.bohai.dataCenter.persistence.TradingDateMapper;
 import com.bohai.dataCenter.persistence.TransactionStatisticsMapper;
 import com.bohai.dataCenter.persistence.VTradeDetailMapper;
@@ -37,6 +44,7 @@ import com.bohai.dataCenter.service.ReportExchangeRebateService;
 import com.bohai.dataCenter.service.ReportInvestorRebateService;
 import com.bohai.dataCenter.service.ReportRebateService;
 import com.bohai.dataCenter.service.ReportService;
+import com.bohai.dataCenter.service.ReportSpecialReturnService;
 import com.bohai.dataCenter.util.DateFormatterUtil;
 import com.bohai.dataCenter.vo.CountExchangeRebateParamVO;
 import com.bohai.dataCenter.vo.CountRebatReportParamVO;
@@ -83,6 +91,18 @@ public class ReportServiceImpl implements ReportService {
 	
 	@Autowired
 	private ReportInvestorRebateService reportInvestorRebateService;
+	
+	@Autowired
+	private ReporteInvestorRebateMapper reporteInvestorRebateMapper;
+	
+	@Autowired
+	private SpecialReturnMapper specialReturnMapper;
+	
+	@Autowired
+	private ReportSpecialReturnService reportSpecialReturnService;
+	
+	@Autowired
+	private ReportMarketerInterestMapper reportMarketerInterestMapper;
 
 	@Override
 	public List<Map<String, Object>> queryTBSoftReport() {
@@ -170,6 +190,7 @@ public class ReportServiceImpl implements ReportService {
 				this.generateRebat(statements, rebate, depName);
 			}
 		}
+		
 		
 		//补充节假日利息
 		this.fillDate(paramVO.getYear(),paramVO.getMonth());
@@ -628,5 +649,210 @@ public class ReportServiceImpl implements ReportService {
         }
         
 	}
+	
+	/**
+	 * 统计交易所返佣特例
+	 * @param paramVO
+	 * @throws BohaiException 
+	 */
+	@Override
+	public void reportSpecialReturn(CountExchangeRebateParamVO paramVO) throws BohaiException {
+	    
+	    //统计月份   格式为 yyyy-MM
+	    String month = paramVO.getMonth();
+	    //先统计交易所返佣到客户
+	    this.countInvestorExchangeRebate(paramVO);
+	    //查询交易所返佣特例名单
+	    List<SpecialReturn> list = this.specialReturnMapper.selectAll();
+	    if(list != null){
+	        for (SpecialReturn specialReturn : list) {
+                //投资者编号
+	            String investorNo = specialReturn.getInvestorNo();
+                //根据投资者编号查询客户交易所返还记录
+	            
+                ReporteInvestorRebate investorRebate = this.reporteInvestorRebateMapper.selectByMonthAndInvestorNo(month, investorNo);
+                //交易所返佣特例报表
+                ReportSpecialReturn reportSpecialReturn = new ReportSpecialReturn();
+                //统计月份
+                reportSpecialReturn.setMonth(month);
+                //投资者编号
+                reportSpecialReturn.setInvestorNo(specialReturn.getInvestorNo());
+                //投资者名称
+                reportSpecialReturn.setInvestorName(specialReturn.getInvestorName());
+                //居间人编号
+                reportSpecialReturn.setMediatorNo(specialReturn.getMediatorNo());
+                //居间人名称
+                reportSpecialReturn.setMediatorName(specialReturn.getMediatorName());
+                //固定比例
+                reportSpecialReturn.setFixProportion(specialReturn.getFixProportion());
+                if(investorRebate == null){
+                    reportSpecialReturn.setSrebate("0.00");
+                    reportSpecialReturn.setZrebate("0.00");
+                    reportSpecialReturn.setDrebate("0.00");
+                    reportSpecialReturn.setAmount("0.00");
+                    if(StringUtils.isEmpty(specialReturn.getFixProportion())){
+                        reportSpecialReturn.setCustomProportion("0.00");
+                    }
+                }else {
+                    String s = investorRebate.getSrebate() == null ? "0.00" : investorRebate.getSrebate();
+                    String z = investorRebate.getZrebate() == null ? "0.00" : investorRebate.getZrebate();
+                    String d = investorRebate.getDrebate() == null ? "0.00" : investorRebate.getDrebate();
+                    
+                    reportSpecialReturn.setSrebate(s);
+                    reportSpecialReturn.setZrebate(z);
+                    reportSpecialReturn.setDrebate(d);
+                    //交易所返还总金额
+                    BigDecimal amount = new BigDecimal(s).add(new BigDecimal(z)).add(new BigDecimal(d));
+                    
+                    //浮动返还比例
+                    BigDecimal frate = new BigDecimal("0.00");
+                    
+                    if(!StringUtils.isEmpty(specialReturn.getFixProportion())){
+                        //固定比例返还
+                        amount = new BigDecimal(specialReturn.getFixProportion()).multiply(amount).setScale(2, RoundingMode.HALF_UP);
+                        
+                        reportSpecialReturn.setAmount(amount.toString());
+                        
+                    }else if (!StringUtils.isEmpty(specialReturn.getCustomInterval())) {
+                        //浮动区间
+                        JSONObject json = JSONObject.parseObject(specialReturn.getCustomInterval());
+                        for (Map.Entry<String, Object> entry : json.entrySet()) {
+                            
+                            logger.debug("获取区间："+entry.getKey()+",对应的利率："+entry.getValue().toString());
+                            
+                            String customStr = entry.getKey();
+                            
+                            BigDecimal minValue = new BigDecimal(customStr.substring(0, customStr.indexOf("-")));
+                            BigDecimal maxValue = new BigDecimal(customStr.substring(customStr.indexOf("-")+1));
+                            
+                            
+                            //  左区间<返还总金额<=右区间
+                            if(amount.compareTo(minValue)>0 && amount.compareTo(maxValue)<1){
+                                //浮动利率
+                                frate = new BigDecimal(entry.getValue().toString());
+                                
+                                logger.debug("客户返还："+amount+"在区间："+entry.getKey()+"范围内");
+                                
+                                break;
+                            }
+                            
+                        }
+                        amount = amount.multiply(frate).setScale(2, RoundingMode.HALF_UP);
+                        reportSpecialReturn.setAmount(amount.toString());
+                        reportSpecialReturn.setCustomProportion(frate.toString());
+                        
+                    }
+                }
+                
+                reportSpecialReturnService.saveOrUpdate(reportSpecialReturn);
+                
+            }
+	    }
+	}
+	
+	/**
+	 * 统计营销人员返利息提成（除特例）
+	 * @param month
+	 * @throws BohaiException 
+	 */
+	public void reportInvestorInterest(CountRebatReportParamVO paramVO) throws BohaiException{
+	    
+	    String month = paramVO.getYear()+paramVO.getMonth();
+	    
+	    List<Map<String,Object>> list = this.capitalStatementMapper.selectByExistsMarketer(month);
+	    if(list == null ){
+	        return ;
+	    }
+	    for(Map<String, Object> map : list){
+	        ReportMarketerInterest marketerInterest = new ReportMarketerInterest();
+            //交易日
+	        marketerInterest.setTradeDateStr((String) map.get("TRADE_DATE_STR"));
+            //交易日date类型
+	        marketerInterest.setTradeDate((Date) map.get("TRADE_DATE"));
+            //营销人员编号
+	        marketerInterest.setMarketNo((String) map.get("MARKETER_NO"));
+            //营销人员名称
+	        marketerInterest.setMarketName((String) map.get("MARKETER_NAME"));
+            //投资者编号
+	        marketerInterest.setInvestorNo((String) map.get("INVESTOR_NO"));
+            //投资者名称
+	        marketerInterest.setInvestorName((String) map.get("INVESTOR_NAME"));
+            //居间人编号
+	        marketerInterest.setMediatorName(null);
+            //居间人姓名
+	        marketerInterest.setMediatorNo(null);
+            //营业部
+	        marketerInterest.setDeptName((String) map.get("DEP_NAME"));
+            //固定利率
+	        marketerInterest.setFixProportion("0.0195");
+            //可用资金
+            String aviliable = (String) map.get("AVAILABLE_FUNDS");
+            marketerInterest.setAvailableFunds(aviliable);
+            
+            //客户权益
+            marketerInterest.setRights((String) map.get("INVESTOR_RIGHTS"));
+            //利息
+            BigDecimal interest = new BigDecimal("0.0195").multiply(new BigDecimal(aviliable)).divide(new BigDecimal("360"),2,RoundingMode.HALF_UP);
+            marketerInterest.setInterestAmount(interest.toString());
+            //日期类型 1:交易日 0：节假日
+            marketerInterest.setDateType("1");
+            
+            //reportRebateService.saveOrUpdate(reportRebate);
+            reportMarketerInterestMapper.insert(marketerInterest);
+	    }
+	    
+	    this.fillDate1(paramVO.getYear(), paramVO.getMonth());
+	}
+	
+	
+	private void fillDate1(String year, String month) throws BohaiException{
+        
+        logger.debug("开始填补节假日利息");
+        
+        //查询某一月份所有返息人员名单
+        List<ReportMarketerInterest> investors = this.reportMarketerInterestMapper.selectDistinctInvestorByYearAndMonth(year, month);
+        if(investors == null || investors.size() < 1){
+            return;
+        }
+        for(ReportMarketerInterest investorMap:investors){
+            
+            String investorNo = investorMap.getInvestorNo();
+            String investorName = investorMap.getInvestorName();
+            String depName = investorMap.getDeptName();
+            //查询当月所有节假日信息
+            List<TradingDate> holidays = tradingDateMapper.selectHolidaysByYearAndMonth(year, month);
+            
+            for(TradingDate holiday:holidays){
+                //查询节假日前一交易日信息
+                Date tradingDate = this.tradingDateMapper.selectPreTraDateByDate(holiday.getTdate());
+                
+                String dateStr = DateFormatterUtil.getDateStryyyyMMdd(tradingDate);
+                //查询前一交易日返利信息
+                ReportMarketerInterest rebate = this.reportMarketerInterestMapper.selectByTradeDateAndInvestorNo(dateStr, investorNo);
+                if(rebate == null || StringUtils.isEmpty(rebate.getInvestorNo())){
+                    //补充一条利息为0的数据
+                    ReportMarketerInterest reportRebate = new ReportMarketerInterest();
+                    //节假日
+                    reportRebate.setTradeDate(holiday.getTdate());
+                    reportRebate.setTradeDateStr(DateFormatterUtil.getDateStryyyyMMdd(holiday.getTdate()));
+                    reportRebate.setInvestorNo(investorNo);
+                    reportRebate.setInvestorName(investorName);
+                    reportRebate.setDeptName(depName);
+                    reportRebate.setInterestAmount("0.00");
+                    //日期类型为节假日
+                    reportRebate.setDateType("0");
+                    reportMarketerInterestMapper.insert(reportRebate);
+                }else {
+                    rebate.setId(null);
+                    rebate.setDateType("0");
+                    rebate.setTradeDate(holiday.getTdate());
+                    rebate.setTradeDateStr(DateFormatterUtil.getDateStryyyyMMdd(holiday.getTdate()));
+                    reportMarketerInterestMapper.insert(rebate);
+                }
+            }
+            
+        }
+        
+    }
 
 }

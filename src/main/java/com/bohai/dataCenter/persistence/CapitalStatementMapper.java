@@ -1,8 +1,10 @@
 package com.bohai.dataCenter.persistence;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Select;
 
 import com.bohai.dataCenter.entity.CapitalStatement;
 
@@ -79,4 +81,14 @@ public interface CapitalStatementMapper {
      * @return
      */
     List<CapitalStatement> selectByInvestorNo(String investorNo,String year,String month);
+    
+    @Select("select t1.MARKETER_NO,t1.MARKETER_NAME,t1.DEP_NAME, t.* from T_CAPITAL_STATEMENT t ,T_MARKETER t1 "
+            + "where F_GETMARKETERNO(t.INVESTOR_NO) is not null "
+            + "and t1.MARKETER_NO = F_GETMARKETERNO(t.INVESTOR_NO)"
+            + "and substr(t.TRADE_DATE_STR,0,6) = #{0} "
+            + "and not EXISTS (select 1 "
+            + "                from T_REPORT_REBATE t1 "
+            + "               where t.INVESTOR_NO = t1.INVESTOR_NO)")
+    
+    List<Map<String,Object>> selectByExistsMarketer(String month);
 }

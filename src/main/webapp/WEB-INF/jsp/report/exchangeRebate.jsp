@@ -89,6 +89,30 @@
                   todayHighlight: true
             });
             
+            $('#reportMonth1').datepicker({
+                format: "yyyy-mm",
+                  startView: 1,
+                  minViewMode: 1,
+                  maxViewMode: 2,
+                  todayBtn: "linked",
+                  clearBtn: true,
+                  language: "zh-CN",
+                  autoclose: true,
+                  todayHighlight: true
+            });
+            
+            $('#reportMonth2').datepicker({
+                format: "yyyy-mm",
+                  startView: 1,
+                  minViewMode: 1,
+                  maxViewMode: 2,
+                  todayBtn: "linked",
+                  clearBtn: true,
+                  language: "zh-CN",
+                  autoclose: true,
+                  todayHighlight: true
+            });
+            
             $('#beginDate').datepicker({
                 format: "yyyy-mm-dd",
                   startView: 0,
@@ -156,6 +180,38 @@
             );
         }
         
+        function querySpecialRebateReport(){
+        	var reportMonth = $("#reportMonth1").val();
+            if(reportMonth == "" || reportMonth == undefined || reportMonth == null){
+                alert("请先选择统计年月！");
+                return;
+            }
+            
+            var param = {month:reportMonth};
+            
+            $("#specialRebateReportTable").bootstrapTable(
+                'refresh',{url:"querySpecialReturnReport",
+                           query: param
+                          }
+            );
+        }
+        
+        function queryMarketerReturnReport(){
+        	var reportMonth = $("#reportMonth2").val();
+            if(reportMonth == "" || reportMonth == undefined || reportMonth == null){
+                alert("请先选择统计年月！");
+                return;
+            }
+            
+            var param = {month:reportMonth};
+            
+            $("#marketerReturnReportTable").bootstrapTable(
+                'refresh',{url:"queryMarketerReturnReport",
+                           query: param
+                          }
+            );
+        }
+        
       //上期所合计
         function sfooter(data){
             
@@ -191,6 +247,30 @@
             //保留两位小数
             return interest.toFixed(2);
         }
+      
+      function returnfoot(data){
+    	  var interest = 0;
+          for(var i=0;i<data.length;i++){
+                if(data[i].amount == "" || data[i].amount == undefined || data[i].amount == null){
+                    continue;
+                }
+                interest += parseFloat(data[i].amount);
+              }
+          //保留两位小数
+          return interest.toFixed(2);
+      }
+      
+      function marketerfooter(data){
+    	  var interest = 0;
+          for(var i=0;i<data.length;i++){
+                if(data[i].MARKETER_AMOUNT == "" || data[i].MARKETER_AMOUNT == undefined || data[i].MARKETER_AMOUNT == null){
+                    continue;
+                }
+                interest += parseFloat(data[i].MARKETER_AMOUNT);
+              }
+          //保留两位小数
+          return interest.toFixed(2);
+      }
         
     </script>
   </head>
@@ -267,7 +347,9 @@
               <!-- Nav tabs -->
               <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">交易所返佣月统计表</a></li>
-                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"></a></li>
+                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">交易所返佣特例</a></li>
+                <li role="presentation"><a href="#messages" aria-controls="profile" role="tab" data-toggle="tab">交易所返还营销人员统计</a></li>
+                <li role="presentation"><a href="#settings" aria-controls="profile" role="tab" data-toggle="tab">.....</a></li>
               </ul>
             
               <!-- Tab panes -->
@@ -333,63 +415,99 @@
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="profile">
                 
-                    <!-- 交易所返佣查询条件表单-->
+                    <!-- 交易所返佣特例查询条件表单-->
                       <form class="form-horizontal" style="margin-top: 30px">
                           <div class="form-group">
                           
-                                <label for="beginDate" class="col-sm-2 col-md-1 col-md-offset-1 control-label">统计开始日期</label>
+                                <label for="reportMonth1" class="col-sm-2 col-md-1 col-md-offset-2 control-label">统计年月</label>
                                 <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="beginDate">
-                                </div>
-                                
-                                <label for="endDate" class="col-sm-2 col-md-1 control-label">统计结束日期</label>
-                                <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="endDate">
-                                </div>
-                                
-                                <label for="depName" class="col-sm-2 col-md-1 control-label">营业部名称</label>
-                                <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="depName">
+                                  <input type="text" class="form-control" id="reportMonth1">
                                 </div>
                                 
                                 <div class="col-sm-offset-2 col-sm-10 col-md-2 col-md-offset-1">
-                                  <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryExchangeRebateReport()">
+                                  <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="querySpecialRebateReport()">
                                 </div>
                           </div>
                       </form>
-                      <!-- 交易所返佣查询条件表单结束 -->
+                      <!-- 交易所返佣特例查询条件表单结束 -->
                       
                     <div class="table-responsive">
-                        <table class="table table-striped"
+                        <table id="specialRebateReportTable"
+                               class="table table-striped"
                                data-toggle="table" 
                                data-show-refresh="true"
                                data-show-toggle="true"
                                data-show-columns="true"
-                               data-height="542"
-                               data-url="queryRebateDetail"
+                               data-height="564"
+                               data-url="querySpecialReturnReport"
                                data-pagination="true"
-                               data-method="get"
+                               data-method="post"
                                data-page-list="[5, 10, 20, 50]"
                                data-search="true"
-                               data-height="300">
+                               data-show-footer="true">
                             <thead>
                             <tr>
                                 <!-- <th data-field="state" data-checkbox="true"></th> -->
-                                <th data-field="tradeDateStr" data-align="center" data-sortable="true">日期</th>
+                                <th data-field="month" data-align="center" data-sortable="true" data-footer-formatter="合计">统计年月</th>
                                 <th data-field="investorNo" data-align="center" >投资者编号</th>
                                 <th data-field="investorName" data-align="center" >投资者姓名</th>
-                                <th data-field="deptName" data-align="center" >营业部</th>
-                                <th data-field="fixProportion" data-align="center" >固定利率</th>
-                                <th data-field="dailyRights" data-align="center" >日均权益利率</th>
-                                <th data-field="interestAmount" data-align="center" data-sortable="true">利息</th>
-                                <th data-field="availableFunds" data-align="center" data-sortable="true">可用资金</th>
-                                <th data-field="rights" data-align="center" data-sortable="true">客户权益</th>
+                                <th data-field="mediatorNo" data-align="center" >居间人编号</th>
+                                <th data-field="mediatorName" data-align="center" >居间人姓名</th>
+                                <th data-field="srebate" data-align="center" >上期所返还</th>
+                                <th data-field="zrebate" data-align="center" >郑商所返还</th>
+                                <th data-field="drebate" data-align="center" >大商所返还</th>
+                                <th data-field="fixProportion" data-align="center" >固定返还比例</th>
+                                <th data-field="customProportion" data-align="center" >浮动返还比例</th>
+                                <th data-field="amount" data-align="center" data-footer-formatter="returnfoot">返还金额</th>
+                                <th data-field="remark" data-align="center" >加账户标志</th>
                             </tr>
                             </thead>
                         </table>
                       </div>
                 </div>
-                <div role="tabpanel" class="tab-pane fade" id="messages">...</div>
+                <div role="tabpanel" class="tab-pane fade" id="messages">
+                    <!-- 交易所返佣特例查询条件表单-->
+                      <form class="form-horizontal" style="margin-top: 30px">
+                          <div class="form-group">
+                          
+                                <label for="reportMonth2" class="col-sm-2 col-md-1 col-md-offset-2 control-label">统计年月</label>
+                                <div class="col-sm-10 col-md-2">
+                                  <input type="text" class="form-control" id="reportMonth2">
+                                </div>
+                                
+                                <div class="col-sm-offset-2 col-sm-10 col-md-2 col-md-offset-1">
+                                  <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryMarketerReturnReport()">
+                                </div>
+                          </div>
+                      </form>
+                      <!-- 交易所返佣特例查询条件表单结束 -->
+                      
+                    <div class="table-responsive">
+                        <table id="marketerReturnReportTable"
+                               class="table table-striped"
+                               data-toggle="table" 
+                               data-show-refresh="true"
+                               data-show-toggle="true"
+                               data-show-columns="true"
+                               data-show-footer="true"
+                               data-height="564"
+                               data-pagination="true"
+                               data-method="post"
+                               data-page-list="[5, 10, 20, 50]"
+                               data-search="true">
+                            <thead>
+                            <tr>
+                                <!-- <th data-field="state" data-checkbox="true"></th> -->
+                                <th data-field="MARKETER_NO" data-align="center" data-footer-formatter="合计">营销人员编号</th>
+                                <th data-field="MARKETER_NAME" data-align="center" >营销人员名称</th>
+                                <th data-field="DEP_NAME" data-align="center" >营业部</th>
+                                <th data-field="MARKETER_AMOUNT" data-align="center" data-footer-formatter="marketerfooter">营销人员返佣</th>
+                            </tr>
+                            </thead>
+                        </table>
+                      </div>
+                
+                </div>
                 <div role="tabpanel" class="tab-pane fade" id="settings">...</div>
               </div>
             

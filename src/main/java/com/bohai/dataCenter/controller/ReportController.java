@@ -15,13 +15,17 @@ import com.alibaba.fastjson.JSON;
 import com.bohai.dataCenter.controller.exception.BohaiException;
 import com.bohai.dataCenter.entity.ReportExchangeRebate;
 import com.bohai.dataCenter.entity.ReportRebate;
+import com.bohai.dataCenter.entity.ReportSpecialReturn;
 import com.bohai.dataCenter.service.ReportExchangeRebateService;
 import com.bohai.dataCenter.service.ReportRebateService;
 import com.bohai.dataCenter.service.ReportService;
+import com.bohai.dataCenter.service.ReportSpecialReturnService;
 import com.bohai.dataCenter.vo.CountExchangeRebateParamVO;
 import com.bohai.dataCenter.vo.CountRebatReportParamVO;
 import com.bohai.dataCenter.vo.QueryExchangeRebateParamVO;
+import com.bohai.dataCenter.vo.QueryMarketerReturnReportParamVO;
 import com.bohai.dataCenter.vo.QueryRebateReportParamVO;
+import com.bohai.dataCenter.vo.QuerySpecialReturnReportParamVO;
 
 @Controller
 public class ReportController {
@@ -36,6 +40,9 @@ public class ReportController {
 	
 	@Autowired
 	private ReportExchangeRebateService reportExchangeRebateService;
+	
+	@Autowired
+	private ReportSpecialReturnService reportSpecialReturnService;
 	
 	
 	@RequestMapping(value="toBusinessReport")
@@ -133,6 +140,32 @@ public class ReportController {
 	public List<ReportExchangeRebate> queryExchangeRebateReport(@RequestBody(required=false) QueryExchangeRebateParamVO paramVO) throws BohaiException{
 		
 		return this.reportExchangeRebateService.queryExchangeRebate(paramVO);
+	}
+	
+	/**
+	 * 查询交易所返佣特例
+	 * @param paramVO
+	 * @return
+	 * @throws BohaiException
+	 */
+	@RequestMapping(value="querySpecialReturnReport")
+	@ResponseBody
+	public List<ReportSpecialReturn> querySpecialReturnReport(@RequestBody(required=false) QuerySpecialReturnReportParamVO paramVO) throws BohaiException{
+	    
+	    return this.reportSpecialReturnService.queryByCondition(paramVO);
+	}
+	
+	/**
+	 * 查询营销人员返佣
+	 * @param paramVO
+	 * @return
+	 * @throws BohaiException
+	 */
+	@RequestMapping(value="queryMarketerReturnReport")
+	@ResponseBody
+	public List<Map<String, Object>> queryMarketerReturnReport(@RequestBody(required=false) QueryMarketerReturnReportParamVO paramVO) throws BohaiException{
+	    
+	    return this.reportSpecialReturnService.queryMarketerReturn(paramVO.getMonth());
 	}
 	
 	/**

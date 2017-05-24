@@ -30,4 +30,5 @@ public interface ReportInvestorRebateService {
      * @throws BohaiException
      */
     public void removeByMonth(String month) throws BohaiException;
+    
 }

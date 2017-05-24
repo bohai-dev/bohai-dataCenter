@@ -193,7 +193,24 @@
     </table> -->
     
     <!-- T_REPORTE_INVESTOR_REBATE 交易所返还到客户表 -->
-    <table schema="" tableName="T_REPORTE_INVESTOR_REBATE" domainObjectName="ReporteInvestorRebate" 
+    <!-- <table schema="" tableName="T_REPORTE_INVESTOR_REBATE" domainObjectName="ReporteInvestorRebate" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- 交易所返还特例名单 -->
+    <!-- <table schema="" tableName="T_SPECIAL_RETURN" domainObjectName="SpecialReturn" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- 交易所返还特例统计表 -->
+    <!-- <table schema="" tableName="T_REPORT_SPECIAL_RETURN" domainObjectName="ReportSpecialReturn" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <table schema="" tableName="T_REPORT_MARKETER_INTEREST" domainObjectName="ReportMarketerInterest" 
         enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
         enableUpdateByExample="false" selectByExampleQueryId="false">
     </table>
