@@ -599,7 +599,7 @@
                             <thead>
                             <tr>
                                 <!-- <th data-field="state" data-checkbox="true"></th> -->
-                                <th data-field="MARKETER_NO" data-align="center" >营销人员编号</th>
+                                <th data-field="MARKETER_NO" data-align="center" data-footer-formatter="合计">营销人员编号</th>
                                 <th data-field="MARKETER_NAME" data-align="center" >营销人员姓名</th>
                                 <th data-field="DEP_NAME" data-align="center" >营业部</th>
                                 <th data-field="INTEREST" data-align="center" data-footer-formatter="interestFooter" >返利息</th>
