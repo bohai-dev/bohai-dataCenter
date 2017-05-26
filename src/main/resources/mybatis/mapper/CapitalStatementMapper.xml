@@ -271,4 +271,10 @@
     and to_char(TRADE_DATE,'mm') = #{2}
   </select>
   
+  <select id="callInterestReport" parameterType="java.lang.String" statementType="CALLABLE">
+    
+    call p_report_interest(#{month,jdbcType=VARCHAR})
+  
+  </select>
+  
 </mapper>

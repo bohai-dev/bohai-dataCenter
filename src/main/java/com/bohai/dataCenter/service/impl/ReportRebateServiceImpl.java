@@ -89,4 +89,15 @@ public class ReportRebateServiceImpl implements ReportRebateService {
         return this.reportRebateMapper.selectMarketerReport(paramVO);
     }
 
+    @Override
+    public void removeByMonth(String month) throws BohaiException {
+        
+        try {
+            this.reportRebateMapper.deleteByMonth(month);
+        } catch (Exception e) {
+            logger.error("删除返利息报表失败",e);
+            throw new BohaiException("", "删除返利息报表失败");
+        }
+    }
+
 }

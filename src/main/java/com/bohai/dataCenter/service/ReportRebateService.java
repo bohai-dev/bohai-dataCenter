@@ -20,6 +20,13 @@ public interface ReportRebateService {
 	 */
 	void saveOrUpdate(ReportRebate reportRebate) throws BohaiException;
 	
+	/**
+	 * 根据月份删除返利息特例报表
+	 * @param month 月份yyyyMM
+	 * @throws BohaiException
+	 */
+	void removeByMonth(String month) throws BohaiException;
+	
 	List<ReportRebate> queryRebateDetail();
 	
 	/**

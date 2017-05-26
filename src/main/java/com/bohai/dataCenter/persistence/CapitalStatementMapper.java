@@ -91,4 +91,11 @@ public interface CapitalStatementMapper {
             + "               where t.INVESTOR_NO = t1.INVESTOR_NO)")
     
     List<Map<String,Object>> selectByExistsMarketer(String month);
+    
+    /**
+     * 
+     * 填充节假日资金调用存储过程
+     * @param month
+     */
+    void callInterestReport(String month);
 }

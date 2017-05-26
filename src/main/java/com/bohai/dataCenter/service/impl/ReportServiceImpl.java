@@ -114,6 +114,9 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public void countRebatReport(CountRebatReportParamVO paramVO) throws BohaiException {
 		
+	    //先删除统计月份数据
+	    this.reportRebateService.removeByMonth(paramVO.getYear()+paramVO.getMonth());
+	    
 		List<RebateList> list = rebateListMapper.selectAll();
 		
 		if(list == null || list.size() < 1){
@@ -193,7 +196,7 @@ public class ReportServiceImpl implements ReportService {
 		
 		
 		//补充节假日利息
-		this.fillDate(paramVO.getYear(),paramVO.getMonth());
+		//this.fillDate(paramVO.getYear(),paramVO.getMonth());
 		
 	}
 	
@@ -801,7 +804,7 @@ public class ReportServiceImpl implements ReportService {
             reportMarketerInterestMapper.insert(marketerInterest);
 	    }
 	    
-	    this.fillDate1(paramVO.getYear(), paramVO.getMonth());
+	    //this.fillDate1(paramVO.getYear(), paramVO.getMonth());
 	}
 	
 	

@@ -210,10 +210,17 @@
         enableUpdateByExample="false" selectByExampleQueryId="false">
     </table> -->
     
-    <table schema="" tableName="T_REPORT_MARKETER_INTEREST" domainObjectName="ReportMarketerInterest" 
+    <!--<table schema="" tableName="T_REPORT_MARKETER_INTEREST" domainObjectName="ReportMarketerInterest" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- caoxx建的表 -->
+    <table schema="" tableName="T_CUST_TRADE" domainObjectName="CustTrade" 
         enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
         enableUpdateByExample="false" selectByExampleQueryId="false">
     </table>
+    
     
   </context>
 </generatorConfiguration>

@@ -31,6 +31,18 @@ public class CrmMarketerServiceImpl implements CrmMarketerService {
     @Override
     public void modifyCrmMarketer(CrmMarketer marketer) throws BohaiException {
         
+        
+        //更新营销人员名下居间人部门
+        int mediatorCount = 0;
+        
+        try {
+            mediatorCount = this.crmMediatorMapper.updateDepByMarketerNo(marketer);
+            logger.debug("共更新"+mediatorCount+"条营销人员名下居间人信息");
+        } catch (Exception e) {
+            logger.error("更新营销人员名下居间人归属部门失败");
+            throw new BohaiException("", "更新营销人员名下居间人归属部门失败");
+        }
+        
         //查询营销人员名下所有居间人信息
         List<CrmMediator> mediators = this.crmMediatorMapper.selectByMarketer(marketer.getMarketerNo());
         if(mediators != null && mediators.size() >0){
@@ -44,18 +56,6 @@ public class CrmMarketerServiceImpl implements CrmMarketerService {
                 }
                 
             }
-        }
-        
-        
-        //更新营销人员名下居间人部门
-        int mediatorCount = 0;
-        
-        try {
-            mediatorCount = this.crmMediatorMapper.updateDepByMarketerNo(marketer);
-            logger.debug("共更新"+mediatorCount+"条营销人员名下居间人信息");
-        } catch (Exception e) {
-            logger.error("更新营销人员名下居间人归属部门失败");
-            throw new BohaiException("", "更新营销人员名下居间人归属部门失败");
         }
         
         //更新营销人员名下客户信息

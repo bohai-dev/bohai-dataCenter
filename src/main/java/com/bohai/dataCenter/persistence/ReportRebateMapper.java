@@ -3,6 +3,7 @@ package com.bohai.dataCenter.persistence;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
 
 import com.bohai.dataCenter.entity.ReportRebate;
@@ -56,6 +57,9 @@ public interface ReportRebateMapper {
      * @mbggenerated Tue Apr 11 15:16:02 CST 2017
      */
     int updateByPrimaryKey(ReportRebate record);
+    
+    @Delete("delete from T_REPORT_REBATE where to_char(TRADE_DATE,'yyyymm') = #{0}")
+    int deleteByMonth(String month);
     
     ReportRebate selectByTradeDateAndInvestorNo(String tradeDateStr, String investorNo);
     

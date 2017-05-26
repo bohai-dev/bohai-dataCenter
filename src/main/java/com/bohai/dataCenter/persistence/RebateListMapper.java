@@ -58,6 +58,7 @@ public interface RebateListMapper {
     @Delete("delete from T_REBATE_LIST")
     int deleteAll();
     
+    
     /**
      * 查询所有数据
      * @return
