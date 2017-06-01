@@ -49,4 +49,11 @@ public class ReportSpecialReturnServiceImpl implements ReportSpecialReturnServic
         return this.reportSpecialReturnMapper.selectMarketerReturn(month);
     }
 
+    @Override
+    public void removeByMonth(String month) throws BohaiException {
+
+        this.reportSpecialReturnMapper.deleteByMonth(month);
+        
+    }
+
 }

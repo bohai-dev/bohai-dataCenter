@@ -1,5 +1,6 @@
 package com.bohai.dataCenter.persistence;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -52,9 +53,26 @@ public interface VTradeDetailMapper {
 	 * @param exchangeId
 	 * @return
 	 */
-	@Select("select t.INVESTOR_NO,t.INVESTOR_NAME,sum(t.EXCHANGE_CHARGE) as CHARGE from T_CTPTRADE_DATA t "
-	        + "where t.EXCHANGE_NAME = #{1} "
+	@Select("select t.INVESTOR_NO,t.INVESTOR_NAME,sum(decode(t.HEDGE_FLAG,'投',t.EXCHANGE_CHARGE*0.4,'保',t.EXCHANGE_CHARGE*0.8)) as CHARGE from T_CTPTRADE_DATA t "
+	        + "where t.EXCHANGE_NAME = '上期所' "
 	        + "and substr(TRADE_DATE,0,6) = #{0} "
 	        + "group by t.INVESTOR_NO,t.INVESTOR_NAME")
-	List<Map<String,Object>> selectInvestorCharge(String month, String exchangeId);
+	List<Map<String,Object>> selectInvestorChargeShanghai(String month);
+	
+	@Select("select t.INVESTOR_NO,t.INVESTOR_NAME,sum(t.EXCHANGE_CHARGE*0.2) as CHARGE from T_CTPTRADE_DATA t "
+            + "where t.EXCHANGE_NAME = '郑商所' "
+	        + "and t.HEDGE_FLAG = '投'"
+            + "and substr(TRADE_DATE,0,6) = #{0} "
+            + "group by t.INVESTOR_NO,t.INVESTOR_NAME")
+    List<Map<String,Object>> selectInvestorChargeZhengzhou(String month);
+	
+	/**
+	 * 查询客户月上交手续费
+	 * @param month
+	 * @return
+	 */
+	@Select("select sum(EXCHANGE_CHARGE) from T_CTPTRADE_DATA t where substr(t.TRADE_DATE,0,6) = #{0} and t.INVESTOR_NO = #{1} and t.EXCHANGE_NAME = #{2}")
+	BigDecimal selectInvestorChargeByMonth(String month, String investorNo, String exchangeName);
+	
+	
 }

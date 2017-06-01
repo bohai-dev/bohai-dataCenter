@@ -504,7 +504,7 @@ public class ReportServiceImpl implements ReportService {
 	    this.reportInvestorRebateService.removeByMonth(paramVO.getMonth());
 	    
 	    //统计上期所返还到客户
-	    List<Map<String, Object>> slist = this.vTradeDetailMapper.selectInvestorCharge(paramVO.getMonth().replace("-", ""), "上期所");
+	    List<Map<String, Object>> slist = this.vTradeDetailMapper.selectInvestorChargeShanghai("201704");
 	    if(slist != null){
             for(Map<String, Object> map : slist){
                 ReporteInvestorRebate investorRebate = new ReporteInvestorRebate();
@@ -516,14 +516,14 @@ public class ReportServiceImpl implements ReportService {
                 investorRebate.setInvestorName((String) map.get("INVESTOR_NAME"));
                 //手续费 上期所返还上交手续费的40%
                 BigDecimal scharge = (BigDecimal) map.get("CHARGE");
-                scharge = scharge.multiply(new BigDecimal("0.4")).setScale(2, RoundingMode.HALF_UP);
+                //scharge = scharge.multiply(new BigDecimal("0.4")).setScale(2, RoundingMode.HALF_UP);
                 investorRebate.setSrebate(scharge.toString());
                 this.reportInvestorRebateService.saveOrUpdate(investorRebate);
             }
         }
 	    
 	    //统计郑商所返还到客户
-        List<Map<String, Object>> zlist = this.vTradeDetailMapper.selectInvestorCharge(paramVO.getMonth().replace("-", ""), "郑商所");
+        List<Map<String, Object>> zlist = this.vTradeDetailMapper.selectInvestorChargeZhengzhou(paramVO.getMonth().replace("-", ""));
         if(slist != null){
             for(Map<String, Object> map : zlist){
                 ReporteInvestorRebate investorRebate = new ReporteInvestorRebate();
@@ -535,7 +535,7 @@ public class ReportServiceImpl implements ReportService {
                 investorRebate.setInvestorName((String) map.get("INVESTOR_NAME"));
                 //手续费 郑商所返还上交手续费的20%
                 BigDecimal zcharge = (BigDecimal) map.get("CHARGE");
-                zcharge = zcharge.multiply(new BigDecimal("0.2")).setScale(2, RoundingMode.HALF_UP);
+                //zcharge = zcharge.multiply(new BigDecimal("0.2")).setScale(2, RoundingMode.HALF_UP);
                 investorRebate.setZrebate(zcharge.toString());
                 this.reportInvestorRebateService.saveOrUpdate(investorRebate);
             }
@@ -661,8 +661,12 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public void reportSpecialReturn(CountExchangeRebateParamVO paramVO) throws BohaiException {
 	    
+	    
 	    //统计月份   格式为 yyyy-MM
 	    String month = paramVO.getMonth();
+	    //先删除所有统计数据
+	    this.reportSpecialReturnService.removeByMonth(month);
+	    
 	    //先统计交易所返佣到客户
 	    this.countInvestorExchangeRebate(paramVO);
 	    //查询交易所返佣特例名单
@@ -707,6 +711,28 @@ public class ReportServiceImpl implements ReportService {
                     //交易所返还总金额
                     BigDecimal amount = new BigDecimal(s).add(new BigDecimal(z)).add(new BigDecimal(d));
                     
+                    //只返郑商所
+                    if("1".equals(specialReturn.getReturnType())){
+                        amount = new BigDecimal(z);
+                    }
+                    
+                    //查询客户月上交手续费
+                    BigDecimal zcharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201703", investorNo, "郑商所");
+                    if(zcharge == null){
+                        zcharge = new BigDecimal("0");
+                    }
+                    BigDecimal dcharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201703", investorNo, "大商所");
+                    if(dcharge == null){
+                        dcharge = new BigDecimal("0");
+                    }
+                    BigDecimal scharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201704", investorNo, "上期所");
+                    if(scharge == null){
+                        scharge = new BigDecimal("0");
+                    }
+                    //客户月上交总手续费
+                    BigDecimal allCharge = zcharge.add(dcharge).add(scharge);
+                    
+                    
                     //浮动返还比例
                     BigDecimal frate = new BigDecimal("0.00");
                     
@@ -730,11 +756,11 @@ public class ReportServiceImpl implements ReportService {
                             
                             
                             //  左区间<返还总金额<=右区间
-                            if(amount.compareTo(minValue)>0 && amount.compareTo(maxValue)<1){
+                            if(allCharge.compareTo(minValue)>0 && allCharge.compareTo(maxValue)<1){
                                 //浮动利率
                                 frate = new BigDecimal(entry.getValue().toString());
                                 
-                                logger.debug("客户返还："+amount+"在区间："+entry.getKey()+"范围内");
+                                logger.debug("客户上交手续费："+allCharge+"在区间："+entry.getKey()+"范围内");
                                 
                                 break;
                             }

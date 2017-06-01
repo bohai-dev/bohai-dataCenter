@@ -233,17 +233,33 @@
           select t1.MARKETER_NO,
                   t1.MARKETER_NAME,
                   t1.DEP_NAME,
-                  round(case when 
-                                  t.fix_proportion is not null 
-                             then 
-                                  (0.8-t.fix_proportion)/fix_proportion*t.amount 
-                             else 
-                                  decode(t.custom_proportion,0,0.8,(0.8-t.custom_proportion)/t.custom_proportion)*t.amount 
+                  round(
+                        case when t5.return_type = '1'
+                        then 
+                            (case when 
+                                    t.fix_proportion is not null 
+                               then 
+                                    (0.8-t.fix_proportion)/t.fix_proportion*t.amount + (t.drebate+t.srebate)*0.8
+                               else 
+                                    decode(t.custom_proportion,0,0.8*(srebate+zrebate+drebate),(0.8-t.custom_proportion)/t.custom_proportion*t.amount )
+                            end)
+                        else
+                          (case when 
+                                    t.fix_proportion is not null 
+                               then 
+                                    (0.8-t.fix_proportion)/t.fix_proportion*t.amount 
+                               else 
+                                    decode(t.custom_proportion,0,0.8*(t.srebate+t.zrebate+t.drebate),(0.8-t.custom_proportion)/t.custom_proportion*t.amount )
+                            end)
+
                         end
                   ,2) as MARKETER_AMOUNT  
           from T_REPORT_SPECIAL_RETURN t left join T_MARKETER t1  
           on F_GETMARKETERNO(t.INVESTOR_NO) = t1.MARKETER_NO
+          left join T_SPECIAL_RETURN t5 
+          on t.INVESTOR_NO = t5.INVESTOR_NO
           where t.MONTH = #{month}
+          and not EXISTS (select 1 from  MARKET_CUSTTEMP t2,T_MEDIATOR_CUST t3 where t2.CUSTNAME = t3.mediator_name and t3.CUST_NO = t.investor_no and t2.DBL16 = 0 )
           
           union all
           
@@ -255,6 +271,7 @@
                               where t.INVESTOR_NO = t2.INVESTOR_NO 
                               and t.MONTH = t2.MONTH)
           and t.MONTH = #{month}
+          and not EXISTS (select 1 from  MARKET_CUSTTEMP t2,T_MEDIATOR_CUST t3 where t2.CUSTNAME = t3.mediator_name and t3.CUST_NO = t.investor_no and t2.DBL16 = 0 )
         )
     where MARKETER_NO is not null
     group by MARKETER_NO,MARKETER_NAME,DEP_NAME

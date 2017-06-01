@@ -3,6 +3,8 @@ package com.bohai.dataCenter.persistence;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Delete;
+
 import com.bohai.dataCenter.entity.ReportSpecialReturn;
 import com.bohai.dataCenter.vo.QuerySpecialReturnReportParamVO;
 
@@ -68,4 +70,7 @@ public interface ReportSpecialReturnMapper {
      * @return
      */
     List<Map<String,Object>> selectMarketerReturn(String month);
+    
+    @Delete("delete from T_REPORT_SPECIAL_RETURN where month = #{0}")
+    void deleteByMonth(String month);
 }

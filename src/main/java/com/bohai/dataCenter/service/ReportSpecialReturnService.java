@@ -30,4 +30,6 @@ public interface ReportSpecialReturnService {
     public List<ReportSpecialReturn> queryByCondition(QuerySpecialReturnReportParamVO paramVO) throws BohaiException;
     
     public List<Map<String, Object>> queryMarketerReturn(String month) throws BohaiException;
+    
+    public void removeByMonth(String month) throws BohaiException;
 }
