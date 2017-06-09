@@ -304,6 +304,11 @@
                 }
            });
         }
+      
+      //导出excel
+        function exportCrmMarketer(){
+            $('#queryForm').submit();
+        }
     </script>
   </head>
 
@@ -346,7 +351,7 @@
 
           <div class="row placeholders">
             <!-- 查询条件表单 -->
-                      <form class="form-horizontal" style="margin-top: 30px">
+                      <form id="queryForm" class="form-horizontal" style="margin-top: 30px">
                           <div class="form-group">
                           
                                 <label for="qdepName" class="col-sm-2 col-md-1 control-label">所在营业部</label>
@@ -367,8 +372,11 @@
                           </div>
                           
                           <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10 col-md-2 col-md-offset-5 ">
+                            <div class="col-sm-offset-2 col-sm-10 col-md-2 col-md-offset-4 ">
                               <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryCrmMarketer()">
+                            </div>
+                            <div class=" col-sm-10 col-md-2 ">
+                              <input class="btn btn-default col-xs-7" type="button" value="导出" onclick="exportCrmMarketer()">
                             </div>
                           </div>
                       </form>
