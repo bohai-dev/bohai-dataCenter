@@ -277,4 +277,26 @@
   
   </select>
   
+  <select id="selectRightByMediator" parameterType="com.bohai.dataCenter.vo.QueryMediatorRightParamVO" 
+        resultType="java.math.BigDecimal">
+    select sum (rights) from (select t.INVESTOR_NO,avg(t.INVESTOR_RIGHTS) as rights
+	from T_CAPITAL_STATEMENT t 
+	where EXISTS (select 1 from T_MEDIATOR_CUST t1 
+	               <where>
+	                   t.INVESTOR_NO = t1.CUST_NO
+	                  <if test="mediatorNo != null and mediatorNo != ''" >
+	                    and t1.MEDIATOR_NO = #{mediatorNo,jdbcType=VARCHAR}
+	                  </if>
+	                  <if test="mediatorName != null and mediatorName != ''" >
+                        and t1.MEDIATOR_NAME = #{mediatorName,jdbcType=VARCHAR}
+                      </if>
+	               </where>
+	               
+	              )
+	and to_char(TRADE_DATE,'yyyy') = #{year,jdbcType=VARCHAR}
+    and to_char(TRADE_DATE,'mm') = #{month,jdbcType=VARCHAR}
+	group by t.INVESTOR_NO) 
+  
+  </select>
+  
 </mapper>

@@ -322,6 +322,36 @@
     from T_REPORT_REBATE
   </select>
   
+  <select id="selectByCondition" resultMap="BaseResultMap" parameterType="com.bohai.dataCenter.vo.QueryRebateDetailParamVO">
+    select 
+    <include refid="Base_Column_List" />
+    from T_REPORT_REBATE
+    <where>
+        <if test="depName != null and depName != ''">
+            DEPT_NAME like  '%'||#{depName, jdbcType=VARCHAR}||'%'
+        </if>
+        <if test="investorNo != null and investorNo != ''">
+            and INVESTOR_NO = #{investorNo, jdbcType=VARCHAR}
+        </if>
+        <if test="investorName != null and investorName != ''">
+            and INVESTOR_NAME = #{investorName, jdbcType=VARCHAR}
+        </if>
+        <if test="mediatorNo != null and mediatorNo != ''">
+            and MEDIATOR_NO = #{mediatorNo, jdbcType=VARCHAR}
+        </if>
+        <if test="mediatorName != null and mediatorName != ''">
+            and MARKET_NAME = #{mediatorName, jdbcType=VARCHAR}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            and to_char(TRADE_DATE,'yyyy-mm-dd') <![CDATA[>=]]> #{beginDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            and to_char(TRADE_DATE,'yyyy-mm-dd') <![CDATA[<=]]> #{endDate}
+        </if>
+    </where>
+  
+  </select>
+  
   
   <select id="selectDistinctInvestorByYearAndMonth" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select distinct INVESTOR_NO,INVESTOR_NAME,DEPT_NAME 
@@ -368,7 +398,7 @@
 			    round(case when 
 			               t.fix_proportion is not null 
 			           then ((0.0195-t.FIX_PROPORTION)/t.FIX_PROPORTION)*t.INTEREST_AMOUNT 
-			           else decode(t.daily_rights,0,0.0195*t.INTEREST_AMOUNT,((0.0195-t.daily_rights)/t.daily_rights)*t.INTEREST_AMOUNT) 
+			           else decode(t.daily_rights,0,0.0195*t.AVAILABLE_FUNDS/360,((0.0195-t.daily_rights)/t.daily_rights)*t.INTEREST_AMOUNT) 
 			           end,2) as interest,
 			    t.DEPT_NAME,t.TRADE_DATE
 			from T_REPORT_REBATE t 

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.bohai.dataCenter.controller.exception.BohaiException;
 import com.bohai.dataCenter.entity.ReportRebate;
+import com.bohai.dataCenter.vo.QueryRebateDetailParamVO;
 import com.bohai.dataCenter.vo.QueryRebateReportParamVO;
 
 /**
@@ -27,7 +28,7 @@ public interface ReportRebateService {
 	 */
 	void removeByMonth(String month) throws BohaiException;
 	
-	List<ReportRebate> queryRebateDetail();
+	List<ReportRebate> queryRebateDetail(QueryRebateDetailParamVO paramVO);
 	
 	/**
 	 * 查询返利息报表

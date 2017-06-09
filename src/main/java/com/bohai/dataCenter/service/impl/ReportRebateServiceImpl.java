@@ -14,6 +14,7 @@ import com.bohai.dataCenter.controller.exception.BohaiException;
 import com.bohai.dataCenter.entity.ReportRebate;
 import com.bohai.dataCenter.persistence.ReportRebateMapper;
 import com.bohai.dataCenter.service.ReportRebateService;
+import com.bohai.dataCenter.vo.QueryRebateDetailParamVO;
 import com.bohai.dataCenter.vo.QueryRebateReportParamVO;
 
 @Service("reportRebateService")
@@ -67,9 +68,10 @@ public class ReportRebateServiceImpl implements ReportRebateService {
 	}
 	
 	@Override
-	public List<ReportRebate> queryRebateDetail(){
+	public List<ReportRebate> queryRebateDetail(QueryRebateDetailParamVO paramVO){
 		
-		return this.reportRebateMapper.selectAll();
+	    //return this.reportRebateMapper.selectAll();
+		return this.reportRebateMapper.selectByCondition(paramVO);
 	}
 
 	@Override

@@ -88,6 +88,13 @@ public class CrmMediatorController {
         return this.crmMediatorMapper.getMediatorNo();
     }
     
+    /**
+     * 导出居间人信息
+     * @param paramVO
+     * @param request
+     * @param response
+     * @throws BohaiException
+     */
     @RequestMapping("exportCrmMediator")
     public void exportCrmMediator(QueryCrmMediatorParamVO paramVO, 
             HttpServletRequest request, HttpServletResponse response) throws BohaiException{
@@ -95,12 +102,12 @@ public class CrmMediatorController {
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet=wb.createSheet("居间人信息");
         
-        String[] head = {"所属营业部","居间人编号","居间人名称","归属类型","归属代码","归属名称","证件类型","证件号码","生效日期","失效日期","默认分配比例","联系电话"};
+        String[] mediatorHead = {"所属营业部","居间人编号","居间人名称","归属类型","归属代码","归属名称","证件类型","证件号码","生效日期","失效日期","默认分配比例","联系电话"};
         
         XSSFRow row = sheet.createRow(0);
         //初始化表头
-        for (int i = 0 ;i < head.length ; i++) {
-            row.createCell(i).setCellValue(head[i]);
+        for (int i = 0 ;i < mediatorHead.length ; i++) {
+            row.createCell(i).setCellValue(mediatorHead[i]);
             
             sheet.setColumnWidth(i, 256*15);
         }
@@ -154,6 +161,20 @@ public class CrmMediatorController {
                 row2.createCell(11).setCellValue(list.get(i).getTelephone());
             }
         }
+        
+        
+        XSSFSheet sheet1=wb.createSheet("居间人与客户关系");
+        String[] mediatorInvestorHead = {"居间人编号","居间人姓名","投资者编号","投资者名称","生效日期","失效日期","备注"};
+        XSSFRow row1 = sheet.createRow(0);
+        //初始化表头
+        for (int i = 0 ;i < mediatorInvestorHead.length ; i++) {
+            row1.createCell(i).setCellValue(mediatorInvestorHead[i]);
+            
+            sheet1.setColumnWidth(i, 256*15);
+        }
+        
+        //TODO 根据条件查询居间人与客户关系
+        
         
         try {
             OutputStream output=response.getOutputStream();

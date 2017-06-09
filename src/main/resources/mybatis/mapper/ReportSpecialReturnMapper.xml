@@ -228,30 +228,42 @@
   </select>
   
   <select id="selectMarketerReturn" parameterType="java.lang.String" resultType="java.util.Map">
-    select MARKETER_NO,MARKETER_NAME,DEP_NAME,sum(marketer_amount) as MARKETER_AMOUNT 
+    select MARKETER_NO,MARKETER_NAME,DEP_NAME, sum(MARKETER_AMOUNT) as MARKETER_AMOUNT
     from (
           select t1.MARKETER_NO,
                   t1.MARKETER_NAME,
                   t1.DEP_NAME,
                   round(
-                        case when t5.return_type = '1'
-                        then 
-                            (case when 
-                                    t.fix_proportion is not null 
-                               then 
-                                    (0.8-t.fix_proportion)/t.fix_proportion*t.amount + (t.drebate+t.srebate)*0.8
-                               else 
-                                    decode(t.custom_proportion,0,0.8*(srebate+zrebate+drebate),(0.8-t.custom_proportion)/t.custom_proportion*t.amount )
+                        case when  t1.DEP_NAME in ('创新业务一部','资产管理业务部','华东事业部一部','上海营业部') then
+                            (case when t5.return_type = '1'
+                            then 
+                                (srebate*(1-t.fix_proportion)+drebate+zrebate)*(1-0.1178/1.06)*0.8
+                            else
+                              (case when 
+                                        t.fix_proportion is not null 
+                                   then 
+                                        (srebate+drebate+zrebate)*(1-0.1178/1.06)*(1-t.fix_proportion)*0.8
+                                        
+                                   else 
+                                        decode(t.custom_proportion,0,(t.srebate+t.zrebate+t.drebate)*(1-0.1178/1.06)*0.8,(srebate+drebate+zrebate)*(1-0.1178/1.06)*(1-t.custom_proportion)*0.8 )
+                                end)
+    
                             end)
-                        else
-                          (case when 
-                                    t.fix_proportion is not null 
-                               then 
-                                    (0.8-t.fix_proportion)/t.fix_proportion*t.amount 
-                               else 
-                                    decode(t.custom_proportion,0,0.8*(t.srebate+t.zrebate+t.drebate),(0.8-t.custom_proportion)/t.custom_proportion*t.amount )
-                            end)
-
+                        else 
+                            (case when t5.return_type = '1'
+                              then 
+                                  (srebate*(1-t.fix_proportion)+drebate+zrebate)*(1-0.1172/1.06)*0.8
+                              else
+                                (case when 
+                                          t.fix_proportion is not null 
+                                     then 
+                                          (srebate+drebate+zrebate)*(1-0.1172/1.06)*(1-t.fix_proportion)*0.8
+                                          
+                                     else 
+                                          decode(t.custom_proportion,0,(t.srebate+t.zrebate+t.drebate)*(1-0.1172/1.06)*0.8,(srebate+drebate+zrebate)*(1-0.1172/1.06)*(1-t.custom_proportion)*0.8 )
+                                  end)
+      
+                              end)
                         end
                   ,2) as MARKETER_AMOUNT  
           from T_REPORT_SPECIAL_RETURN t left join T_MARKETER t1  
@@ -263,7 +275,8 @@
           
           union all
           
-          select t1.MARKETER_NO,t1.MARKETER_NAME,t1.DEP_NAME,round((nvl(t.SREBATE,0)+nvl(t.ZREBATE,0)+nvl(t.DREBATE,0))*0.8,2) as MARKETER_AMOUNT 
+          select t1.MARKETER_NO,t1.MARKETER_NAME,t1.DEP_NAME,
+          case when t1.DEP_NAME in ('创新业务一部','资产管理业务部','华东事业部一部','上海营业部') then round((nvl(t.SREBATE,0)+nvl(t.ZREBATE,0)+nvl(t.DREBATE,0))*(1-0.1178/1.06)*0.8,2) else round((nvl(t.SREBATE,0)+nvl(t.ZREBATE,0)+nvl(t.DREBATE,0))*(1-0.1172/1.06)*0.8,2)  end  as MARKETER_AMOUNT 
           from T_REPORTE_INVESTOR_REBATE t left join T_MARKETER t1  
           on F_GETMARKETERNO(t.INVESTOR_NO) = t1.MARKETER_NO
           where not exists (select 1 

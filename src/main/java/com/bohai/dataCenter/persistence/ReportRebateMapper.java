@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
 
 import com.bohai.dataCenter.entity.ReportRebate;
+import com.bohai.dataCenter.vo.QueryRebateDetailParamVO;
 import com.bohai.dataCenter.vo.QueryRebateReportParamVO;
 
 public interface ReportRebateMapper {
@@ -64,6 +65,8 @@ public interface ReportRebateMapper {
     ReportRebate selectByTradeDateAndInvestorNo(String tradeDateStr, String investorNo);
     
     List<ReportRebate> selectAll();
+    
+    List<ReportRebate> selectByCondition(QueryRebateDetailParamVO paramVO);
     
     List<ReportRebate> selectDistinctInvestorByYearAndMonth(String year, String month);
     

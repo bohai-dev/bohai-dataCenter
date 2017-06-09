@@ -61,7 +61,6 @@ public interface VTradeDetailMapper {
 	
 	@Select("select t.INVESTOR_NO,t.INVESTOR_NAME,sum(t.EXCHANGE_CHARGE*0.2) as CHARGE from T_CTPTRADE_DATA t "
             + "where t.EXCHANGE_NAME = '郑商所' "
-	        + "and t.HEDGE_FLAG = '投'"
             + "and substr(TRADE_DATE,0,6) = #{0} "
             + "group by t.INVESTOR_NO,t.INVESTOR_NAME")
     List<Map<String,Object>> selectInvestorChargeZhengzhou(String month);

@@ -2,6 +2,8 @@ package com.bohai.dataCenter.persistence;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
+
 import com.bohai.dataCenter.entity.ReportMarketerInterest;
 import com.bohai.dataCenter.entity.ReportRebate;
 
@@ -25,4 +27,7 @@ public interface ReportMarketerInterestMapper {
     List<ReportMarketerInterest> selectDistinctInvestorByYearAndMonth(String year, String month);
     
     ReportMarketerInterest selectByTradeDateAndInvestorNo(String tradeDateStr, String investorNo);
+    
+    @Delete("delete from T_REPORT_MARKETER_INTEREST where substr(trade_date_str,0,6) = #{0}")
+    void deleteByMonth(String month);
 }

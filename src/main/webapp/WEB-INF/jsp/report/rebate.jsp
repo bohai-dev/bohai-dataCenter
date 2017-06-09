@@ -215,6 +215,25 @@
             );
         }
         
+        function queryRebateDetail(){
+        	
+        	var param = {beginDate:$('#beginDate').val(),
+        			     endDate: $('#endDate').val(),
+        			     depName: $('#depName3').val(),
+        			     investorNo: $('#investorNo3').val(),
+        			     investorName: $('#investorName3').val(),
+        			     mediatorNo: $('#mediatorNo3').val(),
+        			     mediatorName: $('#mediatorName3').val()
+        		        
+        			   };
+        	
+        	$("#rebateDetailTable").bootstrapTable(
+                    'refresh',{url:"queryRebateDetail",
+                               query: param
+                              }
+                );
+        }
+        
         //营业部统计合计
         function footer(data){
             
@@ -492,40 +511,40 @@
                                   <input type="text" class="form-control" id="endDate">
                                 </div>
                                 
-                                <label for="depName" class="col-sm-2 col-md-1 control-label">营业部名称</label>
+                                <label for="depName3" class="col-sm-2 col-md-1 control-label">营业部名称</label>
                                 <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="depName">
+                                  <input type="text" class="form-control" id="depName3">
                                 </div>
                                 
                           </div>
                           <div class="form-group">
                           
-                                <label for="investorNo" class="col-sm-2 col-md-1 col-md-offset-1 control-label">投资者账号</label>
+                                <label for="investorNo3" class="col-sm-2 col-md-1 col-md-offset-1 control-label">投资者账号</label>
                                 <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="investorNo">
+                                  <input type="text" class="form-control" id="investorNo3">
                                 </div>
                                 
-                                <label for="investorName" class="col-sm-2 col-md-1 control-label">投资者姓名</label>
+                                <label for="investorName3" class="col-sm-2 col-md-1 control-label">投资者姓名</label>
                                 <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="investorName">
+                                  <input type="text" class="form-control" id="investorName3">
                                 </div>
                                 
-                                <label for="mediatorNo" class="col-sm-2 col-md-1 control-label">居间人编号</label>
+                                <label for="mediatorNo3" class="col-sm-2 col-md-1 control-label">居间人编号</label>
                                 <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="mediatorNo">
+                                  <input type="text" class="form-control" id="mediatorNo3">
                                 </div>
                                 
                           </div>
                           
                           <div class="form-group">
                           
-                            <label for="mediatorName" class="col-sm-2 col-md-1 col-md-offset-1 control-label">居间人姓名</label>
+                            <label for="mediatorName3" class="col-sm-2 col-md-1 col-md-offset-1 control-label">居间人姓名</label>
                             <div class="col-sm-10 col-md-2">
-                              <input type="text" class="form-control" id="mediatorName">
+                              <input type="text" class="form-control" id="mediatorName3">
                             </div>
                             
                             <div class="col-sm-offset-2 col-sm-10 col-md-2 col-md-offset-1">
-                              <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="">
+                              <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryRebateDetail()">
                             </div>
                             
                           </div>
@@ -534,7 +553,8 @@
                       
                       
                     <div class="table-responsive">
-                        <table class="table table-striped"
+                        <table id="rebateDetailTable"
+                               class="table table-striped"
                                data-toggle="table" 
                                data-show-export="true"
                                data-show-refresh="true"
@@ -543,7 +563,7 @@
                                data-height="542"
                                data-url="queryRebateDetail"
                                data-pagination="true"
-                               data-method="get"
+                               data-method="post"
                                data-page-list="[5, 10, 20, 50]"
                                data-search="true"
                                data-height="300">

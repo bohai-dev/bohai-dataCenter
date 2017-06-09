@@ -24,6 +24,7 @@ import com.bohai.dataCenter.vo.CountExchangeRebateParamVO;
 import com.bohai.dataCenter.vo.CountRebatReportParamVO;
 import com.bohai.dataCenter.vo.QueryExchangeRebateParamVO;
 import com.bohai.dataCenter.vo.QueryMarketerReturnReportParamVO;
+import com.bohai.dataCenter.vo.QueryRebateDetailParamVO;
 import com.bohai.dataCenter.vo.QueryRebateReportParamVO;
 import com.bohai.dataCenter.vo.QuerySpecialReturnReportParamVO;
 
@@ -91,8 +92,8 @@ public class ReportController {
 	 */
 	@RequestMapping(value="queryRebateDetail")
 	@ResponseBody
-	public List<ReportRebate> queryRebateDetail(){
-		return this.reportRebateService.queryRebateDetail();
+	public List<ReportRebate> queryRebateDetail(@RequestBody(required=false) QueryRebateDetailParamVO paramVO){
+		return this.reportRebateService.queryRebateDetail(paramVO);
 	}
 	
 	/**

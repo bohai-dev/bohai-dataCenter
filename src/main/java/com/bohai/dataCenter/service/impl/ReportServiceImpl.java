@@ -48,6 +48,7 @@ import com.bohai.dataCenter.service.ReportSpecialReturnService;
 import com.bohai.dataCenter.util.DateFormatterUtil;
 import com.bohai.dataCenter.vo.CountExchangeRebateParamVO;
 import com.bohai.dataCenter.vo.CountRebatReportParamVO;
+import com.bohai.dataCenter.vo.QueryMediatorRightParamVO;
 
 import oracle.net.aso.a;
 
@@ -142,7 +143,7 @@ public class ReportServiceImpl implements ReportService {
 						//居间人下没有客户的资金信息
 						continue;
 					}
-					this.generateRebat(statements, rebate, depName);
+					this.generateRebat(statements, rebate, depName,paramVO);
 				}else {
 					//居间人没有居间人编号的情况
 					String depName = "其他";
@@ -153,7 +154,7 @@ public class ReportServiceImpl implements ReportService {
 						//客户没有资金信息
 						continue;
 					}
-					this.generateRebat(statements, rebate, depName);
+					this.generateRebat(statements, rebate, depName,paramVO);
 					
 				}
 			}else if (rebate.getCateDesp().equals("客户")) {//类型为客户
@@ -190,7 +191,7 @@ public class ReportServiceImpl implements ReportService {
 					//客户没有资金信息
 					continue;
 				}
-				this.generateRebat(statements, rebate, depName);
+				this.generateRebat(statements, rebate, depName,paramVO);
 			}
 		}
 		
@@ -200,7 +201,7 @@ public class ReportServiceImpl implements ReportService {
 		
 	}
 	
-	private void generateRebat(List<CapitalStatement> statements,RebateList rebate,String depName) throws BohaiException{
+	private void generateRebat(List<CapitalStatement> statements,RebateList rebate,String depName,CountRebatReportParamVO paramVO) throws BohaiException{
 		
 		//固定利率
 		String fixPro = rebate.getFixProportion();
@@ -242,6 +243,21 @@ public class ReportServiceImpl implements ReportService {
 				interest = new BigDecimal(availableFunds).multiply(new BigDecimal(fixPro)).divide(new BigDecimal("360"), 2, RoundingMode.HALF_UP);
 			}else if(!StringUtils.isEmpty(custom)) {
 				JSONObject json = JSONObject.parseObject(custom);
+				
+				if(rebate.getCateDesp().equals("居间人")){
+				    
+				    QueryMediatorRightParamVO mediatorRightParamVO = new QueryMediatorRightParamVO();
+				    mediatorRightParamVO.setMediatorName(rebate.getMediatorName());
+				    mediatorRightParamVO.setMediatorNo(rebate.getMdeiatorNo());
+				    mediatorRightParamVO.setYear(paramVO.getYear());
+				    mediatorRightParamVO.setMonth(paramVO.getMonth());
+				    BigDecimal mediatorRights = this.capitalStatementMapper.selectRightByMediator(mediatorRightParamVO);
+				    if(mediatorRights != null){
+				        //居间人名下所有客户的日均权益之和
+				        investorRights = mediatorRights.toString();
+				    }
+				}
+				
 				for (Map.Entry<String, Object> entry : json.entrySet()) {
 					
 					logger.debug("获取区间："+entry.getKey()+",对应的利率："+entry.getValue().toString());
@@ -596,7 +612,7 @@ public class ReportServiceImpl implements ReportService {
                 
               //鸡蛋和两版
                 if(instrument.equals("jd")||instrument.equals("bb")||instrument.equals("fb")){
-                    if(hadgeFlag.equals("保")){
+                    /*if(hadgeFlag.equals("保")){
                         //套保日内 90%  非日内  98%
                         if(!StringUtils.isEmpty(openCharge) && !StringUtils.isEmpty(closetCharge)){
                             inday = new BigDecimal(closetCharge).multiply(closeTodayVolume).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.9"));
@@ -607,16 +623,16 @@ public class ReportServiceImpl implements ReportService {
                             //outday = 
                             outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.98"));
                         }
-                    }else if (hadgeFlag.equals("投")) {
+                    }else if (hadgeFlag.equals("投")) {*/
                         //非套保日内 0     非日内 80%
                         if(!StringUtils.isEmpty(openCharge)){
                             outday = (volume.subtract(closeTodayVolume.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openCharge)).multiply(new BigDecimal("0.8"));
                         }else if (!StringUtils.isEmpty(openChargeRate)) {
                             outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.8"));
                         }
-                    }
+                    /*}*/
                 }else {//非鸡蛋和两板
-                    if(hadgeFlag.equals("保")){
+                    /*if(hadgeFlag.equals("保")){
                         //套保日内 92.5%  非日内  98.5%
                         if(!StringUtils.isEmpty(openCharge) && !StringUtils.isEmpty(closetCharge)){
                             inday = new BigDecimal(closetCharge).multiply(closeTodayVolume).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.925"));
@@ -627,7 +643,7 @@ public class ReportServiceImpl implements ReportService {
                             //outday = 
                             outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.985"));
                         }
-                    }else if (hadgeFlag.equals("投")) {
+                    }else if (hadgeFlag.equals("投")) {*/
                         //非套保日内 25%     非日内 85%
                         if(!StringUtils.isEmpty(openCharge) && !StringUtils.isEmpty(closetCharge)){
                             inday = new BigDecimal(closetCharge).multiply(closeTodayVolume).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.25"));
@@ -637,7 +653,7 @@ public class ReportServiceImpl implements ReportService {
                             inday = new BigDecimal(closetChargeRate).multiply(closeToday).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.25"));
                             outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.85"));
                         }
-                    }
+                    /*}*/
                 }
                 
                 rebate = inday.add(outday);
@@ -787,6 +803,9 @@ public class ReportServiceImpl implements ReportService {
 	public void reportInvestorInterest(CountRebatReportParamVO paramVO) throws BohaiException{
 	    
 	    String month = paramVO.getYear()+paramVO.getMonth();
+	    
+	    //先删除统计月份数据
+	    this.reportMarketerInterestMapper.deleteByMonth(month);
 	    
 	    List<Map<String,Object>> list = this.capitalStatementMapper.selectByExistsMarketer(month);
 	    if(list == null ){
