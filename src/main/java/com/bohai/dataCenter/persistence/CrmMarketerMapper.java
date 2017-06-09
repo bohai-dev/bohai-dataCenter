@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Select;
 
 import com.bohai.dataCenter.entity.CrmMarketer;
+import com.bohai.dataCenter.vo.CrmMarketerAndCustomer;
+import com.bohai.dataCenter.vo.CrmMarketerAndMediator;
 import com.bohai.dataCenter.vo.QueryCrmMarketerParamVO;
 
 public interface CrmMarketerMapper {
@@ -57,6 +59,12 @@ public interface CrmMarketerMapper {
     int updateByPrimaryKey(CrmMarketer record);
     
     List<CrmMarketer> selectByCondition(QueryCrmMarketerParamVO paramVO);
+    
+    //XUSHEN ADD START
+    List<CrmMarketerAndMediator> selectMaketerRelation(QueryCrmMarketerParamVO paramVO);
+    
+    List<CrmMarketerAndCustomer> selectMaketerCustomerRelation(QueryCrmMarketerParamVO paramVO);
+    //XUSHEN ADD END
     
     @Select("SELECT to_char(sysdate,'yymm')||'1'||lpad(SEQ_CRM_MARKETERNO.nextval,5,'0') from dual")
     String getMarketerNo();

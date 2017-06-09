@@ -351,7 +351,7 @@
 
           <div class="row placeholders">
             <!-- 查询条件表单 -->
-                      <form id="queryForm" class="form-horizontal" style="margin-top: 30px">
+                      <form id="queryForm" action="exportCrmMarketer" class="form-horizontal" style="margin-top: 30px">
                           <div class="form-group">
                           
                                 <label for="qdepName" class="col-sm-2 col-md-1 control-label">所在营业部</label>

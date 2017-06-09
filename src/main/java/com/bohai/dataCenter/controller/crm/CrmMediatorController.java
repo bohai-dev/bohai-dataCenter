@@ -165,7 +165,7 @@ public class CrmMediatorController {
         
         XSSFSheet sheet1=wb.createSheet("居间人与客户关系");
         String[] mediatorInvestorHead = {"居间人编号","居间人姓名","投资者编号","投资者名称","生效日期","失效日期","备注"};
-        XSSFRow row1 = sheet.createRow(0);
+        XSSFRow row1 = sheet1.createRow(0);
         //初始化表头
         for (int i = 0 ;i < mediatorInvestorHead.length ; i++) {
             row1.createCell(i).setCellValue(mediatorInvestorHead[i]);
