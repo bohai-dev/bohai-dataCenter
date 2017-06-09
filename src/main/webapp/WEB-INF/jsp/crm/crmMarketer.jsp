@@ -351,23 +351,23 @@
 
           <div class="row placeholders">
             <!-- 查询条件表单 -->
-                      <form id="queryForm" action="exportCrmMarketer" class="form-horizontal" style="margin-top: 30px">
+                      <form id="queryForm" action="exportCrmMarketer" enctype="application/json;charset=UTF-8" class="form-horizontal" style="margin-top: 30px">
                           <div class="form-group">
                           
                                 <label for="qdepName" class="col-sm-2 col-md-1 control-label">所在营业部</label>
                                 <div class="col-sm-10 col-md-2">
-                                  <select class="selectpicker form-control" id="qdepName" data-live-Search="true">
+                                  <select class="selectpicker form-control" id="qdepName" name="depCode" data-live-Search="true">
                                     </select>
                                 </div>
                                 
                                 <label for="qmarketerNo" class="col-sm-2 col-md-1 control-label">营销人员编号</label>
                                 <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="qmarketerNo">
+                                  <input type="text" class="form-control" name="marketerNo" id="qmarketerNo">
                                 </div>
                             
                                 <label for="qmarketerName" class="col-sm-2 col-md-1 control-label">营销人员姓名</label>
                                 <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="qmarketerName">
+                                  <input type="text" class="form-control" name="marketerName" id="qmarketerName">
                                 </div>
                           </div>
                           
