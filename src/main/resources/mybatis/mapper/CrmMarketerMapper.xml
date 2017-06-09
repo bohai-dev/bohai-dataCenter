@@ -343,17 +343,16 @@
     from T_CRM_MARKETER t, T_CRM_MEDIATOR t1 
     where t.MARKETER_NO = t1.BELONG_TO
     and t1.BELONG_TYPE = '1'
-    <where>
-        <if test="marketerNo != null and marketerNo != ''">
-            and t.MARKETER_NO = #{marketerNo,jdbcType=VARCHAR}
-        </if>
-        <if test="marketerName != null and marketerName != ''">
-            and t.MARKETER_NAME like  '%'||#{marketerName,jdbcType=VARCHAR}||'%'
-        </if>
-        <if test="depCode != null and depCode != ''">
-            and t.DEP_CODE = #{depCode,jdbcType=VARCHAR}
-        </if>
-    </where>
+    <if test="marketerNo != null and marketerNo != ''">
+        and t.MARKETER_NO = #{marketerNo,jdbcType=VARCHAR}
+    </if>
+    <if test="marketerName != null and marketerName != ''">
+        and t.MARKETER_NAME like  '%'||#{marketerName,jdbcType=VARCHAR}||'%'
+    </if>
+    <if test="depCode != null and depCode != ''">
+        and t.DEP_CODE = #{depCode,jdbcType=VARCHAR}
+    </if>
+    order by t.MARKETER_NO
   </select>
   
   <select id="selectMaketerCustomerRelation" resultType="com.bohai.dataCenter.vo.CrmMarketerAndCustomer" parameterType="com.bohai.dataCenter.vo.QueryCrmMarketerParamVO">
@@ -364,9 +363,9 @@
         t1.INVESTOR_NAME as investorName,
         t1.REMARK as remark
     from T_CRM_MARKETER t, T_CRM_CUSTOMER t1 
-    where t.MARKETER_NO = t1.BELONG_TO
-    and t1.BELONG_TYPE = '1'
     <where>
+	    t.MARKETER_NO = t1.BELONG_TO
+	    and t1.BELONG_TYPE = '1'
         <if test="marketerNo != null and marketerNo != ''">
             and t.MARKETER_NO = #{marketerNo,jdbcType=VARCHAR}
         </if>
@@ -377,5 +376,6 @@
             and t.DEP_CODE = #{depCode,jdbcType=VARCHAR}
         </if>
     </where>
+    order by t.MARKETER_NO
   </select>
 </mapper>
