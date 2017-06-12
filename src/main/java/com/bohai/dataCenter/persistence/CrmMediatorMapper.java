@@ -7,6 +7,10 @@ import org.apache.ibatis.annotations.Update;
 
 import com.bohai.dataCenter.entity.CrmMarketer;
 import com.bohai.dataCenter.entity.CrmMediator;
+import com.bohai.dataCenter.vo.CrmMarketerAndCustomer;
+import com.bohai.dataCenter.vo.CrmMarketerAndMediator;
+import com.bohai.dataCenter.vo.CrmMediatorAndCustomer;
+import com.bohai.dataCenter.vo.QueryCrmMarketerParamVO;
 import com.bohai.dataCenter.vo.QueryCrmMediatorParamVO;
 
 public interface CrmMediatorMapper {
@@ -68,6 +72,10 @@ public interface CrmMediatorMapper {
     int updateDepByMarketerNo(CrmMarketer marketer);
     
     List<CrmMediator> selectByMarketer(String marketerNo);
+    
+    //XUSHEN ADD START
+    List<CrmMediatorAndCustomer> selectMediatorCustomerRelation(QueryCrmMediatorParamVO paramVO);
+    //XUSHEN ADD END
     
     @Select(" SELECT to_char(sysdate,'yymm')||'2'||lpad(SEQ_CRM_MEDIATORNO.nextval,5,'0') from dual")
     String getMediatorNo();

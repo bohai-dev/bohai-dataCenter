@@ -22,6 +22,7 @@ import com.bohai.dataCenter.controller.exception.BohaiException;
 import com.bohai.dataCenter.entity.CrmMediator;
 import com.bohai.dataCenter.persistence.CrmMediatorMapper;
 import com.bohai.dataCenter.service.CrmMediatorService;
+import com.bohai.dataCenter.vo.CrmMediatorAndCustomer;
 import com.bohai.dataCenter.vo.QueryCrmMediatorParamVO;
 
 @Controller
@@ -163,7 +164,7 @@ public class CrmMediatorController {
         }
         
         
-        XSSFSheet sheet1=wb.createSheet("居间人与客户关系");
+        XSSFSheet sheet1 = wb.createSheet("居间人与客户关系");
         String[] mediatorInvestorHead = {"居间人编号","居间人姓名","投资者编号","投资者名称","生效日期","失效日期","备注"};
         XSSFRow row1 = sheet1.createRow(0);
         //初始化表头
@@ -173,8 +174,28 @@ public class CrmMediatorController {
             sheet1.setColumnWidth(i, 256*15);
         }
         
-        //TODO 根据条件查询居间人与客户关系
-        
+        //TODO 根据条件查询居间人与客户关系T_CRM_MEDIATOR和T_CRM_CUSTOMER关联关系
+        List<CrmMediatorAndCustomer> mediatorlist = this.crmMediatorMapper.selectMediatorCustomerRelation(paramVO);
+		if (mediatorlist != null && mediatorlist.size() > 0) {
+
+			for (int i = 0; i < mediatorlist.size(); i++) {
+				XSSFRow row2 = sheet1.createRow(i + 1);
+				// 居间人编号
+				row2.createCell(0).setCellValue(mediatorlist.get(i).getMediatorNo());
+				// 居间人名称
+				row2.createCell(1).setCellValue(mediatorlist.get(i).getMediatorName());
+				// 投资者编号
+				row2.createCell(2).setCellValue(mediatorlist.get(i).getInvestorNo());
+				// 投资者名称
+				row2.createCell(3).setCellValue(mediatorlist.get(i).getInvestorName());
+				// 生效日期
+				row2.createCell(4).setCellValue(mediatorlist.get(i).getEffectDate());
+				// 失效日期
+				row2.createCell(5).setCellValue(mediatorlist.get(i).getExpireDate());
+				// 备注
+				row2.createCell(6).setCellValue(mediatorlist.get(i).getRemark());
+			}
+		}
         
         try {
             OutputStream output=response.getOutputStream();
