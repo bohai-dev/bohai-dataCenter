@@ -506,6 +506,7 @@
                 data: JSON.stringify(param),
                 success: function (data,status) {
                     $('#addModal').modal('hide')
+                	alert("添加成功")
                     $("#investorTable").bootstrapTable('refresh');
                 }
             });
@@ -568,6 +569,13 @@
               pageNumber:params.pageNumber,
               pageSize:params.pageSize}
       }
+      
+      
+    //导出excel
+      function exportCustomer(){
+          $('#queryForm').submit();
+      }
+      
     </script>
   </head>
 
@@ -611,30 +619,30 @@
           <div class="row placeholders">
             
             <!-- 查询条件表单 -->
-                      <form class="form-horizontal" style="margin-top: 30px">
+                      <form id="queryForm" method="post" action="exportCustomer" enctype="application/json;charset=UTF-8" class="form-horizontal" style="margin-top: 30px">
                           <div class="form-group">
                                 
                                 <label for="qdepName" class="col-sm-2 col-md-1 control-label">所在营业部</label>
                                 <div class="col-sm-10 col-md-2">
-                                  <select class="selectpicker form-control" id="qdepName" data-live-Search="true">
+                                  <select class="selectpicker form-control" id="qdepName" name="deptCode" data-live-Search="true">
                                     </select>
                                 </div>
                           
                                 <label for="qinvestorNo" class="col-sm-2 col-md-1 control-label">投资者账号</label>
                                 <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="qinvestorNo">
+                                  <input type="text" class="form-control" id="qinvestorNo" name="investorNo">
                                 </div>
                             
                                 <label for="qinvestorName" class="col-sm-2 col-md-1 control-label">投资者姓名</label>
                                 <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="qinvestorName">
+                                  <input type="text" class="form-control" id="qinvestorName" name="investorName">
                                 </div>
                                 
                           </div>
                           <div class="form-group">
                                 <label for="qbelongType" class="col-sm-2 col-md-1 control-label">归属类型</label>
                                 <div class="col-sm-10 col-md-2">
-                                  <select class="selectpicker form-control" id="qbelongType" >
+                                  <select class="selectpicker form-control" id="qbelongType" name="belongType">
                                       <option > </option>
                                       <option value="0">营业部</option>
                                       <option value="1">营销人员</option>
@@ -644,14 +652,17 @@
                                 
                                 <label for="qbelongTo" class="col-sm-2 col-md-1 control-label">归属名称</label>
                                 <div class="col-sm-10 col-md-2">
-                                  <input type="text" class="form-control" id="qbelongTo">
+                                  <input type="text" class="form-control" id="qbelongTo" name="belongTo">
                                 </div>
                                 
                           </div>
                           
                           <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10 col-md-2 col-md-offset-5 ">
+                            <div class="col-sm-offset-2 col-sm-10 col-md-2 col-md-offset-4 ">
                               <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryCrmCustomer()">
+                            </div>
+                            <div class=" col-sm-10 col-md-2 ">
+                              <input class="btn btn-default col-xs-7" type="button" value="导出" onclick="exportCustomer()">
                             </div>
                           </div>
                       </form>
@@ -721,7 +732,7 @@
             <h4 class="modal-title" id="myModalLabel">新建客户信息</h4>
           </div>
           <div class="modal-body">
-              <form class="form-horizontal" role="form">
+              <form id="addForm" class="form-horizontal" role="form">
                   
                   <div class="form-group">
                     <label for="deptName" class="col-sm-3 control-label">营业部名称</label>

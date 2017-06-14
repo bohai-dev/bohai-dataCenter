@@ -53,6 +53,7 @@ public class FileUploadController {
 		String fileName;
 		try {
 			fileName = new String(file.getOriginalFilename().getBytes("ISO-8859-1"),"UTF-8");
+			fileName = file.getOriginalFilename();
 			logger.debug(fileName);
 			fileUploadFactory.createService(fileName).upload(file);
 			
@@ -72,6 +73,7 @@ public class FileUploadController {
 		String fileName;
 		try {
 			fileName = new String(file.getOriginalFilename().getBytes("ISO-8859-1"),"UTF-8");
+			fileName = file.getOriginalFilename();//new String(file.getOriginalFilename().getBytes("ISO-8859-1"),"UTF-8");
 			logger.debug(fileName);
 			rebateUploadFactory.createService(fileName).upload(file,fileName);
 			
@@ -92,6 +94,7 @@ public class FileUploadController {
 		String fileName;
 		try {
 			fileName = new String(file.getOriginalFilename().getBytes("ISO-8859-1"),"UTF-8");
+			fileName = file.getOriginalFilename();
 			logger.debug(fileName);
 			exchangeRebateUploadFactory.createService(fileName).upload(file,fileName);
 			
