@@ -120,6 +120,10 @@ public class CtpTradeDataCSVUploadImpl implements FileUploadService {
 					String exchangeName = record.get(exchangeNameIndex);
 					//合约
 					String instrument = record.get(instrumentIndex);
+					if(StringUtils.isEmpty(instrument) || instrument.indexOf("-") > -1){
+					    //期权不返
+					    continue;
+					}
 					//买卖方向
 					String direction = record.get(directionIndex);
 					//开平

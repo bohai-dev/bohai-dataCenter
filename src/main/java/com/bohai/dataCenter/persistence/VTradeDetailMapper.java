@@ -34,6 +34,8 @@ public interface VTradeDetailMapper {
 	
 	List<Map<String,Object>> selectInvestorTradeInfo(String tradeMonth);
 	
+	List<Map<String, Object>> selectInvestorTradeInfoByDate(String beginDate, String endDate);
+	
 	/**
 	 * 查询郑商所和上期所手续费(以营业部为维度)
 	 * @param month
@@ -72,6 +74,16 @@ public interface VTradeDetailMapper {
 	 */
 	@Select("select sum(EXCHANGE_CHARGE) from T_CTPTRADE_DATA t where substr(t.TRADE_DATE,0,6) = #{0} and t.INVESTOR_NO = #{1} and t.EXCHANGE_NAME = #{2}")
 	BigDecimal selectInvestorChargeByMonth(String month, String investorNo, String exchangeName);
+	
+	/**
+	 * 查询居间人名下客户月上交手续费
+	 * @param month
+	 * @param mediatorNo
+	 * @param exchangeName
+	 * @return
+	 */
+	@Select("select sum(t.EXCHANGE_CHARGE) from T_CTPTRADE_DATA t,T_SPECIAL_RETURN t1 where t.INVESTOR_NO = t1.INVESTOR_NO and substr(t.TRADE_DATE,0,6) = #{0} and t1.MEDIATOR_NO = #{1} and t.EXCHANGE_NAME = #{2}")
+	BigDecimal selectMediatorChargeByMonthAndExchange(String month, String mediatorNo, String exchangeName);
 	
 	
 }

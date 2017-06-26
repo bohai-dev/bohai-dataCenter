@@ -16,6 +16,10 @@ public class ReportServiceTest extends AbstractJUnit4SpringContextTests{
 	@Autowired
 	private ReportService reportService;
 	
+	/**
+	 * 统计交易所返还（以营业部为维度）
+	 * @throws BohaiException
+	 */
 	@Test
 	public void countExchangeRebate() throws BohaiException {
 
@@ -26,32 +30,67 @@ public class ReportServiceTest extends AbstractJUnit4SpringContextTests{
 		this.reportService.countExchangeRebate(paramVO);
 	}
 	
+	/**-----------------------------------以下统计交返---------------------------------------**/
+	
+	/**
+	 * 统计交易所返还（以投资者为维度）
+	 * @throws BohaiException
+	 */
 	@Test
 	public void countInvestorExchangeRebate() throws BohaiException{
 	    
 	    CountExchangeRebateParamVO paramVO = new CountExchangeRebateParamVO();
-        paramVO.setMonth("2017-03");
+        paramVO.setMonth("2017-05");
 	    
         this.reportService.countInvestorExchangeRebate(paramVO);
 	}
 	
+	/**
+	 * 统计交易所返还特例
+	 * @throws BohaiException
+	 */
 	@Test
 	public void reportSpecialReturn() throws BohaiException{
 	    
 	    CountExchangeRebateParamVO paramVO = new CountExchangeRebateParamVO();
-        paramVO.setMonth("2017-03");
+        paramVO.setMonth("2017-05");
 	    this.reportService.reportSpecialReturn(paramVO);
 	    
 	}
 	
+	/**-----------------------------------统计交返结束-------------------------------------**/
 	
+	
+	
+	
+	
+	
+	/**-----------------------------------以下统计返利息------------------------------------**/
+	/**
+	 * 统计返利息特例
+	 * @throws BohaiException 
+	 */
+	@Test
+	public void countRebatReport() throws BohaiException{
+	    CountRebatReportParamVO paramVO = new CountRebatReportParamVO();
+	    paramVO.setYear("2017");
+	    paramVO.setMonth("05");
+	    this.reportService.countRebatReport(paramVO);
+	}
+	
+	/**
+	 * 统计营销人员返利息提成（除特例）
+	 * @throws BohaiException
+	 */
 	@Test
 	public void reportInvestorInterest() throws BohaiException{
 	    CountRebatReportParamVO paramVO = new CountRebatReportParamVO();
 	    paramVO.setYear("2017");
-	    paramVO.setMonth("04");
+	    paramVO.setMonth("05");
 	    //this.reportService.countRebatReport(paramVO);
 	    this.reportService.reportInvestorInterest(paramVO);
 	}
+	
+	/**-----------------------------------统计返利息结束----------------------------------**/
 
 }

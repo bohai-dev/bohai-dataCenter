@@ -392,7 +392,7 @@
   </select>
   
   <select id="selectMarketerReport" resultType="java.util.Map" parameterType="com.bohai.dataCenter.vo.QueryRebateReportParamVO">
-      select MARKETER_NO,MARKETER_NAME,DEP_NAME,sum(INTEREST) as INTEREST from(
+      <!-- select MARKETER_NO,MARKETER_NAME,DEP_NAME,sum(INTEREST) as INTEREST from(
 	    select marketerNo as MARKETER_NO,b.MARKETER_NAME,b.DEP_NAME,sum(interest) as INTEREST from 
 			(select F_GETMARKETERNO(t.INVESTOR_NO) as marketerNo,t.INVESTOR_NAME,
 			    round(case when 
@@ -422,6 +422,29 @@
 	        and to_char(t.TRADE_DATE,'yyyy-mm') = #{month, jdbcType=VARCHAR}
 	    </if>
 		group by t1.MARKETER_NO,t1.MARKETER_NAME ,t1.DEP_NAME)
+	group by MARKETER_NO,MARKETER_NAME,DEP_NAME -->
+	
+	select MARKETER_NO,MARKETER_NAME,DEP_NAME,sum(INTEREST) as INTEREST 
+	  from( select marketerNo as MARKETER_NO,b.MARKETER_NAME,F_GETDEPNAME(a.INVESTOR_NO) as DEP_NAME,sum(interest) as INTEREST 
+	        from (select F_GETMARKETERNO(t.INVESTOR_NO) as marketerNo,t.INVESTOR_NAME, t.INVESTOR_NO,
+	                    round(case when t.fix_proportion is not null 
+	                                then ((0.0195-t.FIX_PROPORTION)/t.FIX_PROPORTION)*t.INTEREST_AMOUNT 
+	                                else decode(t.daily_rights,0,0.0195*t.AVAILABLE_FUNDS/360,((0.0195-t.daily_rights)/t.daily_rights)*t.INTEREST_AMOUNT) 
+	                          end,2) as interest, t.DEPT_NAME,t.TRADE_DATE 
+	              from T_REPORT_REBATE t
+	              where  not EXISTS (select 1 from MARKET_CUSTTEMP t2,T_CRM_CUSTOMER t3,T_CRM_MEDIATOR t4 where t3.BELONG_TYPE = '2' and t4.MEDIATOR_NO = t3.BELONG_TO  and t2.TYPE = '3' and t2.CUSTNAME = t4.MEDIATOR_NAME and t3.INVESTOR_NO = t.investor_no and t2.DBL16 = 0 ) ) a,
+	              T_CRM_MARKETER b
+	        where a.marketerNo = b.MARKETER_NO 
+	        and to_char(a.TRADE_DATE,'yyyy-mm') = #{month, jdbcType=VARCHAR}
+	        group by marketerNo,b.MARKETER_NAME,F_GETDEPNAME(a.INVESTOR_NO) 
+	        
+	         UNION all 
+	         
+	         select t.MARKET_NO as MARKETER_NO,t.MARKET_NAME as MARKETER_NAME ,F_GETDEPNAME(t.INVESTOR_NO) as DEP_NAME ,sum(t.INTEREST_AMOUNT) as INTEREST 
+	         from T_REPORT_MARKETER_INTEREST t
+	         where not EXISTS (select 1 from MARKET_CUSTTEMP t2,T_CRM_CUSTOMER t3,T_CRM_MEDIATOR t4 where t3.BELONG_TYPE = '2' and t4.MEDIATOR_NO = t3.BELONG_TO  and t2.TYPE = '3' and t2.CUSTNAME = t4.MEDIATOR_NAME and t3.INVESTOR_NO = t.investor_no and t2.DBL16 = 0 ) 
+	         and to_char(t.TRADE_DATE,'yyyy-mm') = #{month, jdbcType=VARCHAR}
+	         group by t.MARKET_NO,t.MARKET_NAME ,F_GETDEPNAME(t.INVESTOR_NO))
 	group by MARKETER_NO,MARKETER_NAME,DEP_NAME
   </select>
 </mapper>

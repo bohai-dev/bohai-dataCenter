@@ -155,8 +155,35 @@
 	VOLUME ,
 	TRUNOVER ,
 	CLOSE_TODAY_VOLUME ,
-	CLOSE_TODAY_TRUNOVER  
+	CLOSE_TODAY_TRUNOVER ,
+	EXCHANGE_CHARGE,
+	CLOSE_TODAY_EXCHANGE_CHARGE
 	from V_CTPTRADE_INVESTOR_DALIAN  
 	where TRADE_MONTH= #{tradeMonth,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="selectInvestorTradeInfoByDate" resultType="java.util.Map" parameterType="java.lang.String">
+  
+      select a.TRADE_MONTH,a.INVESTOR_NO,a.INVESTOR_NAME,a.INSTRUMENT,a.HEDGE_FLAG,a.VOLUME,a.TRUNOVER,b.CLOSE_TODAY_VOLUME,b.CLOSE_TODAY_TRUNOVER,a.EXCHANGE_CHARGE,b.CLOSE_TODAY_EXCHANGE_CHARGE
+      from
+          (select substr(t.TRADE_DATE,0,6) as TRADE_MONTH ,t.INVESTOR_NO,t.INVESTOR_NAME , regexp_replace(t.INSTRUMENT,'[[:digit:]]','') as INSTRUMENT,
+                  t.HEDGE_FLAG, sum(t.VOLUME) as VOLUME,sum(t.TRUNOVER) as TRUNOVER ,sum(t.EXCHANGE_CHARGE) as EXCHANGE_CHARGE
+           from T_CTPTRADE_DATA t
+           where  t.exchange_name = '大商所'
+           and t.TRADE_DATE <![CDATA[ >= ]]> #{0} and t.TRADE_DATE <![CDATA[ <= ]]> #{1}
+           group by substr(t.TRADE_DATE,0,6),t.INVESTOR_NO,t.INVESTOR_NAME , regexp_replace(t.INSTRUMENT,'[[:digit:]]',''),t.HEDGE_FLAG) a 
+      left join 
+          (select substr(t.TRADE_DATE,0,6) as TRADE_MONTH,t.INVESTOR_NO,t.INVESTOR_NAME  , regexp_replace(t.INSTRUMENT,'[[:digit:]]','') as INSTRUMENT,
+                  t.HEDGE_FLAG, sum(t.VOLUME) as CLOSE_TODAY_VOLUME,sum(t.TRUNOVER) as CLOSE_TODAY_TRUNOVER,sum(t.EXCHANGE_CHARGE) as CLOSE_TODAY_EXCHANGE_CHARGE 
+          from T_CTPTRADE_DATA t
+          where t.exchange_name = '大商所'
+          and t.offset_flag = '平今'
+          and t.TRADE_DATE <![CDATA[ >= ]]> #{0} and t.TRADE_DATE <![CDATA[ <= ]]> #{1}
+          group by substr(t.TRADE_DATE,0,6),t.INVESTOR_NO,t.INVESTOR_NAME , regexp_replace(t.INSTRUMENT,'[[:digit:]]',''),t.HEDGE_FLAG) b
+      on a.INVESTOR_NO = b.INVESTOR_NO
+      and a.instrument = b.instrument
+      and a.HEDGE_FLAG = b.HEDGE_FLAG
+      and a.TRADE_MONTH = b.TRADE_MONTH
   </select>
 </mapper>

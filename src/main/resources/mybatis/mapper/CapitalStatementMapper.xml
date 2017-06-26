@@ -241,24 +241,24 @@
   
   <select id="selectByMediatorNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
-     ID,TRADE_DATE_STR,TRADE_DATE,INVESTOR_NO,INVESTOR_NAME,DEPT_CODE,DEPT_NAME,AVAILABLE_FUNDS,CREATE_TIME,UPDATE_TIME,CREATE_BY,UPDATE_BY,
+     t.ID,t.TRADE_DATE_STR,t.TRADE_DATE,t.INVESTOR_NO,t.INVESTOR_NAME,t.DEPT_CODE,F_GETDEPNAME(t.INVESTOR_NO) as DEPT_NAME,t.AVAILABLE_FUNDS,t.CREATE_TIME,t.UPDATE_TIME,t.CREATE_BY,t.UPDATE_BY,
      (select round(avg(INVESTOR_RIGHTS),2)
         from T_CAPITAL_STATEMENT t2 
         where t.INVESTOR_NO = t2.INVESTOR_NO 
         and to_char(t2.TRADE_DATE,'yyyy')= #{1}
         and to_char(t2.TRADE_DATE,'mm') = #{2}
         ) as INVESTOR_RIGHTS
-    from T_CAPITAL_STATEMENT t 
-    where EXISTS (select 1 from T_MEDIATOR_CUST t1 
-                  where t1.MEDIATOR_NO = #{0,jdbcType=VARCHAR}
-                  and t.INVESTOR_NO = t1.CUST_NO)
+    from T_CAPITAL_STATEMENT t ,T_CRM_CUSTOMER t1
+    where t.INVESTOR_NO = t1.INVESTOR_NO
+    and t1.BELONG_TYPE = '2'
+    and t1.BELONG_TO = #{0,jdbcType=VARCHAR}
     and to_char(t.TRADE_DATE,'yyyy') = #{1}
     and to_char(t.TRADE_DATE,'mm') = #{2}
   </select>
   
   <select id="selectByInvestorNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
-    ID,TRADE_DATE_STR,TRADE_DATE,INVESTOR_NO,INVESTOR_NAME,DEPT_CODE,DEPT_NAME,AVAILABLE_FUNDS,CREATE_TIME,UPDATE_TIME,CREATE_BY,UPDATE_BY,
+    ID,TRADE_DATE_STR,TRADE_DATE,INVESTOR_NO,INVESTOR_NAME,DEPT_CODE,F_GETDEPNAME(t.INVESTOR_NO) as DEPT_NAME,AVAILABLE_FUNDS,CREATE_TIME,UPDATE_TIME,CREATE_BY,UPDATE_BY,
      (select round(avg(INVESTOR_RIGHTS),2)
         from T_CAPITAL_STATEMENT t2 
         where t.INVESTOR_NO = t2.INVESTOR_NO 
@@ -281,14 +281,16 @@
         resultType="java.math.BigDecimal">
     select sum (rights) from (select t.INVESTOR_NO,avg(t.INVESTOR_RIGHTS) as rights
 	from T_CAPITAL_STATEMENT t 
-	where EXISTS (select 1 from T_MEDIATOR_CUST t1 
+	where EXISTS (select 1 from T_CRM_CUSTOMER t1 ,t_CRM_MEDIATOR t2
 	               <where>
-	                   t.INVESTOR_NO = t1.CUST_NO
+	                   t1.BELONG_TO = t2.MEDIATOR_NO
+	                   and t.INVESTOR_NO = t1.INVESTOR_NO
+	                   and t1.BELONG_TYPE = '2'
 	                  <if test="mediatorNo != null and mediatorNo != ''" >
-	                    and t1.MEDIATOR_NO = #{mediatorNo,jdbcType=VARCHAR}
+	                    and t1.BELONG_TO = #{mediatorNo,jdbcType=VARCHAR}
 	                  </if>
 	                  <if test="mediatorName != null and mediatorName != ''" >
-                        and t1.MEDIATOR_NAME = #{mediatorName,jdbcType=VARCHAR}
+                        and t2.MEDIATOR_NAME = #{mediatorName,jdbcType=VARCHAR}
                       </if>
 	               </where>
 	               
@@ -297,6 +299,16 @@
     and to_char(TRADE_DATE,'mm') = #{month,jdbcType=VARCHAR}
 	group by t.INVESTOR_NO) 
   
+  </select>
+  
+  <select id="selectByExistsMarketer" parameterType="java.lang.String" resultType="java.util.Map">
+    select t2.MARKETER_NO,t2.MARKETER_NAME,F_GETDEPNAME(t.INVESTOR_NO) as DEP_NAME, t.* 
+    from T_CAPITAL_STATEMENT t,T_CRM_MARKETER t2
+	where F_GETMARKETERNO(t.INVESTOR_NO) = t2.MARKETER_NO
+	and substr(t.TRADE_DATE_STR,0,6) = #{0,jdbcType=VARCHAR}
+	and not EXISTS (select 1 from T_REPORT_REBATE t3
+	                where t.INVESTOR_NO = t3.INVESTOR_NO
+	                and substr(t3.TRADE_DATE_STR,0,6) = #{0,jdbcType=VARCHAR})
   </select>
   
 </mapper>

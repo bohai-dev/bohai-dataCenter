@@ -228,7 +228,7 @@
   </select>
   
   <select id="selectMarketerReturn" parameterType="java.lang.String" resultType="java.util.Map">
-    select MARKETER_NO,MARKETER_NAME,DEP_NAME, sum(MARKETER_AMOUNT) as MARKETER_AMOUNT
+    <!-- select MARKETER_NO,MARKETER_NAME,DEP_NAME, sum(MARKETER_AMOUNT) as MARKETER_AMOUNT
     from (
           select t1.MARKETER_NO,
                   t1.MARKETER_NAME,
@@ -287,6 +287,38 @@
           and not EXISTS (select 1 from  MARKET_CUSTTEMP t2,T_MEDIATOR_CUST t3 where t2.CUSTNAME = t3.mediator_name and t3.CUST_NO = t.investor_no and t2.DBL16 = 0 )
         )
     where MARKETER_NO is not null
+    group by MARKETER_NO,MARKETER_NAME,DEP_NAME -->
+    
+    select MARKETER_NO,MARKETER_NAME,DEP_NAME, sum(MARKETER_AMOUNT) as MARKETER_AMOUNT
+    from ( select t1.MARKETER_NO, t1.MARKETER_NAME, F_GETDEPNAME(t.INVESTOR_NO) as DEP_NAME, 
+              round( case when F_GETDEPNAME(t.INVESTOR_NO) in ('创新业务部','资产管理业务部','华东事业部一部','上海营业部')
+                    then (case when t5.return_type = '1' 
+                          then (zrebate*(1-t.fix_proportion)+drebate+srebate)*(1-0.1178/1.06)*0.8 
+                          else (case when t.fix_proportion is not null 
+                                then (srebate+drebate+zrebate)*(1-0.1178/1.06)*(1-t.fix_proportion)*0.8 
+                                else decode(t.custom_proportion,0,(t.srebate+t.zrebate+t.drebate)*(1-0.1178/1.06)*0.8,(srebate+drebate+zrebate)*(1-0.1178/1.06)*(1-t.custom_proportion)*0.8 ) 
+                                 end) 
+                          end) 
+                    else (case when t5.return_type = '1' 
+                          then (zrebate*(1-t.fix_proportion)+drebate+srebate)*(1-0.1172/1.06)*0.8 
+                          else (case when t.fix_proportion is not null 
+                                then (srebate+drebate+zrebate)*(1-0.1172/1.06)*(1-t.fix_proportion)*0.8 
+                                else decode(t.custom_proportion,0,(t.srebate+t.zrebate+t.drebate)*(1-0.1172/1.06)*0.8,(srebate+drebate+zrebate)*(1-0.1172/1.06)*(1-t.custom_proportion)*0.8 ) 
+                                end) 
+                           end) 
+                     end ,2) as MARKETER_AMOUNT 
+        from T_REPORT_SPECIAL_RETURN t 
+        left join T_SPECIAL_RETURN t5 on t.INVESTOR_NO = t5.INVESTOR_NO , T_CRM_MARKETER t1  
+        where F_GETMARKETERNO(t.INVESTOR_NO) = t1.MARKETER_NO 
+        and t.MONTH = #{month}
+        and not EXISTS (select 1 from MARKET_CUSTTEMP t2,T_CRM_CUSTOMER t3,T_CRM_MEDIATOR t4 where t3.BELONG_TYPE = '2' and t4.MEDIATOR_NO = t3.BELONG_TO  and t2.TYPE = '3' and t2.CUSTNAME = t4.MEDIATOR_NAME and t3.INVESTOR_NO = t.investor_no and t2.DBL16 = 0 ) 
+        union all 
+        select t1.MARKETER_NO,t1.MARKETER_NAME,F_GETDEPNAME(t.INVESTOR_NO) as DEP_NAME, case when F_GETDEPNAME(t.INVESTOR_NO) in ('创新业务部','资产管理业务部','华东事业部一部','上海营业部') then round((nvl(t.SREBATE,0)+nvl(t.ZREBATE,0)+nvl(t.DREBATE,0))*(1-0.1178/1.06)*0.8,2) else round((nvl(t.SREBATE,0)+nvl(t.ZREBATE,0)+nvl(t.DREBATE,0))*(1-0.1172/1.06)*0.8,2) end as MARKETER_AMOUNT 
+        from T_REPORTE_INVESTOR_REBATE t , T_CRM_MARKETER t1  
+        where F_GETMARKETERNO(t.INVESTOR_NO) = t1.MARKETER_NO 
+        and not exists (select 1 from T_REPORT_SPECIAL_RETURN t2 where t.INVESTOR_NO = t2.INVESTOR_NO and t.MONTH = t2.MONTH) 
+        and t.MONTH = #{month}
+        and not EXISTS (select 1 from MARKET_CUSTTEMP t2,T_CRM_CUSTOMER t3,T_CRM_MEDIATOR t4 where t3.BELONG_TYPE = '2' and t4.MEDIATOR_NO = t3.BELONG_TO  and t2.TYPE = '3' and t2.CUSTNAME = t4.MEDIATOR_NAME and t3.INVESTOR_NO = t.investor_no and t2.DBL16 = 0) ) 
     group by MARKETER_NO,MARKETER_NAME,DEP_NAME
     
   </select>

@@ -2,6 +2,7 @@ package com.bohai.dataCenter.service.factory;
 
 import org.springframework.stereotype.Service;
 
+import com.bohai.dataCenter.controller.exception.BohaiException;
 import com.bohai.dataCenter.service.FileUploadService;
 import com.bohai.dataCenter.service.UploadFactory;
 import com.bohai.dataCenter.util.SpringContextUtil;
@@ -14,7 +15,7 @@ import com.bohai.dataCenter.util.SpringContextUtil;
 public class RebateUploadFactory implements UploadFactory {
 
 	@Override
-	public FileUploadService createService(String fileName) {
+	public FileUploadService createService(String fileName) throws BohaiException {
 
 		FileUploadService fileUploadService = null;
 		if (fileName.indexOf("返利息名单") > -1) {
@@ -25,7 +26,9 @@ public class RebateUploadFactory implements UploadFactory {
 			fileUploadService = (FileUploadService) SpringContextUtil.getBean("capitalStatementCSVUploadService");
 		}else if(fileName.indexOf("资金对账表") > -1){
 			fileUploadService = (FileUploadService) SpringContextUtil.getBean("capitalStatementUploadService");
-		} 
+		}else {
+            throw new BohaiException("", "文件名错误");
+        }
 		
 		return fileUploadService;
 	}

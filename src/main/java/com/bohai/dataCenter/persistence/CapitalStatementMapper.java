@@ -84,19 +84,18 @@ public interface CapitalStatementMapper {
      */
     List<CapitalStatement> selectByInvestorNo(String investorNo,String year,String month);
     
-    @Select("select t1.MARKETER_NO,t1.MARKETER_NAME,t1.DEP_NAME, t.* from T_CAPITAL_STATEMENT t ,T_MARKETER t1 "
+    /*@Select("select t1.MARKETER_NO,t1.MARKETER_NAME,t1.DEP_NAME, t.* from T_CAPITAL_STATEMENT t ,T_MARKETER t1 "
             + "where F_GETMARKETERNO(t.INVESTOR_NO) is not null "
             + "and t1.MARKETER_NO = F_GETMARKETERNO(t.INVESTOR_NO)"
             + "and substr(t.TRADE_DATE_STR,0,6) = #{0} "
             + "and not EXISTS (select 1 "
             + "                from T_REPORT_REBATE t1 "
-            + "               where t.INVESTOR_NO = t1.INVESTOR_NO)")
-    
+            + "               where t.INVESTOR_NO = t1.INVESTOR_NO)")*/
     List<Map<String,Object>> selectByExistsMarketer(String month);
     
     /**
      * 
-     * 填充节假日资金调用存储过程
+     * 填充节假日资金
      * @param month
      */
     void callInterestReport(String month);

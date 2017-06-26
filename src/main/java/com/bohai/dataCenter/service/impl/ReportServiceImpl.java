@@ -50,7 +50,6 @@ import com.bohai.dataCenter.vo.CountExchangeRebateParamVO;
 import com.bohai.dataCenter.vo.CountRebatReportParamVO;
 import com.bohai.dataCenter.vo.QueryMediatorRightParamVO;
 
-import oracle.net.aso.a;
 
 @Service("reportService")
 public class ReportServiceImpl implements ReportService {
@@ -112,11 +111,20 @@ public class ReportServiceImpl implements ReportService {
 		
 	}
 
+	/**
+	 * 统计返利息特例
+	 */
 	@Override
 	public void countRebatReport(CountRebatReportParamVO paramVO) throws BohaiException {
+	    
+	    logger.info("补充统计月份："+paramVO.getYear()+paramVO.getMonth()+"的节假日资金");
+	    this.capitalStatementMapper.callInterestReport(paramVO.getYear()+paramVO.getMonth());
+	    logger.info("资金数据补充完成");
 		
+	    logger.info("删除已统计数据");
 	    //先删除统计月份数据
 	    this.reportRebateService.removeByMonth(paramVO.getYear()+paramVO.getMonth());
+	    logger.info("删除完成");
 	    
 		List<RebateList> list = rebateListMapper.selectAll();
 		
@@ -129,24 +137,24 @@ public class ReportServiceImpl implements ReportService {
 			if (rebate.getCateDesp().equals("居间人")) {
 				//居间人名下所有客户
 				String mediatorNo = rebate.getMdeiatorNo();
-				if(!StringUtils.isEmpty(mediatorNo)){
-					//查询居间人对应的营业部
+				if(StringUtils.isEmpty(rebate.getInvestorNo())){
+					/*//查询居间人对应的营业部
 					Mediator mediator = this.mediatorMapper.selectByMediatorNo(mediatorNo);
 					if(mediator == null){
 						continue;
 					}
 					//营业部
-					String depName = mediator.getDepName();
+					String depName = mediator.getDepName();*/
 					//查询居间人名下所有客户的资金对账信息
 					List<CapitalStatement> statements = this.capitalStatementMapper.selectByMediatorNo(mediatorNo,paramVO.getYear(),paramVO.getMonth());
 					if(statements == null || statements.size() <1){
 						//居间人下没有客户的资金信息
 						continue;
 					}
-					this.generateRebat(statements, rebate, depName,paramVO);
+					this.generateRebat(statements, rebate, paramVO);
 				}else {
-					//居间人没有居间人编号的情况
-					String depName = "其他";
+					//居间人名下指定的某些客户
+					
 					//投资者编号
 					String investorNo = rebate.getInvestorNo();
 					List<CapitalStatement> statements = this.capitalStatementMapper.selectByInvestorNo(investorNo,paramVO.getYear(),paramVO.getMonth());
@@ -154,7 +162,7 @@ public class ReportServiceImpl implements ReportService {
 						//客户没有资金信息
 						continue;
 					}
-					this.generateRebat(statements, rebate, depName,paramVO);
+					this.generateRebat(statements, rebate, paramVO);
 					
 				}
 			}else if (rebate.getCateDesp().equals("客户")) {//类型为客户
@@ -167,31 +175,13 @@ public class ReportServiceImpl implements ReportService {
 					continue;
 				}
 				
-				if(!StringUtils.isEmpty(rebate.getMdeiatorNo())){
-					//查询居间人对应的营业部
-					try {
-						Mediator mediator = this.mediatorMapper.selectByMediatorNo(rebate.getMdeiatorNo());
-						depName = mediator.getDepName();
-					} catch (Exception e) {
-						logger.error("查询居间人信息失败："+rebate.getMdeiatorNo(),e);
-						throw new BohaiException("", "查询居间人信息失败："+rebate.getMdeiatorNo());
-					}
-				}else if (!StringUtils.isEmpty(rebate.getInvestorNo())) {
-					//查询客户所在营业部
-					try {
-						depName = this.marketerMapper.selectDepNameByInvestorNo(investorNo);
-					} catch (Exception e) {
-						logger.error("根据投资者编号查询所在营业部失败："+investorNo,e);
-						throw new BohaiException("", "根据投资者编号查询所在营业部失败："+investorNo);
-					}
-				}
 				
 				List<CapitalStatement> statements = this.capitalStatementMapper.selectByInvestorNo(investorNo,paramVO.getYear(),paramVO.getMonth());
 				if(statements == null || statements.size() <1){
 					//客户没有资金信息
 					continue;
 				}
-				this.generateRebat(statements, rebate, depName,paramVO);
+				this.generateRebat(statements, rebate, paramVO);
 			}
 		}
 		
@@ -201,7 +191,7 @@ public class ReportServiceImpl implements ReportService {
 		
 	}
 	
-	private void generateRebat(List<CapitalStatement> statements,RebateList rebate,String depName,CountRebatReportParamVO paramVO) throws BohaiException{
+	private void generateRebat(List<CapitalStatement> statements,RebateList rebate,CountRebatReportParamVO paramVO) throws BohaiException{
 		
 		//固定利率
 		String fixPro = rebate.getFixProportion();
@@ -222,8 +212,8 @@ public class ReportServiceImpl implements ReportService {
 			reportRebate.setMediatorName(rebate.getMediatorName());
 			//居间人姓名
 			reportRebate.setMediatorNo(rebate.getMdeiatorNo());
-			//营业部
-			reportRebate.setDeptName(depName);
+			//营业部   20170620改为新CRM营业部关系
+			reportRebate.setDeptName(statement.getDeptName());
 			//可用资金
 			String availableFunds = statement.getAvailableFunds();
 			//客户权益
@@ -292,55 +282,6 @@ public class ReportServiceImpl implements ReportService {
 		}
 	}
 	
-	private void fillDate(String year, String month) throws BohaiException{
-		
-		logger.debug("开始填补节假日利息");
-		
-		//查询某一月份所有返息人员名单
-		List<ReportRebate> investors = this.reportRebateMapper.selectDistinctInvestorByYearAndMonth(year, month);
-		if(investors == null || investors.size() < 1){
-			return;
-		}
-		for(ReportRebate investorMap:investors){
-			
-			String investorNo = investorMap.getInvestorNo();
-			String investorName = investorMap.getInvestorName();
-			String depName = investorMap.getDeptName();
-			//查询当月所有节假日信息
-			List<TradingDate> holidays = tradingDateMapper.selectHolidaysByYearAndMonth(year, month);
-			
-			for(TradingDate holiday:holidays){
-				//查询节假日前一交易日信息
-				Date tradingDate = this.tradingDateMapper.selectPreTraDateByDate(holiday.getTdate());
-				
-				String dateStr = DateFormatterUtil.getDateStryyyyMMdd(tradingDate);
-				//查询前一交易日返利信息
-				ReportRebate rebate = this.reportRebateMapper.selectByTradeDateAndInvestorNo(dateStr, investorNo);
-				if(rebate == null || StringUtils.isEmpty(rebate.getInvestorNo())){
-					//补充一条利息为0的数据
-					ReportRebate reportRebate = new ReportRebate();
-					//节假日
-					reportRebate.setTradeDate(holiday.getTdate());
-					reportRebate.setTradeDateStr(DateFormatterUtil.getDateStryyyyMMdd(holiday.getTdate()));
-					reportRebate.setInvestorNo(investorNo);
-					reportRebate.setInvestorName(investorName);
-					reportRebate.setDeptName(depName);
-					reportRebate.setInterestAmount("0.00");
-					//日期类型为节假日
-					reportRebate.setDateType("0");
-					reportRebateService.saveOrUpdate(reportRebate);
-				}else {
-					rebate.setId(null);
-					rebate.setDateType("0");
-					rebate.setTradeDate(holiday.getTdate());
-					rebate.setTradeDateStr(DateFormatterUtil.getDateStryyyyMMdd(holiday.getTdate()));
-					reportRebateService.saveOrUpdate(rebate);
-				}
-			}
-			
-		}
-		
-	}
 
 	@Override
 	public void countExchangeRebate(CountExchangeRebateParamVO paramVO) throws BohaiException {
@@ -520,7 +461,7 @@ public class ReportServiceImpl implements ReportService {
 	    this.reportInvestorRebateService.removeByMonth(paramVO.getMonth());
 	    
 	    //统计上期所返还到客户
-	    List<Map<String, Object>> slist = this.vTradeDetailMapper.selectInvestorChargeShanghai("201704");
+	    List<Map<String, Object>> slist = this.vTradeDetailMapper.selectInvestorChargeShanghai("201705");
 	    if(slist != null){
             for(Map<String, Object> map : slist){
                 ReporteInvestorRebate investorRebate = new ReporteInvestorRebate();
@@ -539,7 +480,7 @@ public class ReportServiceImpl implements ReportService {
         }
 	    
 	    //统计郑商所返还到客户
-        List<Map<String, Object>> zlist = this.vTradeDetailMapper.selectInvestorChargeZhengzhou(paramVO.getMonth().replace("-", ""));
+        List<Map<String, Object>> zlist = this.vTradeDetailMapper.selectInvestorChargeZhengzhou("201704");
         if(slist != null){
             for(Map<String, Object> map : zlist){
                 ReporteInvestorRebate investorRebate = new ReporteInvestorRebate();
@@ -557,7 +498,7 @@ public class ReportServiceImpl implements ReportService {
             }
         }
         
-        List<Map<String,Object>> dlist = this.vTradeDetailMapper.selectInvestorTradeInfo(paramVO.getMonth().replace("-", ""));
+        /*List<Map<String,Object>> dlist = this.vTradeDetailMapper.selectInvestorTradeInfo("201704");
         if(dlist != null){
             for(Map<String, Object> map : dlist){
                 //投资者编号
@@ -612,7 +553,7 @@ public class ReportServiceImpl implements ReportService {
                 
               //鸡蛋和两版
                 if(instrument.equals("jd")||instrument.equals("bb")||instrument.equals("fb")){
-                    /*if(hadgeFlag.equals("保")){
+                    if(hadgeFlag.equals("保")){
                         //套保日内 90%  非日内  98%
                         if(!StringUtils.isEmpty(openCharge) && !StringUtils.isEmpty(closetCharge)){
                             inday = new BigDecimal(closetCharge).multiply(closeTodayVolume).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.9"));
@@ -623,16 +564,16 @@ public class ReportServiceImpl implements ReportService {
                             //outday = 
                             outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.98"));
                         }
-                    }else if (hadgeFlag.equals("投")) {*/
+                    }else if (hadgeFlag.equals("投")) {
                         //非套保日内 0     非日内 80%
                         if(!StringUtils.isEmpty(openCharge)){
                             outday = (volume.subtract(closeTodayVolume.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openCharge)).multiply(new BigDecimal("0.8"));
                         }else if (!StringUtils.isEmpty(openChargeRate)) {
                             outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.8"));
                         }
-                    /*}*/
+                    }
                 }else {//非鸡蛋和两板
-                    /*if(hadgeFlag.equals("保")){
+                    if(hadgeFlag.equals("保")){
                         //套保日内 92.5%  非日内  98.5%
                         if(!StringUtils.isEmpty(openCharge) && !StringUtils.isEmpty(closetCharge)){
                             inday = new BigDecimal(closetCharge).multiply(closeTodayVolume).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.925"));
@@ -643,7 +584,7 @@ public class ReportServiceImpl implements ReportService {
                             //outday = 
                             outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.985"));
                         }
-                    }else if (hadgeFlag.equals("投")) {*/
+                    }else if (hadgeFlag.equals("投")) {
                         //非套保日内 25%     非日内 85%
                         if(!StringUtils.isEmpty(openCharge) && !StringUtils.isEmpty(closetCharge)){
                             inday = new BigDecimal(closetCharge).multiply(closeTodayVolume).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.25"));
@@ -653,7 +594,218 @@ public class ReportServiceImpl implements ReportService {
                             inday = new BigDecimal(closetChargeRate).multiply(closeToday).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.25"));
                             outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.85"));
                         }
-                    /*}*/
+                    }
+                }
+                
+                rebate = inday.add(outday);
+                
+                ReporteInvestorRebate investorRebate = new ReporteInvestorRebate();
+                investorRebate.setMonth(paramVO.getMonth());
+                investorRebate.setDrebate(rebate.toString());
+                investorRebate.setInvestorNo(investorNo);
+                investorRebate.setInvestorName(investorName);
+                this.reportInvestorRebateService.updateRebate(investorRebate);
+            }
+        }*/
+        
+      //直接根据交易所手续费计算 20170622  begin
+        
+        /*for(Map<String, Object> map : dlist){
+            //投资者编号
+            String investorNo = (String) map.get("INVESTOR_NO");
+            //投资者名称
+            String investorName = (String) map.get("INVESTOR_NAME");
+            //合约品种
+            String instrument = (String) map.get("INSTRUMENT");
+            //套保标志  H:套保 O:非套保
+            String hadgeFlag = (String) map.get("HEDGE_FLAG");
+            
+            //总成交量
+            BigDecimal totalVolume = (BigDecimal) map.get("VOLUME");
+            //平今量
+            BigDecimal closeTodayVolume = (BigDecimal) map.get("CLOSE_TODAY_VOLUME");
+            if(closeTodayVolume == null){
+                closeTodayVolume = new BigDecimal("0");
+            } 
+            
+            BigDecimal exchangeCharge = (BigDecimal) map.get("EXCHANGE_CHARGE");
+            if(exchangeCharge == null){
+                exchangeCharge = new BigDecimal("0");
+            }
+            
+            BigDecimal closeTodayExchangeCharge = (BigDecimal) map.get("CLOSE_TODAY_EXCHANGE_CHARGE");
+            if(closeTodayExchangeCharge == null){
+                closeTodayExchangeCharge = new BigDecimal("0");
+            }
+            
+            //日内返还金额
+            BigDecimal inday = new BigDecimal("0");
+            //非日内返还金额
+            BigDecimal outday = new BigDecimal("0");
+            
+            //交易所返还
+            BigDecimal rebate = new BigDecimal("0");
+            
+          //鸡蛋和两版
+            if(instrument.equals("jd")||instrument.equals("bb")||instrument.equals("fb")){
+                if(hadgeFlag.equals("保")){
+                    //套保日内 90%  非日内  98%
+                    //日内返还 = 平今手续费*2*0.9
+                    inday = closeTodayExchangeCharge.multiply(new BigDecimal("2")).multiply(new BigDecimal("0.9"));
+                    //非日内返还 = （总手续费-平今手续费*2）*0.98
+                    outday = (exchangeCharge.subtract(closeTodayExchangeCharge.multiply(new BigDecimal("2")))).multiply(new BigDecimal("0.98"));
+                }else if (hadgeFlag.equals("投")) {
+                    //非套保日内 0     非日内 80%
+                    outday = (exchangeCharge.subtract(closeTodayExchangeCharge.multiply(new BigDecimal("2")))).multiply(new BigDecimal("0.8"));
+                }
+            }else {//非鸡蛋和两板
+                
+                
+                if(hadgeFlag.equals("保")){
+                  
+                    if(closeTodayExchangeCharge.compareTo(new BigDecimal("0")) == 0 && closeTodayVolume.compareTo(new BigDecimal("0")) > 0){
+                        //平今手续费为0 但是有平今量  说明平今手续费为0
+                        //日内手续费 =(平今手数/(总成交手数-平今手数)*总上交手续费)
+                        inday = new BigDecimal(closeTodayVolume.doubleValue()/(totalVolume.doubleValue()-closeTodayVolume.doubleValue())*exchangeCharge.doubleValue()).multiply(new BigDecimal("0.925")).setScale(4, RoundingMode.HALF_UP);
+                        
+                        //非日内手续费 = (总上交手续费-(平今手数/(总成交手数-平今手数)*总上交手续费))
+                        outday = new BigDecimal(exchangeCharge.doubleValue()-
+                                closeTodayVolume.doubleValue()/(totalVolume.doubleValue()-closeTodayVolume.doubleValue())*exchangeCharge.doubleValue()).multiply(new BigDecimal("0.985")).setScale(4, RoundingMode.HALF_UP);
+                        
+                    }else {
+                        //套保日内 92.5%  非日内  98.5%
+                        inday = closeTodayExchangeCharge.multiply(new BigDecimal("2")).multiply(new BigDecimal("0.925"));
+                        outday = (exchangeCharge.subtract(closeTodayExchangeCharge.multiply(new BigDecimal("2")))).multiply(new BigDecimal("0.985"));
+                    }
+                }else if (hadgeFlag.equals("投")) {
+                    
+                    if(closeTodayExchangeCharge.compareTo(new BigDecimal("0")) == 0 && closeTodayVolume.compareTo(new BigDecimal("0")) > 0){
+                        //平今手续费为0 但是有平今量  说明平今手续费为0
+                        //日内手续费 =(平今手数/(总成交手数-平今手数)*总上交手续费)
+                        inday = new BigDecimal(closeTodayVolume.doubleValue()/(totalVolume.doubleValue()-closeTodayVolume.doubleValue())*exchangeCharge.doubleValue()).multiply(new BigDecimal("0.25")).setScale(4, RoundingMode.HALF_UP);
+                        
+                        //非日内手续费 = (总上交手续费-(平今手数/(总成交手数-平今手数)*总上交手续费))
+                        outday = new BigDecimal(exchangeCharge.doubleValue()-
+                                closeTodayVolume.doubleValue()/(totalVolume.doubleValue()-closeTodayVolume.doubleValue())*exchangeCharge.doubleValue()).multiply(new BigDecimal("0.85")).setScale(4, RoundingMode.HALF_UP);
+                        
+                    }else {
+                        //非套保日内 25%     非日内 85%
+                        inday = closeTodayExchangeCharge.multiply(new BigDecimal("2")).multiply(new BigDecimal("0.25"));
+                        outday = (exchangeCharge.subtract(closeTodayExchangeCharge.multiply(new BigDecimal("2")))).multiply(new BigDecimal("0.85"));
+                    }
+                }
+            }
+            
+            rebate = inday.add(outday);
+            
+            ReporteInvestorRebate investorRebate = new ReporteInvestorRebate();
+            investorRebate.setMonth(paramVO.getMonth());
+            investorRebate.setDrebate(rebate.toString());
+            investorRebate.setInvestorNo(investorNo);
+            investorRebate.setInvestorName(investorName);
+            this.reportInvestorRebateService.updateRebate(investorRebate);
+        }*/
+      //直接根据交易所手续费计算 20170622 end
+        
+        
+        //分段计算交易所返还   20170626  begin
+        List<Map<String,Object>> dlist = this.vTradeDetailMapper.selectInvestorTradeInfoByDate("20170401", "20170414");
+        if(dlist != null){
+            for(Map<String, Object> map : dlist){
+                //投资者编号
+                String investorNo = (String) map.get("INVESTOR_NO");
+                //投资者名称
+                String investorName = (String) map.get("INVESTOR_NAME");
+                //合约品种
+                String instrument = (String) map.get("INSTRUMENT");
+                //套保标志  H:套保 O:非套保
+                String hadgeFlag = (String) map.get("HEDGE_FLAG");
+                //总成交量
+                BigDecimal volume = (BigDecimal) map.get("VOLUME");
+                //总成交额
+                BigDecimal turnover = (BigDecimal) map.get("TRUNOVER");
+                //平今量
+                BigDecimal closeTodayVolume = (BigDecimal) map.get("CLOSE_TODAY_VOLUME");
+                if(closeTodayVolume == null){
+                    closeTodayVolume = new BigDecimal("0");
+                }
+                
+                //平今额
+                BigDecimal closeToday = (BigDecimal) map.get("CLOSE_TODAY_TRUNOVER");
+                if(closeToday == null){
+                    closeToday = new BigDecimal("0");
+                }
+                
+                //根据合约名称查询合约属性
+                InstrumentAttribute attribute = this.instrumentAttributeMapper.selectByPrimaryKey(instrument);
+                if(attribute == null){
+                    logger.warn("查询合约手续费失败");
+                    throw new BohaiException("", "查询合约手续费失败："+instrument);
+                }
+                
+                //开始计算大连交易所返还
+                
+                //开仓手续费
+                String openCharge = attribute.getExOpenCharge();
+                //开仓手续费比例
+                String openChargeRate = attribute.getExOpenChargeRate();
+                //平今手续费
+                String closetCharge = attribute.getExClosetCharge();
+                //平今手续费比例
+                String closetChargeRate = attribute.getExClosetChargeRate();
+                
+                //日内返还金额
+                BigDecimal inday = new BigDecimal("0");
+                //非日内返还金额
+                BigDecimal outday = new BigDecimal("0");
+                
+                //交易所返还
+                BigDecimal rebate = new BigDecimal("0");
+                
+              //鸡蛋和两版
+                if(instrument.equals("jd")||instrument.equals("bb")||instrument.equals("fb")){
+                    if(hadgeFlag.equals("保")){
+                        //套保日内 90%  非日内  98%
+                        if(!StringUtils.isEmpty(openCharge) && !StringUtils.isEmpty(closetCharge)){
+                            inday = new BigDecimal(closetCharge).multiply(closeTodayVolume).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.9"));
+                            outday = (volume.subtract(closeTodayVolume.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openCharge)).multiply(new BigDecimal("0.98"));
+                        }else if (!StringUtils.isEmpty(openChargeRate) && !StringUtils.isEmpty(closetChargeRate)) {
+                            //inday = 
+                            inday = new BigDecimal(closetChargeRate).multiply(closeToday).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.9"));
+                            //outday = 
+                            outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.98"));
+                        }
+                    }else if (hadgeFlag.equals("投")) {
+                        //非套保日内 0     非日内 80%
+                        if(!StringUtils.isEmpty(openCharge)){
+                            outday = (volume.subtract(closeTodayVolume.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openCharge)).multiply(new BigDecimal("0.8"));
+                        }else if (!StringUtils.isEmpty(openChargeRate)) {
+                            outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.8"));
+                        }
+                    }
+                }else {//非鸡蛋和两板
+                    if(hadgeFlag.equals("保")){
+                        //套保日内 92.5%  非日内  98.5%
+                        if(!StringUtils.isEmpty(openCharge) && !StringUtils.isEmpty(closetCharge)){
+                            inday = new BigDecimal(closetCharge).multiply(closeTodayVolume).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.925"));
+                            outday = (volume.subtract(closeTodayVolume.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openCharge)).multiply(new BigDecimal("0.985"));
+                        }else if (!StringUtils.isEmpty(openChargeRate) && !StringUtils.isEmpty(closetChargeRate)) {
+                            //inday = 
+                            inday = new BigDecimal(closetChargeRate).multiply(closeToday).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.925"));
+                            //outday = 
+                            outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.985"));
+                        }
+                    }else if (hadgeFlag.equals("投")) {
+                        //非套保日内 25%     非日内 85%
+                        if(!StringUtils.isEmpty(openCharge) && !StringUtils.isEmpty(closetCharge)){
+                            inday = new BigDecimal(closetCharge).multiply(closeTodayVolume).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.25"));
+                            outday = (volume.subtract(closeTodayVolume.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openCharge)).multiply(new BigDecimal("0.85"));
+                        }else if (!StringUtils.isEmpty(openChargeRate) && !StringUtils.isEmpty(closetChargeRate)) {
+                            
+                            inday = new BigDecimal(closetChargeRate).multiply(closeToday).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.25"));
+                            outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.85"));
+                        }
+                    }
                 }
                 
                 rebate = inday.add(outday);
@@ -666,6 +818,147 @@ public class ReportServiceImpl implements ReportService {
                 this.reportInvestorRebateService.updateRebate(investorRebate);
             }
         }
+        
+        Map<String, String> commissionMap = new HashMap<String, String>(){
+            {
+                put("iopen", "0.00006");
+                put("icloseT", "0.00024");
+                
+                put("jopen", "0.00006");
+                put("jcloseT", "0.00036");
+                
+                put("jmopen", "0.00006");
+                put("jmcloseT", "0.00036");
+                
+                put("ppopen", "0.00006");
+                put("ppcloseT", "0.00012");
+            }
+        };
+        
+        List<Map<String,Object>> dlist2 = this.vTradeDetailMapper.selectInvestorTradeInfoByDate("20170417", "20170430");
+        if(dlist != null){
+            for(Map<String, Object> map : dlist2){
+                //投资者编号
+                String investorNo = (String) map.get("INVESTOR_NO");
+                //投资者名称
+                String investorName = (String) map.get("INVESTOR_NAME");
+                //合约品种
+                String instrument = (String) map.get("INSTRUMENT");
+                //套保标志  H:套保 O:非套保
+                String hadgeFlag = (String) map.get("HEDGE_FLAG");
+                //总成交量
+                BigDecimal volume = (BigDecimal) map.get("VOLUME");
+                //总成交额
+                BigDecimal turnover = (BigDecimal) map.get("TRUNOVER");
+                //平今量
+                BigDecimal closeTodayVolume = (BigDecimal) map.get("CLOSE_TODAY_VOLUME");
+                if(closeTodayVolume == null){
+                    closeTodayVolume = new BigDecimal("0");
+                }
+                
+                //平今额
+                BigDecimal closeToday = (BigDecimal) map.get("CLOSE_TODAY_TRUNOVER");
+                if(closeToday == null){
+                    closeToday = new BigDecimal("0");
+                }
+                
+                //根据合约名称查询合约属性
+                InstrumentAttribute attribute = this.instrumentAttributeMapper.selectByPrimaryKey(instrument);
+                if(attribute == null){
+                    logger.warn("查询合约手续费失败");
+                    throw new BohaiException("", "查询合约手续费失败："+instrument);
+                }
+                
+                //开始计算大连交易所返还
+                
+                //开仓手续费
+                String openCharge = attribute.getExOpenCharge();
+                //开仓手续费比例
+                String openChargeRate = attribute.getExOpenChargeRate();
+                //平今手续费
+                String closetCharge = attribute.getExClosetCharge();
+                //平今手续费比例
+                String closetChargeRate = attribute.getExClosetChargeRate();
+                
+                //日内返还金额
+                BigDecimal inday = new BigDecimal("0");
+                //非日内返还金额
+                BigDecimal outday = new BigDecimal("0");
+                
+                //交易所返还
+                BigDecimal rebate = new BigDecimal("0");
+                
+              //鸡蛋和两版
+                if(instrument.equals("jd")||instrument.equals("bb")||instrument.equals("fb")){
+                    if(hadgeFlag.equals("保")){
+                        //套保日内 90%  非日内  98%
+                        if(!StringUtils.isEmpty(openCharge) && !StringUtils.isEmpty(closetCharge)){
+                            inday = new BigDecimal(closetCharge).multiply(closeTodayVolume).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.9"));
+                            outday = (volume.subtract(closeTodayVolume.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openCharge)).multiply(new BigDecimal("0.98"));
+                        }else if (!StringUtils.isEmpty(openChargeRate) && !StringUtils.isEmpty(closetChargeRate)) {
+                            //inday = 
+                            inday = new BigDecimal(closetChargeRate).multiply(closeToday).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.9"));
+                            //outday = 
+                            outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.98"));
+                        }
+                    }else if (hadgeFlag.equals("投")) {
+                        //非套保日内 0     非日内 80%
+                        if(!StringUtils.isEmpty(openCharge)){
+                            outday = (volume.subtract(closeTodayVolume.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openCharge)).multiply(new BigDecimal("0.8"));
+                        }else if (!StringUtils.isEmpty(openChargeRate)) {
+                            outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.8"));
+                        }
+                    }
+                }else {//非鸡蛋和两板
+                    if(hadgeFlag.equals("保")){
+                        //套保日内 92.5%  非日内  98.5%
+                        if(commissionMap.get(instrument+"open") != null){
+                            //inday = 
+                            inday = new BigDecimal(commissionMap.get(instrument+"closeT")).multiply(closeToday).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.925"));
+                            //outday = 
+                            outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(commissionMap.get(instrument+"open"))).multiply(new BigDecimal("0.985"));
+                            
+                        }else {
+                            if(!StringUtils.isEmpty(openCharge) && !StringUtils.isEmpty(closetCharge)){
+                                inday = new BigDecimal(closetCharge).multiply(closeTodayVolume).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.925"));
+                                outday = (volume.subtract(closeTodayVolume.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openCharge)).multiply(new BigDecimal("0.985"));
+                            }else if (!StringUtils.isEmpty(openChargeRate) && !StringUtils.isEmpty(closetChargeRate)) {
+                                //inday = 
+                                inday = new BigDecimal(closetChargeRate).multiply(closeToday).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.925"));
+                                //outday = 
+                                outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.985"));
+                            }
+                        }
+                    }else if (hadgeFlag.equals("投")) {
+                        if(commissionMap.get(instrument+"open") != null){
+                            inday = new BigDecimal(commissionMap.get(instrument+"closeT")).multiply(closeToday).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.25"));
+                            outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(commissionMap.get(instrument+"open"))).multiply(new BigDecimal("0.85"));
+                        }else {
+                          //非套保日内 25%     非日内 85%
+                            if(!StringUtils.isEmpty(openCharge) && !StringUtils.isEmpty(closetCharge)){
+                                inday = new BigDecimal(closetCharge).multiply(closeTodayVolume).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.25"));
+                                outday = (volume.subtract(closeTodayVolume.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openCharge)).multiply(new BigDecimal("0.85"));
+                            }else if (!StringUtils.isEmpty(openChargeRate) && !StringUtils.isEmpty(closetChargeRate)) {
+                                
+                                inday = new BigDecimal(closetChargeRate).multiply(closeToday).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.25"));
+                                outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.85"));
+                            }
+                        }
+                    }
+                }
+                
+                rebate = inday.add(outday);
+                
+                ReporteInvestorRebate investorRebate = new ReporteInvestorRebate();
+                investorRebate.setMonth(paramVO.getMonth());
+                investorRebate.setDrebate(rebate.toString());
+                investorRebate.setInvestorNo(investorNo);
+                investorRebate.setInvestorName(investorName);
+                this.reportInvestorRebateService.updateRebate(investorRebate);
+            }
+        }
+        
+        //分段计算交易所返还   20170626  end
         
 	}
 	
@@ -733,15 +1026,15 @@ public class ReportServiceImpl implements ReportService {
                     }
                     
                     //查询客户月上交手续费
-                    BigDecimal zcharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201703", investorNo, "郑商所");
+                    BigDecimal zcharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201704", investorNo, "郑商所");
                     if(zcharge == null){
                         zcharge = new BigDecimal("0");
                     }
-                    BigDecimal dcharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201703", investorNo, "大商所");
+                    BigDecimal dcharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201704", investorNo, "大商所");
                     if(dcharge == null){
                         dcharge = new BigDecimal("0");
                     }
-                    BigDecimal scharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201704", investorNo, "上期所");
+                    BigDecimal scharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201705", investorNo, "上期所");
                     if(scharge == null){
                         scharge = new BigDecimal("0");
                     }
@@ -761,6 +1054,28 @@ public class ReportServiceImpl implements ReportService {
                     }else if (!StringUtils.isEmpty(specialReturn.getCustomInterval())) {
                         //浮动区间
                         JSONObject json = JSONObject.parseObject(specialReturn.getCustomInterval());
+                        
+                        if("居间人".equals(specialReturn.getType())){
+                            BigDecimal mediatorZcharge = this.vTradeDetailMapper.selectMediatorChargeByMonthAndExchange("201704", specialReturn.getMediatorNo(), "郑商所");
+                            if(mediatorZcharge == null){
+                                mediatorZcharge = new BigDecimal("0");
+                            }
+                            
+                            BigDecimal mediatorDcharge = this.vTradeDetailMapper.selectMediatorChargeByMonthAndExchange("201704", specialReturn.getMediatorNo(), "大商所");
+                            if(mediatorDcharge == null){
+                                mediatorDcharge = new BigDecimal("0");
+                            }
+                            
+                            BigDecimal mediatorScharge = this.vTradeDetailMapper.selectMediatorChargeByMonthAndExchange("201705", specialReturn.getMediatorNo(), "上期所");
+                            if(mediatorScharge == null){
+                                mediatorScharge = new BigDecimal("0");
+                            }
+                            
+                            allCharge = mediatorZcharge.add(mediatorDcharge).add(mediatorScharge);
+                            logger.debug("居间人名下客户月上交手续费总和："+allCharge);
+                            
+                        }
+                        
                         for (Map.Entry<String, Object> entry : json.entrySet()) {
                             
                             logger.debug("获取区间："+entry.getKey()+",对应的利率："+entry.getValue().toString());
@@ -849,58 +1164,7 @@ public class ReportServiceImpl implements ReportService {
             reportMarketerInterestMapper.insert(marketerInterest);
 	    }
 	    
-	    //this.fillDate1(paramVO.getYear(), paramVO.getMonth());
 	}
 	
-	
-	private void fillDate1(String year, String month) throws BohaiException{
-        
-        logger.debug("开始填补节假日利息");
-        
-        //查询某一月份所有返息人员名单
-        List<ReportMarketerInterest> investors = this.reportMarketerInterestMapper.selectDistinctInvestorByYearAndMonth(year, month);
-        if(investors == null || investors.size() < 1){
-            return;
-        }
-        for(ReportMarketerInterest investorMap:investors){
-            
-            String investorNo = investorMap.getInvestorNo();
-            String investorName = investorMap.getInvestorName();
-            String depName = investorMap.getDeptName();
-            //查询当月所有节假日信息
-            List<TradingDate> holidays = tradingDateMapper.selectHolidaysByYearAndMonth(year, month);
-            
-            for(TradingDate holiday:holidays){
-                //查询节假日前一交易日信息
-                Date tradingDate = this.tradingDateMapper.selectPreTraDateByDate(holiday.getTdate());
-                
-                String dateStr = DateFormatterUtil.getDateStryyyyMMdd(tradingDate);
-                //查询前一交易日返利信息
-                ReportMarketerInterest rebate = this.reportMarketerInterestMapper.selectByTradeDateAndInvestorNo(dateStr, investorNo);
-                if(rebate == null || StringUtils.isEmpty(rebate.getInvestorNo())){
-                    //补充一条利息为0的数据
-                    ReportMarketerInterest reportRebate = new ReportMarketerInterest();
-                    //节假日
-                    reportRebate.setTradeDate(holiday.getTdate());
-                    reportRebate.setTradeDateStr(DateFormatterUtil.getDateStryyyyMMdd(holiday.getTdate()));
-                    reportRebate.setInvestorNo(investorNo);
-                    reportRebate.setInvestorName(investorName);
-                    reportRebate.setDeptName(depName);
-                    reportRebate.setInterestAmount("0.00");
-                    //日期类型为节假日
-                    reportRebate.setDateType("0");
-                    reportMarketerInterestMapper.insert(reportRebate);
-                }else {
-                    rebate.setId(null);
-                    rebate.setDateType("0");
-                    rebate.setTradeDate(holiday.getTdate());
-                    rebate.setTradeDateStr(DateFormatterUtil.getDateStryyyyMMdd(holiday.getTdate()));
-                    reportMarketerInterestMapper.insert(rebate);
-                }
-            }
-            
-        }
-        
-    }
 
 }
