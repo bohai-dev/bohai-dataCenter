@@ -66,6 +66,27 @@ public class ReportController {
 		return "report/exchangeRebate";
 	}
 	
+	@RequestMapping(value="toInvestorReport")
+	public String toInvestorReport(){
+	    return "report/investor";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 统计返利息报表
 	 * @throws BohaiException 

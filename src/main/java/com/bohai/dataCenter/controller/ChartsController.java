@@ -3,6 +3,7 @@ package com.bohai.dataCenter.controller;
 import org.springframework.stereotype.Controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bohai.dataCenter.vo.QueryMarketProfitPieChartParamVO;
 
 /**
  * 统计图表
@@ -15,9 +16,12 @@ public class ChartsController {
      * 查询营业部收益饼图
      * @return
      */
-    public JSONObject queryMarketProfitPieChart(){
+    public JSONObject queryMarketProfitPieChart(QueryMarketProfitPieChartParamVO paramVO){
         
         JSONObject json = new JSONObject(true);
+        
+        
+        
         
         return json;
     }
