@@ -1,6 +1,7 @@
 package com.bohai.dataCenter.persistence;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -9,6 +10,7 @@ import com.bohai.dataCenter.entity.CrmCustomer;
 import com.bohai.dataCenter.entity.CrmMarketer;
 import com.bohai.dataCenter.entity.CrmMediator;
 import com.bohai.dataCenter.vo.QueryCrmCustomerParamVO;
+import com.bohai.dataCenter.vo.QueryInvestorProfitParamVO;
 
 public interface CrmCustomerMapper {
     /**
@@ -79,4 +81,22 @@ public interface CrmCustomerMapper {
             + "where BELONG_TYPE = '2' "
             + "and BELONG_TO = #{mediatorNo}")
     int updateBelongByMediator(CrmMediator mediator);
+    
+    /**
+     * 查询投资者产生的利润
+     * @param paramVO
+     * @return
+     */
+    List<Map<String, Object>> queryInvestorProfit(QueryInvestorProfitParamVO paramVO);
+    
+    /**
+     * 查询居间人客户数量
+     * @param mediator
+     * @return
+     */
+    @Select("select count(1) from T_CRM_CUSTOMER where belong_type = '2' and belong_to = #{0}")
+    Long countByMediatorNo(String mediatorNo);
+    
+    @Select("select count(1) from T_CRM_CUSTOMER where belong_type = '1' and belong_to = #{0}")
+    Long countByMarketerNo(String marketerNo);
 }

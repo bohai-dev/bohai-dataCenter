@@ -21,7 +21,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.bohai.dataCenter.controller.exception.BohaiException;
 import com.bohai.dataCenter.entity.CrmCustomer;
 import com.bohai.dataCenter.persistence.CrmCustomerMapper;
+import com.bohai.dataCenter.persistence.CrmMarketerMapper;
+import com.bohai.dataCenter.persistence.CrmMediatorMapper;
+import com.bohai.dataCenter.service.CrmCustomerService;
 import com.bohai.dataCenter.vo.QueryCrmCustomerParamVO;
+import com.bohai.dataCenter.vo.QueryInvestorOverviewParamVO;
+import com.bohai.dataCenter.vo.QueryInvestorOverviewResultVO;
 import com.bohai.dataCenter.vo.TableJsonResponse;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -31,6 +36,9 @@ public class CrmCustomerController {
 	
 	@Autowired
 	private CrmCustomerMapper crmCustomerMapper;
+	
+	@Autowired
+	private CrmCustomerService crmCustomerService;
 	
     static Logger logger = Logger.getLogger(CrmMarketerController.class);
 
@@ -173,5 +181,19 @@ public class CrmCustomerController {
             logger.error("导出客户信息失败",e);
             throw new BohaiException("", "导出客户信息失败");
         }
+    }
+    
+    /**
+     * 查询客户简介
+     * @param paramVO
+     * @return
+     * @throws BohaiException 
+     */
+    @RequestMapping(value="queryInvestorOverview")
+    @ResponseBody
+    public QueryInvestorOverviewResultVO queryInvestorOverview(@RequestBody QueryCrmCustomerParamVO paramVO) throws BohaiException{
+        
+        return this.crmCustomerService.queryInvestorOverview(paramVO);
+        
     }
 }

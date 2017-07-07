@@ -417,4 +417,32 @@
        </where>
     order by t.MEDIATOR_NO
   </select>
+  
+  <select id="queryMediatorProfit" parameterType="com.bohai.dataCenter.vo.QueryMediatorProfitParamVO" resultType="java.util.Map">
+    select MONTH ,
+			MEDIATOR_NO ,
+			MEDIATOR_NAME ,
+			SXFJSR ,
+			INTEREST ,
+			EXCHANGE_RETURN ,
+			INVESTOR_SPECIAL_INTEREST ,
+			INVESTOR_SPECIAL_EXCHANGE ,
+			MEDIATOR_SPECIAL_INTEREST ,
+			MEDIATOR_SPECIAL_EXCHANGE ,
+			DBL16,
+			SXFJSR + INTEREST + EXCHANGE_RETURN-INVESTOR_SPECIAL_INTEREST-INVESTOR_SPECIAL_EXCHANGE-MEDIATOR_SPECIAL_INTEREST-MEDIATOR_SPECIAL_EXCHANGE-DBL16  as NET_PROFIT
+    from T_REPORT_MEDIATOR_PROFIT
+    
+    <where>
+        MONTH <![CDATA[ >= ]]> '201706'
+        <if test="mediatorNo != null and mediatorNo != ''">
+            and MEDIATOR_NO = #{mediatorNo}
+        </if>
+        <if test="mediatorName != null and mediatorName != ''">
+            and MEDIATOR_NAME = #{mediatorName}
+        </if>
+    </where> 
+    
+    order by MONTH desc
+  </select>
 </mapper>

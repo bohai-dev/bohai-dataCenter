@@ -2,6 +2,10 @@ package com.bohai.dataCenter.service;
 
 import com.bohai.dataCenter.controller.exception.BohaiException;
 import com.bohai.dataCenter.entity.CrmMarketer;
+import com.bohai.dataCenter.vo.QueryCrmMarketerParamVO;
+import com.bohai.dataCenter.vo.QueryCrmMediatorParamVO;
+import com.bohai.dataCenter.vo.QueryMarketerOverviewResultVO;
+import com.bohai.dataCenter.vo.QueryMediatorOverviewResultVO;
 
 /**
  * 营销人员接口
@@ -23,4 +27,12 @@ public interface CrmMarketerService {
      */
     public void removeCrmMarketer(CrmMarketer marketer) throws BohaiException;
     
+    
+    /**
+     * 查询营销人员简介
+     * @param paramVO
+     * @return
+     * @throws BohaiException
+     */
+    public QueryMarketerOverviewResultVO queryMarketerOverview(QueryCrmMarketerParamVO paramVO) throws BohaiException;
 }

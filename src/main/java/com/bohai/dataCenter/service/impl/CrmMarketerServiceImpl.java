@@ -13,6 +13,8 @@ import com.bohai.dataCenter.persistence.CrmCustomerMapper;
 import com.bohai.dataCenter.persistence.CrmMarketerMapper;
 import com.bohai.dataCenter.persistence.CrmMediatorMapper;
 import com.bohai.dataCenter.service.CrmMarketerService;
+import com.bohai.dataCenter.vo.QueryCrmMarketerParamVO;
+import com.bohai.dataCenter.vo.QueryMarketerOverviewResultVO;
 
 @Service("crmMarketerService")
 public class CrmMarketerServiceImpl implements CrmMarketerService {
@@ -85,4 +87,29 @@ public class CrmMarketerServiceImpl implements CrmMarketerService {
         
     }
 
+    @Override
+    public QueryMarketerOverviewResultVO queryMarketerOverview(QueryCrmMarketerParamVO paramVO) throws BohaiException {
+
+        QueryMarketerOverviewResultVO resultVO = new QueryMarketerOverviewResultVO();
+        
+        List<CrmMarketer> list = this.crmMarketerMapper.selectByCondition(paramVO);
+        if(list != null && list.size() > 0){
+            CrmMarketer marketer = list.get(0);
+            resultVO.setDepName(marketer.getDepName());
+            resultVO.setMarketerNo(marketer.getMarketerNo());
+            resultVO.setMarketerName(marketer.getMarketerName());
+            resultVO.setEntryDate(marketer.getEntryDate());
+            resultVO.setPhone(marketer.getTelephone());
+            
+            Long directCustomerCount = this.crmCustomerMapper.countByMarketerNo(marketer.getMarketerNo());
+            resultVO.setDirectCustomerCount(directCustomerCount);
+            Long mediatorCount = this.crmMediatorMapper.countByMarketerNo(marketer.getMarketerNo());
+            resultVO.setMediatorCount(mediatorCount);
+            
+            String marketerRate = this.crmMarketerMapper.getMarketerRate(marketer.getMarketerNo());
+            resultVO.setMarketerRate(marketerRate);
+        }
+        
+        return resultVO;
+    }
 }

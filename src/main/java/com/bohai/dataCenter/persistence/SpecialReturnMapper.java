@@ -57,4 +57,6 @@ public interface SpecialReturnMapper {
     int updateByPrimaryKey(SpecialReturn record);
     
     List<SpecialReturn> selectAll();
+    
+    SpecialReturn selectOneByMediatorNo(String mediatorNo);
 }

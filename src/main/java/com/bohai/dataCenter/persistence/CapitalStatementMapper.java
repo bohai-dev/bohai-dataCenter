@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Select;
 
 import com.bohai.dataCenter.entity.CapitalStatement;
+import com.bohai.dataCenter.vo.QueryInvestorProfitParamVO;
 import com.bohai.dataCenter.vo.QueryMediatorRightParamVO;
 
 public interface CapitalStatementMapper {
@@ -101,4 +101,5 @@ public interface CapitalStatementMapper {
     void callInterestReport(String month);
     
     BigDecimal selectRightByMediator(QueryMediatorRightParamVO paramVO);
+    
 }

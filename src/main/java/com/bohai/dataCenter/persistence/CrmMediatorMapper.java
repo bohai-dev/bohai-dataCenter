@@ -1,17 +1,16 @@
 package com.bohai.dataCenter.persistence;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.bohai.dataCenter.entity.CrmMarketer;
 import com.bohai.dataCenter.entity.CrmMediator;
-import com.bohai.dataCenter.vo.CrmMarketerAndCustomer;
-import com.bohai.dataCenter.vo.CrmMarketerAndMediator;
 import com.bohai.dataCenter.vo.CrmMediatorAndCustomer;
-import com.bohai.dataCenter.vo.QueryCrmMarketerParamVO;
 import com.bohai.dataCenter.vo.QueryCrmMediatorParamVO;
+import com.bohai.dataCenter.vo.QueryMediatorProfitParamVO;
 
 public interface CrmMediatorMapper {
     /**
@@ -79,4 +78,9 @@ public interface CrmMediatorMapper {
     
     @Select(" SELECT to_char(sysdate,'yymm')||'2'||lpad(SEQ_CRM_MEDIATORNO.nextval,5,'0') from dual")
     String getMediatorNo();
+    
+    List<Map<String, Object>> queryMediatorProfit(QueryMediatorProfitParamVO paramVO);
+    
+    @Select("select count(1) from T_CRM_MEDIATOR where belong_type = '1' and belong_to = #{0}")
+    Long countByMarketerNo(String marketerNo);
 }

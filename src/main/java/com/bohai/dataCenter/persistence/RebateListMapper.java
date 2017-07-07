@@ -64,4 +64,6 @@ public interface RebateListMapper {
      * @return
      */
     List<RebateList> selectAll();
+    
+    RebateList selectOneByMediatorNo(String mediatorNo);
 }

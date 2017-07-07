@@ -61,6 +61,142 @@
             
         });
         
+        /* 查询投资者产生的利润 */
+        function queryInvestorProfit(){
+        	
+        	if(isNull($('#investorName').val()) && isNull($("#investorNo").val())){
+        		alert("请输入投资者代码或投资者名称");
+        		return;
+        	}
+        	
+        	$("#investorProfit").bootstrapTable(
+                    'refresh',{url:"queryInvestorProfit",
+                               query: {investorName:$('#investorName').val(),
+                                       investorNo:$("#investorNo").val()
+                                      }
+                              }
+                );
+        	
+        	var param = {investorNo:$('#investorNo').val(),
+        			     investorName:$('#investorName').val()}
+        	
+        	$.ajax({
+                url: 'queryInvestorOverview',
+                type: 'post',
+                dataType: 'json',
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify(param),
+                success: function (data) {
+                	$('#invetorOverView').empty();
+                	if(isNull(data.investorNo)){
+                        return;
+                    }
+                    $('#invetorOverView').append("简介：投资者名称："+data.investorName+", &nbsp&nbsp 投资者代码："+data.investorNo+", &nbsp&nbsp 开户日期："+data.openDate+"<br />"
+                    		+"居间人信息：居间人名称："+data.mediatorName+", &nbsp&nbsp 居间人编号："+data.mediatorNo+"&nbsp&nbsp(近一个月手续费比例："+ data.chargeRate +",&nbsp&nbsp利息比例："+ data.interestRate+",&nbsp&nbsp交返比例："+ data.exchangeRate+")<br />"
+                    		+"营销人员信息：营销人员名称："+data.marketerName+", &nbsp&nbsp 营销人员编号："+data.marketerNo+"&nbsp&nbsp(近一个月提成比例："+data.marketerRate+")<br />"
+                    		+"属于营业部："+data.depName)
+                }
+        	});
+        	
+        }
+        
+        /* 查询居间人产生的利润 */
+        function queryMediatorProfit(){
+        	
+        	if(isNull($('#mediatorNo').val()) && isNull($("#mediatorName").val())){
+                alert("请输入投资者代码或投资者名称");
+                return;
+            }
+        	
+        	$("#mediatorProfit").bootstrapTable(
+                    'refresh',{url:"queryMediatorProfit",
+                               query: {mediatorNo:$('#mediatorNo').val(),
+                            	       mediatorName:$("#mediatorName").val()
+                                      }
+                              }
+                );
+        	
+        	
+        	var param = {mediatorNo:$('#mediatorNo').val(),
+                    mediatorName:$('#mediatorName').val()}
+       
+	       $.ajax({
+	           url: 'queryMediatorOverview',
+	           type: 'post',
+	           dataType: 'json',
+	           contentType: "application/json;charset=UTF-8",
+	           data: JSON.stringify(param),
+	           success: function (data) {
+	        	   $('#mediatorOverview').empty();
+	        	   if(isNull(data.mediatorNo)){
+	        		   return;
+	        	   }
+	               $('#mediatorOverview').append("简介：居间人名称："+data.mediatorName+",&nbsp&nbsp居间人编号："+data.mediatorNo+",&nbsp&nbsp生效日期："+data.effectDate+", &nbsp&nbsp失效日期："+data.expireDate+",  电话："+data.phone+"<br />"
+	            		   +"(近一个月手续费比例："+ data.chargeRate +",&nbsp&nbsp利息比例："+ data.interestRate+",&nbsp&nbsp交返比例："+ data.exchangeRate+")<br />"
+	                       +"客户数量："+data.customerCount+"<br />"
+	                       +"营销人员信息：营销人员名称："+data.marketerName+"&nbsp&nbsp,营销人员编号："+data.marketerNo+"&nbsp&nbsp(近一个月提成比例："+data.marketerRate+")<br />"
+	                       +"属于营业部："+data.depName)
+	           }
+	       });
+        }
+        
+        /* 查询营销人与贡献度 */
+        function queryMarketerProfit(){
+        	
+        	if(isNull($('#marketerNo').val()) && isNull($("#marketerName").val())){
+                alert("请输入投资者代码或投资者名称");
+                return;
+            }
+        	
+            $("#marketerProfit").bootstrapTable(
+                    'refresh',{url:"queryMarketerProfit",
+                               query: {marketerNo:$('#marketerNo').val(),
+                            	       marketerName:$("#marketerName").val()
+                                      }
+                              }
+                );
+            
+            var param = {marketerNo:$('#marketerNo').val(),
+                    marketerName:$('#marketerName').val()}
+       
+           $.ajax({
+               url: 'queryMarketerOverview',
+               type: 'post',
+               dataType: 'json',
+               contentType: "application/json;charset=UTF-8",
+               data: JSON.stringify(param),
+               success: function (data) {
+            	   $('#marketerOverview').empty();
+            	   if(isNull(data.marketerNo)){
+                       return;
+                   }
+                   $('#marketerOverview').append("简介：营销人员名称："+data.marketerName+",&nbsp&nbsp营销人员编号："+data.marketerNo+",&nbsp&nbsp 入职日期："+data.entryDate+",&nbsp&nbsp 电话："+data.phone+"<br />"
+                		   +"(近一个月提成比例："+data.marketerRate+")<br />"
+                           +"居间人数量："+data.mediatorCount+"<br />"
+                           +"直属客户数量："+data.directCustomerCount+"<br />"
+                           +"属于营业部："+data.depName)
+               }
+           });
+        }
+        
+        
+        
+        function queryInvestorProfitParams(params){
+        	
+            return {investorName:$('#investorName').val(),
+                investorNo:$("#investorNo").val(),
+                pageNumber:params.pageNumber,
+                pageSize:params.pageSize}
+        }
+        
+        function isNull(value){
+            if(value == "" || value == undefined || value == null){
+                return true;
+            }else{
+            	return false;
+            }
+        }
+        
     </script>
   </head>
 
@@ -99,8 +235,9 @@
             
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h4 class="page-header"><a href="toHome" style="text-decoration: none;"><i class="glyphicon glyphicon-home"></i></a> --> <a href="toBusinessReport" style="text-decoration: none;">统计报表</a> --> <a href="toBusinessReport" style="text-decoration: none;">营业部统计表</a></h4>
-
+          <h4 class="page-header"><a href="toHome" style="text-decoration: none;"><i class="glyphicon glyphicon-home"></i></a> --> <a href="toBusinessReport" style="text-decoration: none;">统计报表</a> --> <a href="toInvestorReport" style="text-decoration: none;">利润查询</a></h4>
+              
+              <!-- <h2 class="sub-header">客户利润产出查询</h2> -->
 
             <!-- Nav tabs -->
               <ul class="nav nav-tabs" role="tablist">
@@ -108,7 +245,7 @@
                 <li role="presentation"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">居间人利润产出查询</a></li>
                 <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">营销人员利润产出查询</a></li>
               </ul>
-              <h2 class="sub-header">利润产出查询</h2>
+              
               
               <!-- Tab panes -->
               <div class="tab-content">
@@ -134,7 +271,7 @@
                               </div>
                               
                               <div class="col-sm-10 col-md-2 col-md-offset-1 ">
-                                  <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryInvestorReport()">
+                                  <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryInvestorProfit()">
                               </div>
                         </div>
                           
@@ -143,10 +280,11 @@
                     <div class="table-responsive">
                       <div id="toolbar" class="btn-group">
                         <div id="toolbar" class="btn-group">
-                            <span>简介：</span>
+                            <span id="invetorOverView"></span>
                         </div>
                       </div>
-                      <table class="table table-striped"
+                      <table id="investorProfit"
+                             class="table table-striped"
                              data-toggle="table"
                              data-toolbar="#toolbar"
                              data-show-refresh="true"
@@ -156,10 +294,8 @@
                              data-detail-view="true"
                              data-detail-formatter="detailFormatter"
                              data-height="542"
-                             data-url="user/queryUsers"
                              data-pagination="true"
-                             data-side-pagination="server"
-                             data-method="get"
+                             data-method="post"
                              data-page-list="[5, 10, 20, 50]"
                              data-search="true"
                              data-height="300">
@@ -167,16 +303,18 @@
                           <tr>
                               <!-- <th data-field="state" data-checkbox="true"></th> -->
                               
-                              <th data-field="month" data-align="center" >月份</th>
-                              <th data-field="investorNo" data-align="center" >投资者代码</th>
-                              <th data-field="investorName" data-formatter="********" data-align="center" >投资者名称</th>
-                              <th data-field="dept" data-align="center" >利息产出</th>
-                              <th data-field="locked" data-align="center" >客户拿走利息</th>
-                              <th data-field="locked" data-align="center" >居间人拿走利息</th>
-                              <th data-field="locked" data-align="center" >交返产出</th>
-                              <th data-field="locked" data-align="center" >客户拿走交返</th>
-                              <th data-field="locked" data-align="center" >居间人拿走交返</th>
-                              <th data-field="updateTime" data-align="center" >更新时间</th>
+                              <th data-field="MONTH" data-align="center" >月份</th>
+                              <th data-field="INVESTOR_NO" data-align="center" >投资者代码</th>
+                              <th data-field="INVESTOR_NAME" data-align="center" >投资者名称</th>
+                              <th data-field="LCSXF" data-align="center" >留存手续费</th>
+                              <th data-field="INTEREST" data-align="center" >利息</th>
+                              <th data-field="EXCHANGE_RETURN" data-align="center" >交返</th>
+                              <th data-field="SPECIAL_INTEREST" data-align="center" >客户拿走利息</th>
+                              <th data-field="AMOUNT" data-align="center" >客户拿走交返</th>
+                              <th data-field="SXFJSR" data-align="center" >手续费净收入</th>
+                              <th data-field="NET_INTEREST" data-align="center" >净利息</th>
+                              <th data-field="NET_AMOUNT" data-align="center" >净交返</th>
+                              <th data-field="NET_PROFIT" data-align="center" >净利润</th>
                           </tr>
                           </thead>
                       </table>
@@ -194,18 +332,18 @@
                               <input type="text" class="form-control" id="reportMonth1">
                             </div> -->
                             
-                            <label for="investorNo" class="col-sm-2 col-md-1 control-label">投资者代码</label>
+                            <label for="mediatorNo" class="col-sm-2 col-md-1 control-label">居间人编号</label>
                             <div class="col-sm-10 col-md-2">
-                              <input type="text" class="form-control" id="investorNo">
+                              <input type="text" class="form-control" id="mediatorNo">
                             </div>
                             
-                            <label for="investorName" class="col-sm-2 col-md-1 control-label">投资者名称</label>
+                            <label for="mediatorName" class="col-sm-2 col-md-1 control-label">居间人名称</label>
                             <div class="col-sm-10 col-md-2">
-                              <input type="text" class="form-control" id="investorName">
+                              <input type="text" class="form-control" id="mediatorName">
                             </div>
                             
                             <div class="col-sm-10 col-md-2 col-md-offset-1 ">
-                                <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryInvestorReport()">
+                                <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryMediatorProfit()">
                             </div>
                       </div>
                         
@@ -213,13 +351,14 @@
               
                   <div class="table-responsive">
                     <div id="toolbar" class="btn-group">
-                      <div id="toolbar" class="btn-group">
-                          <span>简介：</span>
+                      <div id="toolbar1" class="btn-group">
+                        <span id="mediatorOverview"></span>
                       </div>
                     </div>
-                    <table class="table table-striped"
+                    <table id="mediatorProfit"
+                           class="table table-striped"
                            data-toggle="table"
-                           data-toolbar="#toolbar"
+                           data-toolbar="#toolbar1"
                            data-show-refresh="true"
                            data-show-toggle="true"
                            data-show-columns="true"
@@ -227,10 +366,8 @@
                            data-detail-view="true"
                            data-detail-formatter="detailFormatter"
                            data-height="542"
-                           data-url="user/queryUsers"
                            data-pagination="true"
-                           data-side-pagination="server"
-                           data-method="get"
+                           data-method="post"
                            data-page-list="[5, 10, 20, 50]"
                            data-search="true"
                            data-height="300">
@@ -238,16 +375,18 @@
                         <tr>
                             <!-- <th data-field="state" data-checkbox="true"></th> -->
                             
-                            <th data-field="month" data-align="center" >月份</th>
-                            <th data-field="investorNo" data-align="center" >投资者代码</th>
-                            <th data-field="investorName" data-formatter="********" data-align="center" >投资者名称</th>
-                            <th data-field="dept" data-align="center" >利息产出</th>
-                            <th data-field="locked" data-align="center" >客户拿走利息</th>
-                            <th data-field="locked" data-align="center" >居间人拿走利息</th>
-                            <th data-field="locked" data-align="center" >交返产出</th>
-                            <th data-field="locked" data-align="center" >客户拿走交返</th>
-                            <th data-field="locked" data-align="center" >居间人拿走交返</th>
-                            <th data-field="updateTime" data-align="center" >更新时间</th>
+                            <th data-field="MONTH" data-align="center" >月份</th>
+                            <th data-field="MEDIATOR_NO" data-align="center" >居间人编号</th>
+                            <th data-field="MEDIATOR_NAME" data-align="center" >居间人名称</th>
+                            <th data-field="SXFJSR" data-align="center" >总手续费净收入</th>
+                            <th data-field="INTEREST" data-align="center" >总利息</th>
+                            <th data-field="EXCHANGE_RETURN" data-align="center" >总交返（剔税）</th>
+                            <th data-field="INVESTOR_SPECIAL_INTEREST" data-align="center" >客户拿走利息</th>
+                            <th data-field="INVESTOR_SPECIAL_EXCHANGE" data-align="center" >客户拿走交返（剔税）</th>
+                            <th data-field="MEDIATOR_SPECIAL_INTEREST" data-align="center" >居间人拿走利息</th>
+                            <th data-field="MEDIATOR_SPECIAL_EXCHANGE" data-align="center" >居间人拿走交返（剔税）</th>
+                            <th data-field="DBL16" data-align="center" >居间人拿走返佣</th>
+                            <th data-field="NET_PROFIT" data-align="center" >净利润</th>
                         </tr>
                         </thead>
                     </table>
@@ -255,7 +394,7 @@
               </div>
               
               <!-- 营销人员带来利润查询 -->
-              <div role="tabpanel" class="tab-pane fade  in " id="home">
+              <div role="tabpanel" class="tab-pane fade  in " id="profile">
                 
                   <form class="form-horizontal" style="margin-top: 30px">
                       <div class="form-group">
@@ -265,18 +404,18 @@
                               <input type="text" class="form-control" id="reportMonth1">
                             </div> -->
                             
-                            <label for="investorNo" class="col-sm-2 col-md-1 control-label">投资者代码</label>
+                            <label for="investorNo" class="col-sm-2 col-md-1 control-label">营销人员编号</label>
                             <div class="col-sm-10 col-md-2">
-                              <input type="text" class="form-control" id="investorNo">
+                              <input type="text" class="form-control" id="marketerNo">
                             </div>
                             
-                            <label for="investorName" class="col-sm-2 col-md-1 control-label">投资者名称</label>
+                            <label for="investorName" class="col-sm-2 col-md-1 control-label">营销人员名称</label>
                             <div class="col-sm-10 col-md-2">
-                              <input type="text" class="form-control" id="investorName">
+                              <input type="text" class="form-control" id="marketerName">
                             </div>
                             
                             <div class="col-sm-10 col-md-2 col-md-offset-1 ">
-                                <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryInvestorReport()">
+                                <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryMarketerProfit()">
                             </div>
                       </div>
                         
@@ -284,13 +423,14 @@
               
                   <div class="table-responsive">
                     <div id="toolbar" class="btn-group">
-                      <div id="toolbar" class="btn-group">
-                          <span>简介：</span>
+                      <div id="toolbar2" class="btn-group">
+                          <span id="marketerOverview"></span>
                       </div>
                     </div>
-                    <table class="table table-striped"
+                    <table id="marketerProfit"
+                           class="table table-striped"
                            data-toggle="table"
-                           data-toolbar="#toolbar"
+                           data-toolbar="#toolbar2"
                            data-show-refresh="true"
                            data-show-toggle="true"
                            data-show-columns="true"
@@ -298,10 +438,8 @@
                            data-detail-view="true"
                            data-detail-formatter="detailFormatter"
                            data-height="542"
-                           data-url="user/queryUsers"
                            data-pagination="true"
-                           data-side-pagination="server"
-                           data-method="get"
+                           data-method="post"
                            data-page-list="[5, 10, 20, 50]"
                            data-search="true"
                            data-height="300">
@@ -309,16 +447,19 @@
                         <tr>
                             <!-- <th data-field="state" data-checkbox="true"></th> -->
                             
-                            <th data-field="month" data-align="center" >月份</th>
-                            <th data-field="investorNo" data-align="center" >投资者代码</th>
-                            <th data-field="investorName" data-formatter="********" data-align="center" >投资者名称</th>
-                            <th data-field="dept" data-align="center" >利息产出</th>
-                            <th data-field="locked" data-align="center" >客户拿走利息</th>
-                            <th data-field="locked" data-align="center" >居间人拿走利息</th>
-                            <th data-field="locked" data-align="center" >交返产出</th>
-                            <th data-field="locked" data-align="center" >客户拿走交返</th>
-                            <th data-field="locked" data-align="center" >居间人拿走交返</th>
-                            <th data-field="updateTime" data-align="center" >更新时间</th>
+                            <th data-field="MONTH" data-align="center" >月份</th>
+                            <th data-field="MARKETER_NO" data-align="center" >营销人员编号</th>
+                            <th data-field="MARKETER_NAME" data-align="center" >营销人员名称</th>
+                            <th data-field="SXFJSR" data-align="center" >总手续费净收入</th>
+                            <th data-field="INTEREST" data-align="center" >总利息</th>
+                            <th data-field="EXCHANGE_RETURN" data-align="center" >总交返（剔税）</th>
+                            <th data-field="INVESTOR_SPECIAL_INTEREST" data-align="center" >投资者拿走利息</th>
+                            <th data-field="INVESTOR_SPECIAL_EXCHANGE" data-align="center" >投资者拿走交返（剔税）</th>
+                            <th data-field="MEDIATOR_SPECIAL_INTEREST" data-align="center" >居间人拿走利息</th>
+                            <th data-field="MEDIATOR_SPECIAL_EXCHANGE" data-align="center" >居间人拿走交返（剔税）</th>
+                            <th data-field="DBL16" data-align="center" >居间人拿走返佣</th>
+                            <th data-field="MONEY" data-align="center" >营销人员提成</th>
+                            <th data-field="NET_PROFIT" data-align="center" >净利润</th>
                         </tr>
                         </thead>
                     </table>

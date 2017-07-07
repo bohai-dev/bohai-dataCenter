@@ -17,13 +17,17 @@ import com.bohai.dataCenter.entity.ReportExchangeRebate;
 import com.bohai.dataCenter.entity.ReportRebate;
 import com.bohai.dataCenter.entity.ReportSpecialReturn;
 import com.bohai.dataCenter.service.ReportExchangeRebateService;
+import com.bohai.dataCenter.service.ReportQueryService;
 import com.bohai.dataCenter.service.ReportRebateService;
 import com.bohai.dataCenter.service.ReportService;
 import com.bohai.dataCenter.service.ReportSpecialReturnService;
 import com.bohai.dataCenter.vo.CountExchangeRebateParamVO;
 import com.bohai.dataCenter.vo.CountRebatReportParamVO;
 import com.bohai.dataCenter.vo.QueryExchangeRebateParamVO;
+import com.bohai.dataCenter.vo.QueryInvestorProfitParamVO;
+import com.bohai.dataCenter.vo.QueryMarketerProfitParamVO;
 import com.bohai.dataCenter.vo.QueryMarketerReturnReportParamVO;
+import com.bohai.dataCenter.vo.QueryMediatorProfitParamVO;
 import com.bohai.dataCenter.vo.QueryRebateDetailParamVO;
 import com.bohai.dataCenter.vo.QueryRebateReportParamVO;
 import com.bohai.dataCenter.vo.QuerySpecialReturnReportParamVO;
@@ -44,6 +48,9 @@ public class ReportController {
 	
 	@Autowired
 	private ReportSpecialReturnService reportSpecialReturnService;
+	
+	@Autowired
+	private ReportQueryService reportQueryService;
 	
 	
 	@RequestMapping(value="toBusinessReport")
@@ -71,16 +78,47 @@ public class ReportController {
 	    return "report/investor";
 	}
 	
+	/**
+	 * 查询客户贡献
+	 * @param paramVO
+	 * @return
+	 * @throws BohaiException
+	 */
+	@RequestMapping(value="queryInvestorProfit")
+	@ResponseBody
+	public List<Map<String, Object>> queryInvestorProfit(@RequestBody QueryInvestorProfitParamVO paramVO) throws BohaiException{
+	    
+	    logger.debug("查询客户产生的利润入参："+JSON.toJSONString(paramVO));
+	    return this.reportQueryService.queryInvestorProfit(paramVO);
+	}
 	
+	/**
+	 * 查询居间人贡献度
+	 * @param paramVO
+	 * @return
+	 * @throws BohaiException
+	 */
+	@RequestMapping(value="queryMediatorProfit")
+	@ResponseBody
+	public List<Map<String, Object>> queryMediatorProfit(@RequestBody QueryMediatorProfitParamVO paramVO) throws BohaiException{
+        
+        logger.debug("查询居间人产生的利润入参："+JSON.toJSONString(paramVO));
+        return this.reportQueryService.queryMediatorProfit(paramVO);
+    }
 	
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * 查询营销人员贡献度
+	 * @param paramVO
+	 * @return
+	 * @throws BohaiException
+	 */
+	@RequestMapping(value="queryMarketerProfit")
+    @ResponseBody
+    public List<Map<String, Object>> queryMarketerProfit(@RequestBody QueryMarketerProfitParamVO paramVO) throws BohaiException{
+        
+        logger.debug("查询营销人员产生的利润入参："+JSON.toJSONString(paramVO));
+        return this.reportQueryService.queryMarketerProfit(paramVO);
+    }
 	
 	
 	

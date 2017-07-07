@@ -25,6 +25,7 @@ import com.bohai.dataCenter.service.CrmMarketerService;
 import com.bohai.dataCenter.vo.CrmMarketerAndCustomer;
 import com.bohai.dataCenter.vo.CrmMarketerAndMediator;
 import com.bohai.dataCenter.vo.QueryCrmMarketerParamVO;
+import com.bohai.dataCenter.vo.QueryMarketerOverviewResultVO;
 
 @Controller
 public class CrmMarketerController {
@@ -231,5 +232,12 @@ public class CrmMarketerController {
 			logger.error("导出营销人员信息失败", e);
 			throw new BohaiException("", "导出营销人员信息失败");
 		}
+    }
+    
+    @RequestMapping(value="queryMarketerOverview")
+    @ResponseBody
+    public QueryMarketerOverviewResultVO queryMarketerOverview(@RequestBody QueryCrmMarketerParamVO paramVO) throws BohaiException {
+        
+        return this.crmMarketerService.queryMarketerOverview(paramVO);
     }
 }

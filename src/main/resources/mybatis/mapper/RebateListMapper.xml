@@ -296,4 +296,12 @@
     <include refid="Base_Column_List" />
     from T_REBATE_LIST
   </select>
+  
+  <select id="selectOneByMediatorNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+    from T_REBATE_LIST
+    where MDEIATOR_NO = #{0}
+    and ROWNUM = 1
+  </select>
 </mapper>

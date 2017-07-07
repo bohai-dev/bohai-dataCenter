@@ -24,6 +24,7 @@ import com.bohai.dataCenter.persistence.CrmMediatorMapper;
 import com.bohai.dataCenter.service.CrmMediatorService;
 import com.bohai.dataCenter.vo.CrmMediatorAndCustomer;
 import com.bohai.dataCenter.vo.QueryCrmMediatorParamVO;
+import com.bohai.dataCenter.vo.QueryMediatorOverviewResultVO;
 
 @Controller
 public class CrmMediatorController {
@@ -212,5 +213,11 @@ public class CrmMediatorController {
         }
     }
 	
-	
+    @RequestMapping(value="queryMediatorOverview")
+    @ResponseBody
+    public QueryMediatorOverviewResultVO queryMediatorOverview(@RequestBody QueryCrmMediatorParamVO paramVO) throws BohaiException{
+        
+        return this.crmMediatorService.queryMediatorOverview(paramVO);
+        
+    }
 }

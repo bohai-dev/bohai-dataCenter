@@ -378,4 +378,42 @@
     </where>
     order by t.MARKETER_NO
   </select>
+  
+  <select id="queryMarketerProfit" parameterType="com.bohai.dataCenter.vo.QueryMarketerProfitParamVO" resultType="java.util.Map">
+    select MONTH ,
+			MARKETER_NO ,
+			MARKETER_NAME ,
+			INTEREST ,
+			EXCHANGE_RETURN ,
+			INVESTOR_SPECIAL_INTEREST ,
+			INVESTOR_SPECIAL_EXCHANGE ,
+			MEDIATOR_SPECIAL_INTEREST ,
+			MEDIATOR_SPECIAL_EXCHANGE ,
+			SXFJSR ,
+			DBL16 ,
+			MONEY,
+			INTEREST+EXCHANGE_RETURN+SXFJSR-INVESTOR_SPECIAL_INTEREST-INVESTOR_SPECIAL_EXCHANGE-MEDIATOR_SPECIAL_INTEREST-MEDIATOR_SPECIAL_EXCHANGE-DBL16-MONEY as NET_PROFIT
+    from T_REPORT_MARKETER_PROFIT 
+	<where>
+	   MONTH <![CDATA[ >= ]]> '201706'
+       <if test="marketerNo != null and marketerNo != ''">
+        and MARKETER_NO = #{marketerNo}
+       </if>
+       <if test="marketerName != null and marketerName != ''">
+        and MARKETER_NAME = #{marketerName}
+       </if>
+	</where> 
+    order by MONTH desc
+  </select>
+  
+  <select id="getMarketerRate" resultType="java.lang.String" parameterType="java.lang.String">
+    select * from (select case when sum<![CDATA[ < ]]> 50000 then '0.08' 
+				                when sum <![CDATA[ >= ]]> 50000 and sum <![CDATA[ < ]]> 100000 then '0.1' 
+				                when sum <![CDATA[ >= ]]> 100000 and sum <![CDATA[ < ]]> 200000 then '0.12' 
+				                when sum <![CDATA[ >= ]]> 200000 then '0.15' end as marketerRate 
+				    from T_REPORT_MARKETER_REWARD
+				    where MARKETER_NO = #{0}
+				    order by REPORT_MONTH desc)
+    where ROWNUM = 1
+  </select>
 </mapper>

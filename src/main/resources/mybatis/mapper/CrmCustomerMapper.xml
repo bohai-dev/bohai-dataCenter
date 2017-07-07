@@ -397,4 +397,35 @@
     </where>
   </select>
   
+  <!-- 查询投资者产生的利润 -->
+  <select id="queryInvestorProfit" parameterType="com.bohai.dataCenter.vo.QueryInvestorProfitParamVO" resultType="java.util.Map">
+    
+    select MONTH ,
+			INVESTOR_NO ,
+			INVESTOR_NAME ,
+			INTEREST ,
+			EXCHANGE_RETURN ,
+			SPECIAL_INTEREST ,
+			SPECIAL_EXCHANGE ,
+			LCSXF ,
+			SXFJSR ,
+			INTEREST - nvl(SPECIAL_INTEREST,0) as NET_INTEREST ,
+			nvl(EXCHANGE_RETURN,0) - nvl(SPECIAL_EXCHANGE,0) as NET_AMOUNT,
+			INTEREST + nvl(EXCHANGE_RETURN,0) + SXFJSR - nvl(SPECIAL_INTEREST,0)- nvl(SPECIAL_EXCHANGE,0) as NET_PROFIT
+			from T_REPORT_INVESTOR_PROFIT
+    <where> 
+    
+        MONTH <![CDATA[ >= ]]> '201706'
+        <if test="investorNo != null and investorNo != ''">
+            and INVESTOR_NO = #{investorNo}
+        </if>
+        
+        <if test="investorName != null and investorName != ''">
+            and INVESTOR_NAME = #{investorName}
+        </if>
+        
+    </where>
+    order by MONTH desc
+  </select>
+  
 </mapper>
