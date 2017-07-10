@@ -207,8 +207,17 @@ public class CrmCustomer {
     
     private String belongToName;
     
+    private String deleteFlag;
     
     
+    public String getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(String deleteFlag) {
+        this.deleteFlag = deleteFlag;
+    }
+
     public String getBelongToName() {
         return belongToName;
     }

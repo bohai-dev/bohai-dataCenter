@@ -34,6 +34,7 @@
     <result column="BELONG_TO" property="belongTo" jdbcType="VARCHAR" />
     <result column="BELONG_TO_NAME" property="belongToName" jdbcType="VARCHAR" />
     <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR" />
+    <result column="DELETE_FLAG" property="deleteFlag" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     <!--
@@ -44,7 +45,7 @@
     INVESTOR_NO, INVESTOR_NAME, FULL_NAME, STATUS, DEPT_CODE, OPEN_DATE, CANCEL_DATE, 
     OPEN_OPERATOR, CANCEL_OPERATOR, CERT_TYPE, CERT_NO, POSTCODE, ADDRESS, TELEPHONE, 
     MOBILE_PHONE, EMAIL, CONTRACT_NO, CUST_TYPE, REMARK, EFFECT_DATE, EXPIRE_DATE, CREATE_TIME, 
-    UPDATE_TIME, BELONG_TYPE, BELONG_TO
+    UPDATE_TIME, BELONG_TYPE, BELONG_TO, DELETE_FLAG
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     <!--

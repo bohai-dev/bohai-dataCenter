@@ -26,6 +26,7 @@
     <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="CERT_TYPE" property="certType" jdbcType="VARCHAR" />
     <result column="BIRETHDAY" property="birethday" jdbcType="VARCHAR" />
+    <result column="DELETE_FLAG" property="deleteFlag" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     <!--

@@ -29,6 +29,8 @@
     <result column="BELONG_TYPE" property="belongType" jdbcType="VARCHAR" />
     <result column="BELONG_TO" property="belongTo" jdbcType="VARCHAR" />
     <result column="BELONG_TO_NAME" property="belongToName" jdbcType="VARCHAR" />
+    <result column="DELETE_FLAG" property="deleteFlag" jdbcType="VARCHAR" />
+    <result column="IS_IB" property="isIb" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     <!--
@@ -38,7 +40,7 @@
     -->
     MEDIATOR_NO, MEDIATOR_NAME, MEDIATOR_SHORT_NAME, STATUS, DEP_CODE, DEP_NAME, ALLOCATION_PROPORTION, 
     PAY_TYPE, TELEPHONE, FAX, ADDRESS, EMAIL, CERT_NO, REMARK, CREATE_TIME, UPDATE_TIME, 
-    EFFECT_DATE, EXPIRE_DATE, CERT_TYPE,BELONG_TYPE,BELONG_TO
+    EFFECT_DATE, EXPIRE_DATE, CERT_TYPE,BELONG_TYPE,BELONG_TO, DELETE_FLAG, IS_IB
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     <!--

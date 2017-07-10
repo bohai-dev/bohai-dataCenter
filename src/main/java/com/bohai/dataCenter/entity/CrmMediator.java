@@ -161,7 +161,27 @@ public class CrmMediator {
     
     private String belongToName;
 
+    private String deleteFlag;
     
+    private String isIb;
+    
+    
+    public String getIsIb() {
+        return isIb;
+    }
+
+    public void setIsIb(String isIb) {
+        this.isIb = isIb;
+    }
+
+    public String getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(String deleteFlag) {
+        this.deleteFlag = deleteFlag;
+    }
+
     public String getBelongToName() {
         return belongToName;
     }

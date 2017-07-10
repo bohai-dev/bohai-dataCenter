@@ -18,6 +18,7 @@
     <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="UPDATE_BY" property="updateBy" jdbcType="VARCHAR" />
     <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="DELETE_FLAG" property="deleteFlag" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     <!--

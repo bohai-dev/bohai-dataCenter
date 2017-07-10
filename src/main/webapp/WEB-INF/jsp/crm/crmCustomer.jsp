@@ -650,7 +650,7 @@
                                   </select>
                                 </div>
                                 
-                                <label for="qbelongTo" class="col-sm-2 col-md-1 control-label">归属名称</label>
+                                <label for="qbelongTo" class="col-sm-2 col-md-1 control-label">归属代码</label>
                                 <div class="col-sm-10 col-md-2">
                                   <input type="text" class="form-control" id="qbelongTo" name="belongTo">
                                 </div>
