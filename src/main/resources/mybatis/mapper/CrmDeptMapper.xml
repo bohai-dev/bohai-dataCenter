@@ -27,7 +27,7 @@
       This element was generated on Fri May 12 13:44:15 CST 2017.
     -->
     DEPT_CODE, DEPT_NAME, DEPT_TELEPHONE, DEPT_ADDRESS, DEPT_HEAD, ESTABLISH_DATE, CREATE_TIME, 
-    CREATE_BY, UPDATE_TIME, UPDATE_BY, REMARK
+    CREATE_BY, UPDATE_TIME, UPDATE_BY, REMARK, DELETE_FLAG
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     <!--

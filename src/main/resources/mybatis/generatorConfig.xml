@@ -19,7 +19,7 @@
     </jdbcConnection> -->
     <!-- oracle -->
     <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
-        connectionURL="jdbc:oracle:thin:@192.168.16.102:1521:xe"
+        connectionURL="jdbc:oracle:thin:@192.168.16.46:1521:xe"
         userId="sjzx"
         password="sjzx">
     </jdbcConnection>
@@ -221,10 +221,30 @@
         enableUpdateByExample="false" selectByExampleQueryId="false">
     </table> -->
     
-    <table schema="" tableName="T_REPORT_DEP" domainObjectName="ReportDep"
+    <!-- <table schema="" tableName="T_REPORT_DEP" domainObjectName="ReportDep"
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- <table schema="" tableName="T_CRM_CUSTOMER_HISTORY" domainObjectName="CrmCustomerHistory"
         enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
         enableUpdateByExample="false" selectByExampleQueryId="false">
     </table>
+    
+    <table schema="" tableName="T_CRM_DEPT_HISTORY" domainObjectName="CrmDeptHistory"
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table>
+    
+    <table schema="" tableName="T_CRM_MARKETER_HISTORY" domainObjectName="CrmMarketerHistory"
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table>
+    
+    <table schema="" tableName="T_CRM_MEDIATOR_HISTORY" domainObjectName="CrmMediatorHistory"
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
     
     
   </context>
