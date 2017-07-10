@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Welcome  </title>
+    <title>Welcome </title>
     
     <!-- css -->
     <link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -136,8 +136,8 @@
                          $('#belongTo1').selectpicker('val', row.belongTo);
                     }
              });
-            }else if(row.belongType == "0"){
-                 $.ajax({
+            }else if(row.belongType == "0"){      //营业部      belongTo1
+                  $.ajax({
                         url: 'queryCrmDept',
                         type: 'post',
                         dataType: 'json',
@@ -151,8 +151,11 @@
                              $('#belongTo1').html(optionString);
                              $('#belongTo1').selectpicker('refresh');
                              $('#belongTo1').selectpicker('val', row.belongTo);
+                             
                         }
-                 });
+                 }); 
+                  
+                  
             }
         	
         	$("#editModal").modal('show');
@@ -378,8 +381,8 @@
                              $('#belongTo1').selectpicker('refresh');
                         }
                  });
-                }else if(belongType == "0"){
-                     $.ajax({
+                }else if(belongType == "0"){    //----营业部
+                    $.ajax({
                             url: 'queryCrmDept',
                             type: 'post',
                             dataType: 'json',
@@ -393,8 +396,9 @@
                                  $('#belongTo1').html(optionString);
                                  $('#belongTo1').selectpicker('refresh');
                                  
+                                 $('#belongTo1').selectpicker('val',$('#deptCode1').val());
                             }
-                     });
+                     });  
                 }
             });
             
