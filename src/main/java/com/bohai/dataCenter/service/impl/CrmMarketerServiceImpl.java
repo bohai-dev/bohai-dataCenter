@@ -83,8 +83,35 @@ public class CrmMarketerServiceImpl implements CrmMarketerService {
 
     @Override
     public void removeCrmMarketer(CrmMarketer marketer) throws BohaiException {
-        // TODO Auto-generated method stub
+        //删除营销人员，把名下的居间人和客户归属直接划转到营业部
+        CrmMarketer crmMarketer = this.crmMarketerMapper.selectByPrimaryKey(marketer.getMarketerNo());
+        if(crmMarketer == null){
+            logger.warn("营销人员不存在："+marketer.getMarketerNo());
+            throw new BohaiException("", "营销人员不存在："+marketer.getMarketerNo());
+        }
         
+        //把营销人员直属客户的归属改为该营销人员所属的营业部
+        try {
+            this.crmCustomerMapper.updateBelongByMarketer(crmMarketer);
+        } catch (Exception e) {
+            logger.error("更新营销人员直属客户归属失败",e);
+            throw new BohaiException("", "更新营销人员直属客户归属失败");
+        }
+        
+        //把营销人员名下的居间人归属改为营销人员所属的营业部
+        try {
+            this.crmMediatorMapper.updateBelongByMarketer(crmMarketer);
+        } catch (Exception e) {
+            logger.error("更新营销人员名下居间人归属失败",e);
+            throw new BohaiException("", "更新营销人员名下居间人归属失败");
+        }
+        
+        try {
+            this.crmMarketerMapper.deleteByPrimaryKey(crmMarketer.getMarketerNo());
+        } catch (Exception e) {
+            logger.error("删除营销人员失败",e);
+            throw new BohaiException("", "删除营销人员失败");
+        }
     }
 
     @Override

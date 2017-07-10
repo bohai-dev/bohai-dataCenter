@@ -5,7 +5,7 @@ package com.bohai.dataCenter.vo;
  * @author BHQH-CXYWB
  *
  */
-public class QueryMarketProfitPieChartParamVO {
+public class QueryDepProfitPieChartParamVO {
 
     /**
      * 查询年月yyyy-mm

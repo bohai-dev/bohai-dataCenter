@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="resources/bootstrap-table/bootstrap-table.css">
     <link href="resources/css/dashboard.css" rel="stylesheet">
     <link href="resources/css/sticky-footer.css" rel="stylesheet">
-	
+    
     <!-- 菜单树 -->
     <script type="text/javascript" src="resources/tree/bootstrap-treeview.min.js"></script>
     <!-- table插件 -->
@@ -37,10 +37,12 @@
     <script src="resources/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
     <!-- 文件上传插件fileInput -->
     <script src="resources/fileInput/themes/fa/theme.js"></script>
-	<!-- optionally if you need translation for your language then include 
-	    locale file as mentioned below -->
-	<script src="resources/fileInput/js/locales/zh.js"></script>
+    <!-- optionally if you need translation for your language then include 
+        locale file as mentioned below -->
+    <script src="resources/fileInput/js/locales/zh.js"></script>
     
+    <!-- echarts -->
+    <script src="resources/echarts/echarts.min.js"></script>
     
     <script type="text/javascript">
         function operationFormatter(value,row,index) {
@@ -58,6 +60,114 @@
             var treeObj = ${sessionScope.treeView};
             $('#tree').treeview({data: treeObj,enableLinks: true});
             $('li a[href="toBusinessReport"]').parent().addClass("active");
+            
+            var myChart = echarts.init(document.getElementById('pieCharts'));
+            
+            myChart.on('click',function(params){
+                // 点击到了 pie 上
+                if (params.componentType === 'series') {
+               // 点击到了 index 为 1 的 series 的 pie 上。   
+                     if (params.seriesIndex === 1) {
+                        
+                    	 var json = params.data;
+                    	 var seriesData = new Array();
+                    	 var insterestJson = {};
+                    	 insterestJson['value'] = json.interest;
+                    	 insterestJson['name'] = '利息';
+                    	 seriesData[0] = insterestJson;
+                    	 var insterestJson1 = {};
+                    	 insterestJson1['value'] = json.exchangeReturnTicktix;
+                    	 insterestJson1['name'] = '交返(剔税)';
+                    	 seriesData[1] = insterestJson1;
+                    	 var insterestJson2 = {};
+                    	 insterestJson2['value'] = json.commission;
+                    	 insterestJson2['name'] = '手续费';
+                    	 seriesData[2] = insterestJson2;
+                    	 myChart.setOption({
+                             series:[{
+                                  // 根据名字对应到相应的系列
+                                 name: json.name,
+                                 //设置从服务器获取的数据
+                                 data: seriesData
+                             }]
+                         });
+                     }
+                }
+            });
+            
+            
+            $.ajax({
+                url: 'queryMarketProfitPieChart',
+                type: 'post',
+                dataType: 'json',
+                contentType: "application/json;charset=UTF-8",
+                data: null,
+                success: function (result) {
+                    var legendData = new Array();
+                    var seriesData = new Array();
+                    
+                    $.each(result, function(index, content){
+                        legendData[index] = content.depName;
+                        var json = {};
+                        json['value'] = (content.interest + content.exchangeReturnTicktix + content.commission).toFixed(2);
+                        json['name'] = content.depName;
+                        json['interest'] = content.interest;
+                        json['exchangeReturnTicktix'] = content.exchangeReturnTicktix;
+                        json['commission'] = content.commission;
+                        seriesData[index] = json;
+                    });
+                    
+                    option = {
+                    		title : {
+                    	        text: result[0].month+'营业部利润分布饼图',
+                    	        x:'center'
+                    	    },
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: "{a} <br/>{b}: {c} ({d}%)"
+                            },
+                            legend: {
+                                orient: 'vertical',
+                                x: 'left',
+                                data:legendData
+                            },
+                            series: [
+                                {
+                                    name:'利润组成',
+                                    type:'pie',
+                                    selectedMode: 'single',
+                                    radius: [0, '35%'],
+
+                                    label: {
+                                        normal: {
+                                            position: 'inner'
+                                        }
+                                    },
+                                    labelLine: {
+                                        normal: {
+                                            show: false
+                                        }
+                                    },
+                                    data:[
+                                      /*   {value:335, name:'直达'},
+                                        {value:679, name:'营销广告'},
+                                        {value:1548, name:'搜索引擎'} */
+                                    ]
+                                },
+                                {
+                                    name:'毛利润',
+                                    type:'pie',
+                                    radius: ['45%', '60%'],
+
+                                    data:seriesData
+                                }
+                            ]
+                        };
+                    myChart.setOption(option);
+                    
+                }
+            });
+            
             
         });
         
@@ -102,7 +212,7 @@
           <h4 class="page-header"><a href="toHome" style="text-decoration: none;"><i class="glyphicon glyphicon-home"></i></a> --> <a href="toBusinessReport" style="text-decoration: none;">统计报表</a> --> <a href="toBusinessReport" style="text-decoration: none;">营业部统计表</a></h1>
 
           <div class="row placeholders">
-            <label class="control-label">请选择文件上传</label>
+            <!-- <label class="control-label">请选择文件上传</label>
             <input id="finput" type="file" class="file" multiple >
             <script type="text/javascript">
                $("#finput").fileinput({
@@ -115,10 +225,17 @@
                    allowedFileExtensions: ["xls", "xlsx"], //接收的文件后缀 
                    //previewFileIcon: "<i class='glyphicon glyphicon-king'></i>" //选择文件后缩略图
                });
-            </script>
+            </script> -->
+            
+            
+                <div class="col-sm-12 col-md-12">
+                    <div id="pieCharts" style="width: 1600px;height:800px;"></div>
+                </div>
+            
+            
           </div>
 
-          <h2 class="sub-header">用户信息</h2>
+          <!-- <h2 class="sub-header">用户信息</h2>
           <div class="table-responsive">
             <div id="toolbar" class="btn-group">
                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addModal" title="创建任务">
@@ -144,7 +261,7 @@
                    data-height="300">
                 <thead>
                 <tr>
-                    <!-- <th data-field="state" data-checkbox="true"></th> -->
+                    <th data-field="state" data-checkbox="true"></th>
                     <th data-field="username" data-align="center" >用户名</th>
                     <th data-field="password" data-formatter="********" data-align="center" >密码</th>
                     <th data-field="dept" data-align="center" >部门</th>
@@ -155,7 +272,9 @@
                 </tr>
                 </thead>
             </table>
-          </div>
+          </div> -->
+          
+          
         </div>
       </div>
       <div class="row placeholders">

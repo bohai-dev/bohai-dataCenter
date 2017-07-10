@@ -31,65 +31,66 @@ import com.bohai.dataCenter.vo.QueryMarketerOverviewResultVO;
 public class CrmMarketerController {
     
     static Logger logger = Logger.getLogger(CrmMarketerController.class);
-	
-	@Autowired
-	private CrmMarketerMapper crmMarketerMapper;
-	
-	@Autowired
-	private CrmMarketerService crmMarketerService;
+    
+    @Autowired
+    private CrmMarketerMapper crmMarketerMapper;
+    
+    @Autowired
+    private CrmMarketerService crmMarketerService;
 
-	//跳转到营销人员信息维护页面
-	@RequestMapping(value="toCrmMarketer")
-	public String toCrmMarketer(){
-		
-		return "crm/crmMarketer";
-	}
-	
-	@RequestMapping(value="queryCrmMarketer")
-	@ResponseBody
-	public List<CrmMarketer> queryCrmMarketer(@RequestBody(required = false) QueryCrmMarketerParamVO paramVO){
-		
-		return crmMarketerMapper.selectByCondition(paramVO);
-	}
-	
-	/**
-	 * 保存营销人员信息
-	 * @param paramVO
-	 */
-	@RequestMapping(value="saveCrmMarketer")
-	@ResponseBody
-	public void saveCrmMarketer(@RequestBody(required = false) CrmMarketer paramVO){
-	    
-	    this.crmMarketerMapper.insertSelective(paramVO);
-	}
-	
-	/**
-	 * 更新营销人员信息
-	 * @param paramVO
-	 * @throws BohaiException 
-	 */
-	@RequestMapping(value="updateCrmMarketer")
+    //跳转到营销人员信息维护页面
+    @RequestMapping(value="toCrmMarketer")
+    public String toCrmMarketer(){
+        
+        return "crm/crmMarketer";
+    }
+    
+    @RequestMapping(value="queryCrmMarketer")
+    @ResponseBody
+    public List<CrmMarketer> queryCrmMarketer(@RequestBody(required = false) QueryCrmMarketerParamVO paramVO){
+        
+        return crmMarketerMapper.selectByCondition(paramVO);
+    }
+    
+    /**
+     * 保存营销人员信息
+     * @param paramVO
+     */
+    @RequestMapping(value="saveCrmMarketer")
+    @ResponseBody
+    public void saveCrmMarketer(@RequestBody(required = false) CrmMarketer paramVO){
+        
+        this.crmMarketerMapper.insertSelective(paramVO);
+    }
+    
+    /**
+     * 更新营销人员信息
+     * @param paramVO
+     * @throws BohaiException 
+     */
+    @RequestMapping(value="updateCrmMarketer")
     @ResponseBody
     public void updateCrmMarketer(@RequestBody(required = false) CrmMarketer paramVO) throws BohaiException{
         
         this.crmMarketerService.modifyCrmMarketer(paramVO);
     }
-	
-	/**
-	 * 删除营销人员
-	 * @param paramVO
-	 */
-	@RequestMapping(value="removeCrmMarketer")
-	@ResponseBody
-	public void removeCrmMarketer(@RequestBody(required = false) CrmMarketer paramVO){
-	    //TODO
-	    this.crmMarketerMapper.deleteByPrimaryKey(paramVO.getMarketerNo());
-	}
-	
-	/**
-	 * 请求生成营销人员编号
-	 * @return
-	 */
+    
+    /**
+     * 删除营销人员
+     * @param paramVO
+     * @throws BohaiException 
+     */
+    @RequestMapping(value="removeCrmMarketer")
+    @ResponseBody
+    public void removeCrmMarketer(@RequestBody(required = false) CrmMarketer paramVO) throws BohaiException{
+        
+        this.crmMarketerService.removeCrmMarketer(paramVO);
+    }
+    
+    /**
+     * 请求生成营销人员编号
+     * @return
+     */
     @RequestMapping("generateMarketerNo")
     @ResponseBody
     public String generateMarketerNo(){
@@ -122,9 +123,9 @@ public class CrmMarketerController {
         List<CrmMarketer> marketerList= crmMarketerMapper.selectByCondition(paramVO);
         if(marketerList != null && marketerList.size() > 0){
             
-        	
+            
             for (int i = 0 ; i < marketerList.size(); i++) {
-            	
+                
                 XSSFRow row2 = marketerSheet.createRow(i+1);
                 //行号
                 row2.createCell(0).setCellValue(String.valueOf(i+1));
@@ -138,9 +139,9 @@ public class CrmMarketerController {
                 row2.createCell(4).setCellValue(marketerList.get(i).getDepName());
                 //在职状态
                 if (("1").equals(marketerList.get(i).getStatus())) {
-                	row2.createCell(5).setCellValue("在职");
+                    row2.createCell(5).setCellValue("在职");
                 } else {
-                	row2.createCell(5).setCellValue("离职");
+                    row2.createCell(5).setCellValue("离职");
                 }
                 //入职日期
                 row2.createCell(6).setCellValue(marketerList.get(i).getEntryDate());
@@ -165,13 +166,13 @@ public class CrmMarketerController {
         XSSFRow row3 = marketerMediatorSheet.createRow(0);
         //初始化表头
         for (int i = 0 ;i < marketerMediatorHead.length ; i++) {
-        	row3.createCell(i).setCellValue(marketerMediatorHead[i]);   
+            row3.createCell(i).setCellValue(marketerMediatorHead[i]);   
             marketerMediatorSheet.setColumnWidth(i, 256*15);
         }
         List<CrmMarketerAndMediator> marketerAndMediatorList= crmMarketerMapper.selectMaketerRelation(paramVO);
         if(marketerAndMediatorList != null && marketerAndMediatorList.size() > 0){
             for (int i = 0 ; i < marketerAndMediatorList.size(); i++) {
-            	
+                
                 XSSFRow row2 = marketerMediatorSheet.createRow(i+1);
                 //行号
                 row2.createCell(0).setCellValue(String.valueOf(i+1));
@@ -195,43 +196,43 @@ public class CrmMarketerController {
         XSSFRow row4 = marketerInvestorSheet.createRow(0);
         //初始化表头
         for (int i = 0 ;i < marketerInvestorHead.length ; i++) {
-        	row4.createCell(i).setCellValue(marketerInvestorHead[i]);   
-        	marketerInvestorSheet.setColumnWidth(i, 256*15);
+            row4.createCell(i).setCellValue(marketerInvestorHead[i]);   
+            marketerInvestorSheet.setColumnWidth(i, 256*15);
         }
-		List<CrmMarketerAndCustomer> marketerAndCustomerList = crmMarketerMapper.selectMaketerCustomerRelation(paramVO);
-	       if(marketerAndCustomerList != null && marketerAndCustomerList.size() > 0){
-	            for (int i = 0 ; i < marketerAndCustomerList.size(); i++) {
-	            	
-	                XSSFRow row2 = marketerInvestorSheet.createRow(i+1);
-	                //行号
-	                row2.createCell(0).setCellValue(String.valueOf(i+1));
-	                //营销人员编号
-	                row2.createCell(1).setCellValue(marketerAndCustomerList.get(i).getMarketerNo());
-	                //营销人员名称
-	                row2.createCell(2).setCellValue(marketerAndCustomerList.get(i).getMarketerName());
-	                //投资者编号
-	                row2.createCell(3).setCellValue(marketerAndCustomerList.get(i).getInvestorNo());
-	                //投资者名称
-	                row2.createCell(4).setCellValue(marketerAndCustomerList.get(i).getInvestorName());
-	                //备注
-	                row2.createCell(5).setCellValue(marketerAndCustomerList.get(i).getRemark());
+        List<CrmMarketerAndCustomer> marketerAndCustomerList = crmMarketerMapper.selectMaketerCustomerRelation(paramVO);
+           if(marketerAndCustomerList != null && marketerAndCustomerList.size() > 0){
+                for (int i = 0 ; i < marketerAndCustomerList.size(); i++) {
+                    
+                    XSSFRow row2 = marketerInvestorSheet.createRow(i+1);
+                    //行号
+                    row2.createCell(0).setCellValue(String.valueOf(i+1));
+                    //营销人员编号
+                    row2.createCell(1).setCellValue(marketerAndCustomerList.get(i).getMarketerNo());
+                    //营销人员名称
+                    row2.createCell(2).setCellValue(marketerAndCustomerList.get(i).getMarketerName());
+                    //投资者编号
+                    row2.createCell(3).setCellValue(marketerAndCustomerList.get(i).getInvestorNo());
+                    //投资者名称
+                    row2.createCell(4).setCellValue(marketerAndCustomerList.get(i).getInvestorName());
+                    //备注
+                    row2.createCell(5).setCellValue(marketerAndCustomerList.get(i).getRemark());
 
-	            }
-	        }
+                }
+            }
         
-		try {
-			OutputStream output = response.getOutputStream();
-			response.reset();
-			response.setContentType("application/x-xls");
-			response.setCharacterEncoding("UTF-8");
-			String FileName = new String("营销人员信息".getBytes("UTF-8"), "ISO-8859-1");
-			response.setHeader("Content-Disposition", "attachment;filename=" + FileName + ".xlsx");
-			wb.write(output);
-			output.close();
-		} catch (IOException e) {
-			logger.error("导出营销人员信息失败", e);
-			throw new BohaiException("", "导出营销人员信息失败");
-		}
+        try {
+            OutputStream output = response.getOutputStream();
+            response.reset();
+            response.setContentType("application/x-xls");
+            response.setCharacterEncoding("UTF-8");
+            String FileName = new String("营销人员信息".getBytes("UTF-8"), "ISO-8859-1");
+            response.setHeader("Content-Disposition", "attachment;filename=" + FileName + ".xlsx");
+            wb.write(output);
+            output.close();
+        } catch (IOException e) {
+            logger.error("导出营销人员信息失败", e);
+            throw new BohaiException("", "导出营销人员信息失败");
+        }
     }
     
     @RequestMapping(value="queryMarketerOverview")

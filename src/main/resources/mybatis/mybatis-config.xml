@@ -104,6 +104,7 @@
         <mapper resource="mybatis/mapper/ReportSpecialReturnMapper.xml"/>
         <mapper resource="mybatis/mapper/SpecialReturnMapper.xml"/>
         <mapper resource="mybatis/mapper/ReportMarketerInterestMapper.xml"/>
+        <mapper resource="mybatis/mapper/ReportDepMapper.xml"/>
 
         <!-- 视图 -->
         <mapper resource="mybatis/mapper/VTradeDetailMapper.xml"/>

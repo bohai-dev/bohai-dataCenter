@@ -76,11 +76,18 @@ public interface CrmCustomerMapper {
     int updateDepByMediator(CrmMediator mediator);
     
     @Update("update T_CRM_CUSTOMER "
-            + "set BELONG_TYPE = #{belongType},"
-            + "BELONG_TO = #{belongTo}"
+            + "set BELONG_TYPE = #{belongType}, "
+            + "BELONG_TO = #{belongTo} "
             + "where BELONG_TYPE = '2' "
             + "and BELONG_TO = #{mediatorNo}")
     int updateBelongByMediator(CrmMediator mediator);
+    
+    @Update("update T_CRM_CUSTOMER "
+            + "set BELONG_TYPE = '0', "
+            + "BELONG_TO = #{depCode} "
+            + "where BELONG_TYPE = '1' "
+            + "and BELONG_TO = #{marketerNo}")
+    int updateBelongByMarketer(CrmMarketer marketer);
     
     /**
      * 查询投资者产生的利润

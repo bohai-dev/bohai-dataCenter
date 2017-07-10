@@ -19,7 +19,7 @@
     </jdbcConnection> -->
     <!-- oracle -->
     <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
-        connectionURL="jdbc:oracle:thin:@localhost:1521:xe"
+        connectionURL="jdbc:oracle:thin:@192.168.16.102:1521:xe"
         userId="sjzx"
         password="sjzx">
     </jdbcConnection>
@@ -216,7 +216,12 @@
     </table> -->
     
     <!-- caoxx建的表 -->
-    <table schema="" tableName="T_CUST_TRADE" domainObjectName="CustTrade" 
+    <!-- <table schema="" tableName="T_CUST_TRADE" domainObjectName="CustTrade" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <table schema="" tableName="T_REPORT_DEP" domainObjectName="ReportDep"
         enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
         enableUpdateByExample="false" selectByExampleQueryId="false">
     </table>

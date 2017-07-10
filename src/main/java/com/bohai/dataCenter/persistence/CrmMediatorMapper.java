@@ -70,6 +70,13 @@ public interface CrmMediatorMapper {
             + "and BELONG_TO = #{marketerNo}")
     int updateDepByMarketerNo(CrmMarketer marketer);
     
+    @Update("update T_CRM_MEDIATOR "
+            + "set BELONG_TYPE = '0', "
+            + "BELONG_TO = #{depCode} "
+            + "where BELONG_TYPE = '1' "
+            + "and BELONG_TO = #{marketerNo}")
+    int updateBelongByMarketer(CrmMarketer marketer);
+    
     List<CrmMediator> selectByMarketer(String marketerNo);
     
     //XUSHEN ADD START
