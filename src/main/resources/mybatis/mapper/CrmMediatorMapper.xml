@@ -74,14 +74,14 @@
       FAX, ADDRESS, EMAIL, 
       CERT_NO, REMARK, CREATE_TIME, 
       UPDATE_TIME, EFFECT_DATE, EXPIRE_DATE, 
-      CERT_TYPE,BELONG_TYPE,BELONG_TO)
+      CERT_TYPE,BELONG_TYPE,BELONG_TO,IS_IB)
     values (#{mediatorNo,jdbcType=VARCHAR}, #{mediatorName,jdbcType=VARCHAR}, #{mediatorShortName,jdbcType=VARCHAR}, 
       #{status,jdbcType=VARCHAR}, #{depCode,jdbcType=VARCHAR}, #{depName,jdbcType=VARCHAR}, 
       #{allocationProportion,jdbcType=VARCHAR}, #{payType,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, 
       #{fax,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
       #{certNo,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{effectDate,jdbcType=VARCHAR}, #{expireDate,jdbcType=VARCHAR}, 
-      #{certType,jdbcType=VARCHAR},#{belongType,jdbcType=VARCHAR},#{belongTo,jdbcType=VARCHAR})
+      #{certType,jdbcType=VARCHAR},#{belongType,jdbcType=VARCHAR},#{belongTo,jdbcType=VARCHAR},#{isIb,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.bohai.dataCenter.entity.CrmMediator" >
     <!--
@@ -318,7 +318,8 @@
       EXPIRE_DATE = #{expireDate,jdbcType=VARCHAR},
       CERT_TYPE = #{certType,jdbcType=VARCHAR},
       BELONG_TYPE = #{belongType,jdbcType=VARCHAR},
-      BELONG_TO = #{belongTo,jdbcType=VARCHAR}
+      BELONG_TO = #{belongTo,jdbcType=VARCHAR},
+      IS_IB=#{isIb,jdbcType=VARCHAR}
     where MEDIATOR_NO = #{mediatorNo,jdbcType=VARCHAR}
   </update>
   
@@ -344,6 +345,7 @@
 			t.CERT_TYPE,
 			t.BELONG_TYPE,
 			t.BELONG_TO,
+			t.IS_IB,
       case t.belong_type 
       when '0' then (select dept_name from t_crm_dept a  where a.dept_code = t.belong_to) 
       when '1' then (select b.MARKETER_NAME from t_crm_marketer b where b.marketer_no = t.belong_to) end as BELONG_TO_NAME
