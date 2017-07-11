@@ -77,6 +77,15 @@ public interface CrmMediatorMapper {
             + "and BELONG_TO = #{marketerNo}")
     int updateBelongByMarketer(CrmMarketer marketer);
     
+    /**
+     * 备份居间人信息到历史表
+     * @param mediatorNo
+     * @return
+     */
+    int copyMediatorByMediatorNo(String mediatorNo);
+    
+    int copyMediatorByMarketer(CrmMarketer marketer);
+    
     List<CrmMediator> selectByMarketer(String marketerNo);
     
     //XUSHEN ADD START

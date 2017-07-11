@@ -417,4 +417,10 @@
 				    order by REPORT_MONTH desc)
     where ROWNUM = 1
   </select>
+  
+  <insert id="copyMarketerByMarketerNo" parameterType="java.lang.String">
+    insert into T_CRM_MARKETER_HISTORY
+    select * from T_CRM_MARKETER
+    where MARKETER_NO = #{0}
+  </insert>
 </mapper>

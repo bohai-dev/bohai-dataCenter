@@ -447,4 +447,17 @@
     
     order by MONTH desc
   </select>
+  
+  <insert id="copyMediatorByMediatorNo" parameterType="java.lang.String">
+    insert into T_CRM_MEDIATOR_HISTORY 
+    select * from T_CRM_MEDIATOR
+    where MEDIATOR_NO = #{0}
+  </insert>
+  
+  <insert id="copyMediatorByMarketer" parameterType="com.bohai.dataCenter.entity.CrmMarketer">
+    insert into T_CRM_MEDIATOR_HISTORY 
+    select * from T_CRM_MEDIATOR
+    where belong_type = '1'
+    and belong_to = #{marketerNo}
+  </insert>
 </mapper>

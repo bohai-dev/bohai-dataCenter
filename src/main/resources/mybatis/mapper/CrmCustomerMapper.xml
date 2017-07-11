@@ -429,5 +429,18 @@
     order by MONTH desc
   </select>
   
+  <insert id="copyCustomerByMediator" parameterType="com.bohai.dataCenter.entity.CrmMediator">
+    insert into T_CRM_CUSTOMER_HISTORY 
+    select * from T_CRM_CUSTOMER 
+    where belong_type = '2'
+    and belong_to = #{mediatorNo}
+  </insert>
+  
+  <insert id="copyCustomerByMarketer" parameterType="com.bohai.dataCenter.entity.CrmMarketer">
+    insert into T_CRM_CUSTOMER_HISTORY 
+    select * from T_CRM_CUSTOMER 
+    where belong_type = '1'
+    and belong_to = #{marketerNo}
+  </insert>
   
 </mapper>

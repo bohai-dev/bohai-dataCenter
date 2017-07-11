@@ -90,6 +90,16 @@ public class CrmMarketerServiceImpl implements CrmMarketerService {
             throw new BohaiException("", "营销人员不存在："+marketer.getMarketerNo());
         }
         
+        //删除前先备份历史归属关系
+        try {
+            this.crmCustomerMapper.copyCustomerByMarketer(crmMarketer);
+            this.crmMediatorMapper.copyMediatorByMarketer(crmMarketer);
+            this.crmMarketerMapper.copyMarketerByMarketerNo(crmMarketer.getMarketerNo());
+        } catch (Exception e1) {
+            logger.error("备份历史归属关系失败",e1);
+            throw new BohaiException("", "备份历史归属关系失败");
+        }
+        
         //把营销人员直属客户的归属改为该营销人员所属的营业部
         try {
             this.crmCustomerMapper.updateBelongByMarketer(crmMarketer);

@@ -68,6 +68,16 @@ public class CrmMediatorServiceImpl implements CrmMediatorService {
             throw new BohaiException("", "居间人不存在："+mediator.getMediatorNo());
         }
         
+        //先备份再删除
+        try {
+            this.crmCustomerMapper.copyCustomerByMediator(existsMediator);
+            this.crmMediatorMapper.copyMediatorByMediatorNo(existsMediator.getMediatorNo());
+        } catch (Exception e1) {
+            logger.error("保存历史归属关系失败",e1);
+            throw new BohaiException("", "保存历史归属关系失败");
+        }
+        
+        //更新居间人名下客户归属
         try {
             this.crmCustomerMapper.updateBelongByMediator(existsMediator);
         } catch (Exception e) {

@@ -90,6 +90,15 @@ public interface CrmCustomerMapper {
     int updateBelongByMarketer(CrmMarketer marketer);
     
     /**
+     * 备份数据到历史表
+     * @param mediator
+     * @return
+     */
+    int copyCustomerByMediator(CrmMediator mediator);
+    
+    int copyCustomerByMarketer(CrmMarketer marketer);
+    
+    /**
      * 查询投资者产生的利润
      * @param paramVO
      * @return
