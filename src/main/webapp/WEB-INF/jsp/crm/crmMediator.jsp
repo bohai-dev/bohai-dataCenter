@@ -79,7 +79,7 @@
         
         /* 修改任务模态框 */
         function config(row){
-            
+            console.log(row);
             $("#mediatorNo1").val(row.mediatorNo);
             $("#mediatorName1").val(row.mediatorName);
             $('#depCode1').val(row.depCode);
@@ -92,6 +92,8 @@
             $("#certNo1").val(row.certNo);
             $("#effectDate1").val(row.effectDate);
             $("#expireDate1").val(row.expireDate);
+            
+            $('#isIb1').selectpicker('val', row.isIb);
             //设置bootstrap-select的值
             $('#belongType1').selectpicker('val', row.belongType);
             
@@ -388,7 +390,8 @@
                     effectDate:$('#effectDate').val(),
                     expireDate:$('#expireDate').val(),
             		belongType:$('#belongType').val(),
-            		belongTo:$('#belongTo').val()
+            		belongTo:$('#belongTo').val(),
+            		isIb:$('#isIb').val()
                     }
              $.ajax({
                  url: 'saveCrmMediator',
@@ -419,7 +422,8 @@
                     effectDate:$('#effectDate1').val(),
                     expireDate:$('#expireDate1').val(),
                     belongType:$('#belongType1').val(),
-                    belongTo:$('#belongTo1').val()
+                    belongTo:$('#belongTo1').val(),
+                    isIb:$('#isIb1').val()
                     }
              $.ajax({
                  url: 'updateCrmMediator',
@@ -673,6 +677,15 @@
                       <input type="text" class="form-control" id="mediatorName" placeholder="">
                     </div>
                   </div>
+                  <div class="form-group">
+                    <label for="isIb" class="col-sm-3 control-label">IB居间区分</label>
+                    <div class="col-sm-8">
+                     <select class="selectpicker form-control" id="isIb" >
+                          <option value="1">是</option>
+                          <option value="0">否</option>
+                      </select>
+                    </div>
+                  </div>
                   
                   <div class="form-group">
                     <label for="belongType" class="col-sm-3 control-label">归属类型</label>
@@ -820,6 +833,15 @@
                     <label for="mediatorName1" class="col-sm-3 control-label">居间人姓名</label>
                     <div class="col-sm-8">
                       <input type="text" class="form-control" id="mediatorName1" placeholder="">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="isIb1" class="col-sm-3 control-label">IB居间区分</label>
+                    <div class="col-sm-8">
+                      <select class="selectpicker form-control" id="isIb1" data-live-Search="true">
+                          <option value="1">是</option>
+                          <option value="0">否</option>
+                      </select>
                     </div>
                   </div>
                   
