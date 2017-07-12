@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bohai.dataCenter.entity.CrmCustomer;
 import com.bohai.dataCenter.entity.ReportDep;
+import com.bohai.dataCenter.persistence.CrmCustomerMapper;
 import com.bohai.dataCenter.persistence.ReportDepMapper;
 import com.bohai.dataCenter.vo.QueryDepProfitPieChartParamVO;
 
@@ -25,6 +27,9 @@ public class ChartsController {
     
     @Autowired
     private ReportDepMapper reportDepMapper;
+    
+    @Autowired
+    private CrmCustomerMapper crmCustomerMapper;
     /**
      * 查询营业部收益饼图
      * @return
@@ -42,6 +47,15 @@ public class ChartsController {
      */
     public List<Map<String,Object>> queryProfitByDep(){
         
+        
+        return null;
+    }
+    
+    /**
+     * 查询客户地域分布图
+     * @return
+     */
+    public List<Map<String,Object>> queryCustomerDistribution(){
         
         return null;
     }

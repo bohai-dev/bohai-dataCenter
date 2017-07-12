@@ -1,6 +1,9 @@
 package com.bohai.dataCenter.persistence;
 
+import java.util.List;
+
 import com.bohai.dataCenter.entity.CrmMediatorHistory;
+import com.bohai.dataCenter.vo.QueryCrmMediatorParamVO;
 
 public interface CrmMediatorHistoryMapper {
     /**
@@ -18,4 +21,8 @@ public interface CrmMediatorHistoryMapper {
      * @mbggenerated Mon Jul 10 16:18:59 CST 2017
      */
     int insertSelective(CrmMediatorHistory record);
+    
+    
+    List<CrmMediatorHistory> selectByCondition(QueryCrmMediatorParamVO paramVO);
+    
 }
