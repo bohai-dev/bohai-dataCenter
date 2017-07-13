@@ -446,7 +446,8 @@
                         	       mediatorName : $('#qmediatorName').val(),
                                    deptCode : $('#qdepName').val(),
                                    belongType : $('#qbelongType').val(),
-                                   belongTo : $('#qbelongTo').val()
+                                   belongTo : $('#qbelongTo').val(),
+                                   isIb:$('#qisIb').val()
                                   }
                           }
             );
@@ -557,6 +558,15 @@
                                 <label for="qbelongTo" class="col-sm-2 col-md-1 control-label">归属代码</label>
                                 <div class="col-sm-10 col-md-2">
                                   <input type="text" class="form-control" id="qbelongTo" name="belongTo">
+                                </div>
+                                
+                                 <label for="qisIb" class="col-sm-2 col-md-1 control-label">IB居间区分</label>
+                                <div class="col-sm-10 col-md-2">
+                                  <select class="selectpicker form-control" id="qisIb" name="isIb">
+			                          <option > </option>
+			                          <option value="1">是</option>
+			                          <option value="0">否</option>
+			                      </select>
                                 </div>
                                 
                           </div>

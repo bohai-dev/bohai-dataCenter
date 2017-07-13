@@ -13,8 +13,11 @@
     <link href="resources/css/dashboard.css" rel="stylesheet">
     <link href="resources/css/sticky-footer.css" rel="stylesheet">
     <script type="text/javascript" src="resources/tree/bootstrap-treeview.min.js"></script>
-    
+     <!-- echarts -->
+    <script src="resources/echarts/echarts.min.js"></script>
+    <script src="resources/echarts/china.js"></script>
     <script type="text/javascript">
+    
         $(function(){
             /* var tree = [
             {
@@ -121,9 +124,14 @@
 				</div>
             
           </div>
-
+          
+		  <div class="row placeholders" style="width: 100%;height:800px;" id="chinaMap">
+		  
+		  </div>
+		  
         </div>
       </div>
+      
     </div>
     
     <footer class="footer">
@@ -131,6 +139,85 @@
         <p class="text-muted">Place sticky footer content here.</p>
       </div>
     </footer>
+<script type="text/javascript">
 
+var myChart1 = echarts.init(document.getElementById('chinaMap'));
+
+/* function randomData() {
+    return Math.round(Math.random()*1000);
+} */
+
+$.get("queryCustomerDistribution",function(data,status){
+	var array=new Array();
+	for(i=0;i<data.length;i++){
+		var object=new Object();
+		object.name=data[i].NAME;
+		object.value=data[i].VALUE;
+		array.push(object);
+	}
+	
+	
+     console.log(array);
+	option = {
+		    title: {
+		        text: '客户数量各省分布图',
+		        subtext: '',
+		        left: 'center'
+		    },
+		    tooltip: {
+		        trigger: 'item'
+		    },
+		    legend: {
+		        orient: 'vertical',
+		        left: 'left',
+		        data:['客户数量']
+		    },
+		    visualMap: {
+		        min: 0,
+		        max: 2500,
+		        left: 'left',
+		        top: 'bottom',
+		        text: ['高','低'],           // 文本，默认为数值文本
+		        calculable: true
+		    },
+		    toolbox: {
+		        show: true,
+		        orient: 'vertical',
+		        left: 'right',
+		        top: 'center',
+		        feature: {
+		            dataView: {readOnly: false},
+		            restore: {},
+		            saveAsImage: {}
+		        }
+		    },
+		    series: [
+		        {
+		            name: '客户数量',
+		            type: 'map',
+		            mapType: 'china',
+		            roam: false,
+		            label: {
+		                normal: {
+		                    show: true
+		                },
+		                emphasis: {
+		                    show: true
+		                }
+		            },
+		            data:array
+		        }
+		        
+		    ]
+		};
+		myChart1.setOption(option);
+		myChart1.on('click',function(params){
+			window.location.href="toBusinessReport";
+		});
+  });
+
+
+
+</script>
   </body>
 </html>

@@ -115,4 +115,7 @@ public interface CrmCustomerMapper {
     
     @Select("select count(1) from T_CRM_CUSTOMER where belong_type = '1' and belong_to = #{0}")
     Long countByMarketerNo(String marketerNo);
+    
+    @Select("select PROVINCE AS name,COUNT(*) AS value FROM(select T_CRM_CUSTOMER.*,T_CRM_DEPT.* FROM T_CRM_CUSTOMER,  T_CRM_DEPT WHERE T_CRM_CUSTOMER.DEPT_CODE=T_CRM_DEPT.DEPT_CODE) GROUP BY PROVINCE")
+    List<Map<String, Object>> querySumByProvince();
 }

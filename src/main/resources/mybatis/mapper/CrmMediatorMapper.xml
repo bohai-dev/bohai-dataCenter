@@ -373,6 +373,9 @@
             <if test="expireEnd != null and expireEnd != ''" >
                 and t.EXPIRE_DATE <![CDATA[ <= ]]> #{expireEnd,jdbcType=VARCHAR}
             </if>
+             <if test="isIb != null and isIb != ''" >
+                and t.IS_IB <![CDATA[ = ]]> #{isIb,jdbcType=VARCHAR}
+            </if>
         </where>
   </select>
   

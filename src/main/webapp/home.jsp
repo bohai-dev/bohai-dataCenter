@@ -13,8 +13,8 @@
     <link href="resources/css/dashboard.css" rel="stylesheet">
     <link href="resources/css/sticky-footer.css" rel="stylesheet">
     <script type="text/javascript" src="resources/tree/bootstrap-treeview.min.js"></script>
-    
     <script type="text/javascript">
+   
         $(function(){
             /* var tree = [
             {
@@ -283,6 +283,7 @@
           </div>
         </div>
       </div>
+    
     </div>
     
     <footer class="footer">

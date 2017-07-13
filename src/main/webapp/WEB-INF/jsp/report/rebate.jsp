@@ -242,7 +242,7 @@
                   interest += parseFloat(data[i].INTEREST_AMOUNT);
                 }
             //保留两位小数
-            return interest.toFixed(2);
+            return (interest.toFixed(2)+'').replace(/(\d)(?=(\d{3})+\.)/g, '$1,');;
         }
         
         /* 扣减后剩余利息合计 */
@@ -253,7 +253,7 @@
                   interest += parseFloat(data[i].INTEREST_REMAIN);
                 }
             //保留两位小数
-            return interest.toFixed(2);
+            return (interest.toFixed(2)+'').replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
         }
         
         //客户统计合计
@@ -264,7 +264,7 @@
                   interest += parseFloat(data[i].INTEREST_AMOUNT);
                 }
             //保留两位小数
-            return interest.toFixed(2);
+            return (interest.toFixed(2)+'').replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
         }
         
         //营销人员返利息合计
@@ -274,9 +274,14 @@
             for(var i=0;i<data.length;i++){
                   interest += parseFloat(data[i].INTEREST);
                 }
-            //保留两位小数
-            return interest.toFixed(2);
+            //保留两位小数并增加千分位
+            return (interest.toFixed(2)+'').replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
         }
+        
+        function numberFormate(value,row,index) {
+        	//console.log(value);
+			return (value+'').replace(/(\d)(?=(\d{3})+\.)/g, '$1,');//使用正则替换，每隔三个数加一个','  
+		}
         
     </script>
   </head>
@@ -404,8 +409,8 @@
                             <tr>
                                 <!-- <th data-field="state" data-checkbox="true"></th> -->
                                 <th data-field="DEPT_NAME" data-align="center" data-footer-formatter="合计">营业部</th>
-                                <th data-field="AVAILABLE_FUNDS" data-align="center">可用资金</th>
-                                <th data-field="INTEREST_AMOUNT" data-align="center" data-footer-formatter="footer">利息</th>
+                                <th data-field="AVAILABLE_FUNDS" data-align="center" data-formatter="numberFormate">可用资金</th>
+                                <th data-field="INTEREST_AMOUNT" data-align="center" data-footer-formatter="footer" data-formatter="numberFormate">利息</th>
                                 <!-- <th data-field="INTEREST_REMAIN" data-align="center" data-footer-formatter="interestRemainfooter">扣减后剩余利息</th> -->
                             </tr>
                             </thead>
@@ -488,8 +493,8 @@
                                 <th data-field="INVESTOR_NAME" data-align="center" >投资者姓名</th>
                                 <th data-field="MEDIATOR_NAME" data-align="center" >居间人姓名姓名</th>
                                 <th data-field="DEPT_NAME" data-align="center" >营业部</th>
-                                <th data-field="AVAILABLE_FUNDS" data-align="center">可用资金</th>
-                                <th data-field="INTEREST_AMOUNT" data-align="center" data-footer-formatter="rebateTableFooter">利息</th>
+                                <th data-field="AVAILABLE_FUNDS" data-align="center" data-formatter="numberFormate">可用资金</th>
+                                <th data-field="INTEREST_AMOUNT" data-align="center" data-footer-formatter="rebateTableFooter" data-formatter="numberFormate">利息</th>
                             </tr>
                             </thead>
                         </table>
@@ -576,9 +581,9 @@
                                 <th data-field="deptName" data-align="center" >营业部</th>
                                 <th data-field="fixProportion" data-align="center" >固定利率</th>
                                 <th data-field="dailyRights" data-align="center" >日均权益利率</th>
-                                <th data-field="interestAmount" data-align="center" data-sortable="true">利息</th>
-                                <th data-field="availableFunds" data-align="center" data-sortable="true">可用资金</th>
-                                <th data-field="rights" data-align="center" data-sortable="true">客户日均权益</th>
+                                <th data-field="interestAmount" data-align="center" data-sortable="true" data-formatter="numberFormate">利息</th>
+                                <th data-field="availableFunds" data-align="center" data-sortable="true" data-formatter="numberFormate">可用资金</th>
+                                <th data-field="rights" data-align="center" data-sortable="true" data-formatter="numberFormate">客户日均权益</th>
                             </tr>
                             </thead>
                         </table>
@@ -622,7 +627,7 @@
                                 <th data-field="MARKETER_NO" data-align="center" data-footer-formatter="合计">营销人员编号</th>
                                 <th data-field="MARKETER_NAME" data-align="center" >营销人员姓名</th>
                                 <th data-field="DEP_NAME" data-align="center" >营业部</th>
-                                <th data-field="INTEREST" data-align="center" data-footer-formatter="interestFooter" >返利息</th>
+                                <th data-field="INTEREST" data-align="center" data-footer-formatter="interestFooter" data-formatter="numberFormate">返利息</th>
                             </tr>
                             </thead>
                         </table>

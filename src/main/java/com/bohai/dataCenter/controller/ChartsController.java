@@ -55,8 +55,10 @@ public class ChartsController {
      * 查询客户地域分布图
      * @return
      */
+    @RequestMapping(value="queryCustomerDistribution")
+    @ResponseBody
     public List<Map<String,Object>> queryCustomerDistribution(){
         
-        return null;
+        return crmCustomerMapper.querySumByProvince();
     }
 }
