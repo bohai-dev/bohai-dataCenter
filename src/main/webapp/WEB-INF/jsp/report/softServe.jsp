@@ -73,7 +73,7 @@
                   interest += parseFloat(data[i].SOFT_CHARGE);
                 }
             //保留两位小数
-            return interest.toFixed(2);
+            return (interest.toFixed(2)+'').replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
         }
         
         //总佣金合计
@@ -84,7 +84,7 @@
                   interest += parseFloat(data[i].CHARGE);
                 }
             //保留两位小数
-            return interest.toFixed(2);
+            return (interest.toFixed(2)+'').replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
         }
         
         //交易所佣金合计
@@ -95,8 +95,12 @@
 		          interest += parseFloat(data[i].ONHAND_CHARGE);
 		        }
 		    //保留两位小数
-		    return interest.toFixed(2);
+		    return (interest.toFixed(2)+'').replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 		}
+		 function numberFormate(value,row,index) {
+	        	//console.log(value);
+				return (value+'').replace(/(\d)(?=(\d{3})+\.)/g, '$1,');//使用正则替换，每隔三个数加一个','  
+			}
         
     </script>
   </head>
@@ -231,9 +235,9 @@
 			                    <th data-field="INVESTOR_NO" data-align="center" data-footer-formatter="合计">投资者编号</th>
 			                    <th data-field="INVESTOR_NAME" data-align="center" >投资者姓名</th>
 			                    <th data-field="DEPT" data-align="center" >所在营业部</th>
-			                    <th data-field="CHARGE" data-align="center" data-footer-formatter="tbfooter0">总佣金</th>
-			                    <th data-field="ONHAND_CHARGE" data-align="center" data-footer-formatter="tbfooter1">交易所佣金</th>
-			                    <th data-field="SOFT_CHARGE" data-align="center" data-footer-formatter="tbfooter" data-sortable="true">软件服务费</th>
+			                    <th data-field="CHARGE" data-align="center" data-footer-formatter="tbfooter0" data-formatter="numberFormate">总佣金</th>
+			                    <th data-field="ONHAND_CHARGE" data-align="center" data-footer-formatter="tbfooter1" data-formatter="numberFormate">交易所佣金</th>
+			                    <th data-field="SOFT_CHARGE" data-align="center" data-footer-formatter="tbfooter" data-sortable="true" data-formatter="numberFormate">软件服务费</th>
 			                    <th data-field="BATCH_NO" data-align="center">计费时间段</th>
 			                </tr>
 			                </thead>

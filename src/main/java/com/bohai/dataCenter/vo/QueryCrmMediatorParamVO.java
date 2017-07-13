@@ -22,8 +22,18 @@ public class QueryCrmMediatorParamVO {
 	//结束失效时间
 	private String expireEnd;
 	
+	private String isIb;
+	
 
-    public String getExpireBegin() {
+    public String getIsIb() {
+		return isIb;
+	}
+
+	public void setIsIb(String isIb) {
+		this.isIb = isIb;
+	}
+
+	public String getExpireBegin() {
         return expireBegin;
     }
 

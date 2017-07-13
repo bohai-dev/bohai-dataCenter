@@ -197,6 +197,11 @@
             }
         }
         
+        function numberFormate(value,row,index) {
+        	//console.log(value);
+			return (value+'').replace(/(\d)(?=(\d{3})+\.)/g, '$1,');//使用正则替换，每隔三个数加一个','  
+		}
+        
     </script>
   </head>
 
@@ -306,15 +311,15 @@
                               <th data-field="MONTH" data-align="center" >月份</th>
                               <th data-field="INVESTOR_NO" data-align="center" >投资者代码</th>
                               <th data-field="INVESTOR_NAME" data-align="center" >投资者名称</th>
-                              <th data-field="LCSXF" data-align="center" >留存手续费</th>
-                              <th data-field="INTEREST" data-align="center" >利息</th>
-                              <th data-field="EXCHANGE_RETURN" data-align="center" >交返</th>
-                              <th data-field="SPECIAL_INTEREST" data-align="center" >客户拿走利息</th>
-                              <th data-field="AMOUNT" data-align="center" >客户拿走交返</th>
-                              <th data-field="SXFJSR" data-align="center" >手续费净收入</th>
-                              <th data-field="NET_INTEREST" data-align="center" >净利息</th>
-                              <th data-field="NET_AMOUNT" data-align="center" >净交返</th>
-                              <th data-field="NET_PROFIT" data-align="center" >净利润</th>
+                              <th data-field="LCSXF" data-align="center" data-formatter="numberFormate">留存手续费</th>
+                              <th data-field="INTEREST" data-align="center" data-formatter="numberFormate">利息</th>
+                              <th data-field="EXCHANGE_RETURN" data-align="center" data-formatter="numberFormate">交返</th>
+                              <th data-field="SPECIAL_INTEREST" data-align="center" data-formatter="numberFormate">客户拿走利息</th>
+                              <th data-field="AMOUNT" data-align="center" data-formatter="numberFormate">客户拿走交返</th>
+                              <th data-field="SXFJSR" data-align="center" data-formatter="numberFormate">手续费净收入</th>
+                              <th data-field="NET_INTEREST" data-align="center" data-formatter="numberFormate">净利息</th>
+                              <th data-field="NET_AMOUNT" data-align="center" data-formatter="numberFormate">净交返</th>
+                              <th data-field="NET_PROFIT" data-align="center" data-formatter="numberFormate">净利润</th>
                           </tr>
                           </thead>
                       </table>
@@ -378,15 +383,15 @@
                             <th data-field="MONTH" data-align="center" >月份</th>
                             <th data-field="MEDIATOR_NO" data-align="center" >居间人编号</th>
                             <th data-field="MEDIATOR_NAME" data-align="center" >居间人名称</th>
-                            <th data-field="SXFJSR" data-align="center" >总手续费净收入</th>
-                            <th data-field="INTEREST" data-align="center" >总利息</th>
-                            <th data-field="EXCHANGE_RETURN" data-align="center" >总交返（剔税）</th>
-                            <th data-field="INVESTOR_SPECIAL_INTEREST" data-align="center" >客户拿走利息</th>
-                            <th data-field="INVESTOR_SPECIAL_EXCHANGE" data-align="center" >客户拿走交返（剔税）</th>
-                            <th data-field="MEDIATOR_SPECIAL_INTEREST" data-align="center" >居间人拿走利息</th>
-                            <th data-field="MEDIATOR_SPECIAL_EXCHANGE" data-align="center" >居间人拿走交返（剔税）</th>
-                            <th data-field="DBL16" data-align="center" >居间人拿走返佣</th>
-                            <th data-field="NET_PROFIT" data-align="center" >净利润</th>
+                            <th data-field="SXFJSR" data-align="center" data-formatter="numberFormate">总手续费净收入</th>
+                            <th data-field="INTEREST" data-align="center" data-formatter="numberFormate">总利息</th>
+                            <th data-field="EXCHANGE_RETURN" data-align="center" data-formatter="numberFormate">总交返（剔税）</th>
+                            <th data-field="INVESTOR_SPECIAL_INTEREST" data-align="center" data-formatter="numberFormate">客户拿走利息</th>
+                            <th data-field="INVESTOR_SPECIAL_EXCHANGE" data-align="center" data-formatter="numberFormate">客户拿走交返（剔税）</th>
+                            <th data-field="MEDIATOR_SPECIAL_INTEREST" data-align="center" data-formatter="numberFormate">居间人拿走利息</th>
+                            <th data-field="MEDIATOR_SPECIAL_EXCHANGE" data-align="center" data-formatter="numberFormate">居间人拿走交返（剔税）</th>
+                            <th data-field="DBL16" data-align="center" data-formatter="numberFormate">居间人拿走返佣</th>
+                            <th data-field="NET_PROFIT" data-align="center" data-formatter="numberFormate">净利润</th>
                         </tr>
                         </thead>
                     </table>
@@ -450,16 +455,16 @@
                             <th data-field="MONTH" data-align="center" >月份</th>
                             <th data-field="MARKETER_NO" data-align="center" >营销人员编号</th>
                             <th data-field="MARKETER_NAME" data-align="center" >营销人员名称</th>
-                            <th data-field="SXFJSR" data-align="center" >总手续费净收入</th>
-                            <th data-field="INTEREST" data-align="center" >总利息</th>
-                            <th data-field="EXCHANGE_RETURN" data-align="center" >总交返（剔税）</th>
-                            <th data-field="INVESTOR_SPECIAL_INTEREST" data-align="center" >投资者拿走利息</th>
-                            <th data-field="INVESTOR_SPECIAL_EXCHANGE" data-align="center" >投资者拿走交返（剔税）</th>
-                            <th data-field="MEDIATOR_SPECIAL_INTEREST" data-align="center" >居间人拿走利息</th>
-                            <th data-field="MEDIATOR_SPECIAL_EXCHANGE" data-align="center" >居间人拿走交返（剔税）</th>
-                            <th data-field="DBL16" data-align="center" >居间人拿走返佣</th>
-                            <th data-field="MONEY" data-align="center" >营销人员提成</th>
-                            <th data-field="NET_PROFIT" data-align="center" >净利润</th>
+                            <th data-field="SXFJSR" data-align="center" data-formatter="numberFormate">总手续费净收入</th>
+                            <th data-field="INTEREST" data-align="center" data-formatter="numberFormate">总利息</th>
+                            <th data-field="EXCHANGE_RETURN" data-align="center" data-formatter="numberFormate">总交返（剔税）</th>
+                            <th data-field="INVESTOR_SPECIAL_INTEREST" data-align="center" data-formatter="numberFormate">投资者拿走利息</th>
+                            <th data-field="INVESTOR_SPECIAL_EXCHANGE" data-align="center" data-formatter="numberFormate">投资者拿走交返（剔税）</th>
+                            <th data-field="MEDIATOR_SPECIAL_INTEREST" data-align="center" data-formatter="numberFormate">居间人拿走利息</th>
+                            <th data-field="MEDIATOR_SPECIAL_EXCHANGE" data-align="center" data-formatter="numberFormate">居间人拿走交返（剔税）</th>
+                            <th data-field="DBL16" data-align="center" data-formatter="numberFormate">居间人拿走返佣</th>
+                            <th data-field="MONEY" data-align="center" data-formatter="numberFormate">营销人员提成</th>
+                            <th data-field="NET_PROFIT" data-align="center" data-formatter="numberFormate">净利润</th>
                         </tr>
                         </thead>
                     </table>
