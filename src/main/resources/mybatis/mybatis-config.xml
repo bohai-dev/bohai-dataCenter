@@ -105,7 +105,11 @@
         <mapper resource="mybatis/mapper/SpecialReturnMapper.xml"/>
         <mapper resource="mybatis/mapper/ReportMarketerInterestMapper.xml"/>
         <mapper resource="mybatis/mapper/ReportDepMapper.xml"/>
-
+        <mapper resource="mybatis/mapper/CrmCustomerHistoryMapper.xml"/>
+        <mapper resource="mybatis/mapper/CrmMediatorHistoryMapper.xml"/>
+        <mapper resource="mybatis/mapper/CrmMarketerHistoryMapper.xml"/>
+        <mapper resource="mybatis/mapper/CrmDeptHistoryMapper.xml"/>
+        
         <!-- 视图 -->
         <mapper resource="mybatis/mapper/VTradeDetailMapper.xml"/>
 

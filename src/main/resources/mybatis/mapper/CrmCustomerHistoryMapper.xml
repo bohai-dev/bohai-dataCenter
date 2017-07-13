@@ -12,6 +12,7 @@
     <result column="FULL_NAME" property="fullName" jdbcType="VARCHAR" />
     <result column="STATUS" property="status" jdbcType="VARCHAR" />
     <result column="DEPT_CODE" property="deptCode" jdbcType="VARCHAR" />
+    <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR" />
     <result column="OPEN_DATE" property="openDate" jdbcType="VARCHAR" />
     <result column="CANCEL_DATE" property="cancelDate" jdbcType="VARCHAR" />
     <result column="OPEN_OPERATOR" property="openOperator" jdbcType="VARCHAR" />
@@ -227,4 +228,32 @@
       </if>
     </trim>
   </insert>
+  
+  
+    <!-- 查询客户基本信息 -->
+  <select id="selectByCondition" parameterType="com.bohai.dataCenter.vo.QueryCrmCustomerParamVO" resultMap="BaseResultMap">
+    select t.*,t1.DEPT_NAME,
+    case t.belong_type 
+      when '0' then (select dept_name from t_crm_dept a  where a.dept_code = t.belong_to) 
+      when '1' then (select b.MARKETER_NAME from t_crm_marketer b where b.marketer_no = t.belong_to) 
+      when '2' then (select c.MEDIATOR_NAME from t_crm_mediator c where c.MEDIATOR_NO = t.belong_to) end as BELONG_TO_NAME
+    from T_CRM_CUSTOMER_HISTORY t left join T_CRM_DEPT t1 on t.DEPT_CODE = t1.DEPT_CODE
+    <where>
+        <if test="deptCode != null and deptCode != ''">
+            t.DEPT_CODE = #{deptCode}
+        </if>
+        <if test="investorNo != null and investorNo != ''">
+            and t.INVESTOR_NO = #{investorNo}
+        </if>
+        <if test="investorName != null and investorName != ''">
+            and t.INVESTOR_NAME like '%'||#{investorName}||'%'
+        </if>
+        <if test="belongType != null and belongType != ''">
+            and t.BELONG_TYPE = #{belongType}
+        </if>
+        <if test="belongTo != null and belongTo != ''">
+            and t.BELONG_TO = #{belongTo}
+        </if>
+    </where>
+  </select>
 </mapper>

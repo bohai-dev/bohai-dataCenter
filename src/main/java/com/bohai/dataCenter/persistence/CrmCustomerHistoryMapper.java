@@ -1,6 +1,9 @@
 package com.bohai.dataCenter.persistence;
 
+import java.util.List;
+
 import com.bohai.dataCenter.entity.CrmCustomerHistory;
+import com.bohai.dataCenter.vo.QueryCrmCustomerParamVO;
 
 public interface CrmCustomerHistoryMapper {
     /**
@@ -18,4 +21,6 @@ public interface CrmCustomerHistoryMapper {
      * @mbggenerated Mon Jul 10 16:18:59 CST 2017
      */
     int insertSelective(CrmCustomerHistory record);
+    
+    List<CrmCustomerHistory> selectByCondition(QueryCrmCustomerParamVO paramVO);
 }

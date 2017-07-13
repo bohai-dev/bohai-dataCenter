@@ -1,6 +1,11 @@
 package com.bohai.dataCenter.persistence;
 
+import java.util.List;
+
 import com.bohai.dataCenter.entity.CrmMarketerHistory;
+import com.bohai.dataCenter.vo.CrmMarketerAndCustomer;
+import com.bohai.dataCenter.vo.CrmMarketerAndMediator;
+import com.bohai.dataCenter.vo.QueryCrmMarketerParamVO;
 
 public interface CrmMarketerHistoryMapper {
     /**
@@ -18,4 +23,13 @@ public interface CrmMarketerHistoryMapper {
      * @mbggenerated Mon Jul 10 16:18:59 CST 2017
      */
     int insertSelective(CrmMarketerHistory record);
+    
+    
+    List<CrmMarketerHistory> selectByCondition(QueryCrmMarketerParamVO paramVO);
+    
+    
+    List<CrmMarketerAndMediator> selectMaketerRelation(QueryCrmMarketerParamVO paramVO);
+    
+    List<CrmMarketerAndCustomer> selectMaketerCustomerRelation(QueryCrmMarketerParamVO paramVO);
+    
 }
