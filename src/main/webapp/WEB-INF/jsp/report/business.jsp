@@ -55,6 +55,9 @@
                      
             return html;
         }
+        function numformat(params){
+        	return params.value+'值';
+        }
         
         $(function(){
             var treeObj = ${sessionScope.treeView};
@@ -168,7 +171,68 @@
                 }
             });
             
-            
+            //柱状图
+            var myChart2 = echarts.init(document.getElementById('chart2'));
+            option2 = {
+            	    tooltip : {
+            	        trigger: 'axis',
+            	        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+            	            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            	        }
+            	    },
+            	    legend: {
+            	        data: ['净利润', '毛利润']
+            	    },
+            	    grid: {
+            	        left: '3%',
+            	        right: '4%',
+            	        bottom: '2%',
+            	        containLabel: true
+            	    },
+            	    xAxis:  {
+            	        type: 'value',
+            	        scale:true,
+            	        min:0
+            	        
+            	    },
+            	    yAxis: {
+            	        type: 'category',
+            	        max:11,
+            	        data: ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']
+            	    },
+            	    series: [
+            	        {
+            	            name: '净利润',
+            	            type: 'bar',
+            	            stack: '总量',            	            
+            	            label: {
+            	                normal: {
+            	                    show: true,
+            	                    position: 'insideRight',
+            	                   
+            	                }
+            	            },
+            	            data: [320, 302, 301, 334, 390, 330, 320,290,310,295,235,298]
+            	        },
+            	        {
+            	            name: '毛利润',
+            	            type: 'bar',
+            	            stack: '总量',
+            	            barWidth:45,
+            	            label: {
+            	                normal: {
+            	                    show: true,
+            	                    position: 'insideRight',
+            	                    formatter:numformat
+            	                }
+            	            },
+            	            data: [120, 132, 101, 134, 90, 230, 210,200,230,242,180,196]
+            	        }
+            	        
+            	    ]
+            	};
+            myChart2.setOption(option2);
+        
         });
         
     </script>
@@ -229,7 +293,10 @@
             
             
                 <div class="col-sm-12 col-md-12">
-                    <div id="pieCharts" style="width: 1600px;height:800px;"></div>
+                    <div id="pieCharts" style="width: 100%;height:800px;"></div>
+                </div>
+                <div class="col-sm-12 col-md-12">
+                    <div id="chart2" style="width: 100%;height:1000px;"></div>
                 </div>
             
             

@@ -235,7 +235,6 @@ public class ReportController {
 	@RequestMapping(value="querySoftCharge")
 	@ResponseBody
 	public List<Map<String, Object>> querySoftCharge(){
-		
 		return reportService.queryTBSoftReport();
 	}
 

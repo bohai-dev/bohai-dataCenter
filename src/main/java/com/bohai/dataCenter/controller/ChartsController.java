@@ -61,4 +61,14 @@ public class ChartsController {
         
         return crmCustomerMapper.querySumByProvince();
     }
+    /**
+     * 查询营业部每个月利润
+     * @return
+     */
+    @RequestMapping(value="queryMonthProfitByDep")
+    @ResponseBody
+    public List<Map<String,Object>> queryMonthProfitByDep(){
+        
+        return crmCustomerMapper.querySumByProvince();
+    }
 }

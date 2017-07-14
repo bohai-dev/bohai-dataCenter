@@ -149,11 +149,15 @@ var myChart1 = echarts.init(document.getElementById('chinaMap'));
 
 $.get("queryCustomerDistribution",function(data,status){
 	var array=new Array();
+	var max=0;
 	for(i=0;i<data.length;i++){
 		var object=new Object();
 		object.name=data[i].NAME;
 		object.value=data[i].VALUE;
 		array.push(object);
+		if(data[i].VALUE>max){
+			max=data[i].VALUE;
+		}
 	}
 	
 	
@@ -174,7 +178,7 @@ $.get("queryCustomerDistribution",function(data,status){
 		    },
 		    visualMap: {
 		        min: 0,
-		        max: 2500,
+		        max: max,
 		        left: 'left',
 		        top: 'bottom',
 		        text: ['高','低'],           // 文本，默认为数值文本
