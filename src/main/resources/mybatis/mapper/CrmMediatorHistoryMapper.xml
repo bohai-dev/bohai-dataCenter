@@ -258,4 +258,42 @@
             </if>
         </where>
   </select>
+  
+  <select id="selectMediatorCustomerRelation" resultType="com.bohai.dataCenter.vo.CrmMediatorAndCustomer" parameterType="com.bohai.dataCenter.vo.QueryCrmMediatorParamVO">
+    select 
+        t.MEDIATOR_NO as mediatorNo,
+        t.MEDIATOR_NAME as mediatorName,
+        t1.INVESTOR_NO as investorNo,
+        t1.INVESTOR_NAME as investorName,
+        t1.EFFECT_DATE as effectDate,
+        t1.EXPIRE_DATE as expireDate,
+        t1.REMARK as remark
+    from T_CRM_MEDIATOR_HISTORY t, T_CRM_CUSTOMER_HISTORY t1 
+       <where>
+           t.MEDIATOR_NO = t1.BELONG_TO
+           and t1.BELONG_TYPE = '2'
+           <if test="mediatorNo != null and mediatorNo != ''" >
+               t.MEDIATOR_NO = #{mediatorNo,jdbcType=VARCHAR}
+           </if>
+           <if test="mediatorName != null and mediatorName != ''" >
+               and t.MEDIATOR_NAME like '%'||#{mediatorName,jdbcType=VARCHAR}||'%'
+           </if>
+           <if test="belongType != null and belongType != ''" >
+               and t.BELONG_TYPE = #{belongType,jdbcType=VARCHAR}
+           </if>
+           <if test="belongTo != null and belongTo != ''" >
+               and t.BELONG_TO = #{belongTo,jdbcType=VARCHAR}
+           </if>
+           <if test="deptCode != null and deptCode != ''" >
+               and t.DEP_CODE = #{deptCode,jdbcType=VARCHAR}
+           </if>
+           <if test="expireBegin != null and expireBegin != ''" >
+               and t.EXPIRE_DATE <![CDATA[ >= ]]> #{expireBegin,jdbcType=VARCHAR}
+           </if>
+           <if test="expireEnd != null and expireEnd != ''" >
+               and t.EXPIRE_DATE <![CDATA[ <= ]]> #{expireEnd,jdbcType=VARCHAR}
+           </if>
+       </where>
+    order by t.MEDIATOR_NO
+  </select>
 </mapper>
