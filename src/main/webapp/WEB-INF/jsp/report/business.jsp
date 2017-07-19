@@ -55,24 +55,35 @@
                      
             return html;
         }
+        var allProfitList=new Array();   //毛利润数组
+        //柱状图毛利润显示
         function numformat(params){
-        	return params.value+'值';
+        	
+        	return params.value=allProfitList[params.dataIndex];
         }
-        
+        //毛利润阴影显示
+        function profitFormat(params){
+        	
+        	return '净利润：'+params[0].value+'<br>毛利润：'+allProfitList[params[1].dataIndex];
+        	
+        }
         $(function(){
             var treeObj = ${sessionScope.treeView};
             $('#tree').treeview({data: treeObj,enableLinks: true});
             $('li a[href="toBusinessReport"]').parent().addClass("active");
-            
+            //饼图
             var myChart = echarts.init(document.getElementById('pieCharts'));
-            
+            //柱状图
+            var myChart2 = echarts.init(document.getElementById('chart2'));
+            var depName;
             myChart.on('click',function(params){
                 // 点击到了 pie 上
                 if (params.componentType === 'series') {
                // 点击到了 index 为 1 的 series 的 pie 上。   
                      if (params.seriesIndex === 1) {
-                        
+                        // console.log(params.data);
                     	 var json = params.data;
+                    	 depName=json.name;
                     	 var seriesData = new Array();
                     	 var insterestJson = {};
                     	 insterestJson['value'] = json.interest;
@@ -95,7 +106,101 @@
                              }]
                          });
                      }
+                     if (params.seriesIndex === 0){
+                    	     $.ajax({
+                             url: 'queryMonthProfitByDep',
+                             type: 'post',
+                             dataType: 'json',
+                             contentType: "application/json;charset=UTF-8",
+                             data: JSON.stringify({'depName':depName}),
+                             success: function (result) {
+                            	// console.log(result);
+                            	// console.log(result);
+                            	 var profitList=new Array();       //净利润数组
+                            	 var showAllProfitList=new Array();
+                            	 allProfitList.splice(0,allProfitList.length);  //清空毛利润数组
+                                 for(i=0;i<result.length;i++){
+                                	 profitList.push(result[i].depProfit);
+                                	 allProfitList.push(result[i].allProfit);
+                                	 showAllProfitList.push(result[i].allProfit-result[i].depProfit);
+                                    }
+                                 
+                                 option2 = {
+                                		title : {
+                                 	        text: depName+'利润分布柱状图',
+                                 	        x:'center'
+                                 	    },
+                                		 tooltip : {
+                                 	        trigger: 'axis',
+                                 	        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                                 	            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                                 	        },
+                                          formatter:profitFormat
+                                 	    },
+                                 	    legend: {
+                                 	    	 x: 'left',
+                                 	        data: ['净利润', '毛利润']
+                                 	    },
+                                 	    grid: {
+                                 	        left: '3%',
+                                 	        right: '4%',
+                                 	        bottom: '2%',
+                                 	        containLabel: true
+                                 	    },
+                                 	    xAxis:  {
+                                 	        type: 'value',
+                                 	        scale:true,
+                                 	        min:0
+                                 	        
+                                 	    },
+                                 	    yAxis: {
+                                 	        type: 'category',
+                                 	        max:11,
+                                 	        data: ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']
+                                 	    },
+                                 	    series: [
+                                 	        {
+                                 	            name: '净利润',
+                                 	            type: 'bar',
+                                 	            stack: '总量',            	            
+                                 	            label: {
+                                 	                normal: {
+                                 	                    show: true,
+                                 	                    position: 'insideRight',
+                                 	                   
+                                 	                }
+                                 	            },
+                                 	            data: profitList
+                                 	        },
+                                 	        {
+                                 	            name: '毛利润',
+                                 	            type: 'bar',
+                                 	            stack: '总量',
+                                 	            barWidth:35,
+                                 	           
+                                 	            label: {
+                                 	                normal: {
+                                 	                    show: true,
+                                 	                    position: 'insideRight',
+                                 	                    formatter:numformat
+                                 	                }
+                                 	            },
+                                 	            data: showAllProfitList
+                                 	        }
+                                 	        
+                                 	    ]
+                                 	};
+                                 myChart2.setOption(option2);
+                                 
+                                 }
+                             }); 
+                             
+                            
+                             
+                     } 
+                     
                 }
+                
             });
             
             
@@ -171,67 +276,9 @@
                 }
             });
             
-            //柱状图
-            var myChart2 = echarts.init(document.getElementById('chart2'));
-            option2 = {
-            	    tooltip : {
-            	        trigger: 'axis',
-            	        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-            	            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-            	        }
-            	    },
-            	    legend: {
-            	        data: ['净利润', '毛利润']
-            	    },
-            	    grid: {
-            	        left: '3%',
-            	        right: '4%',
-            	        bottom: '2%',
-            	        containLabel: true
-            	    },
-            	    xAxis:  {
-            	        type: 'value',
-            	        scale:true,
-            	        min:0
-            	        
-            	    },
-            	    yAxis: {
-            	        type: 'category',
-            	        max:11,
-            	        data: ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']
-            	    },
-            	    series: [
-            	        {
-            	            name: '净利润',
-            	            type: 'bar',
-            	            stack: '总量',            	            
-            	            label: {
-            	                normal: {
-            	                    show: true,
-            	                    position: 'insideRight',
-            	                   
-            	                }
-            	            },
-            	            data: [320, 302, 301, 334, 390, 330, 320,290,310,295,235,298]
-            	        },
-            	        {
-            	            name: '毛利润',
-            	            type: 'bar',
-            	            stack: '总量',
-            	            barWidth:45,
-            	            label: {
-            	                normal: {
-            	                    show: true,
-            	                    position: 'insideRight',
-            	                    formatter:numformat
-            	                }
-            	            },
-            	            data: [120, 132, 101, 134, 90, 230, 210,200,230,242,180,196]
-            	        }
-            	        
-            	    ]
-            	};
-            myChart2.setOption(option2);
+           
+            
+            
         
         });
         
@@ -296,7 +343,7 @@
                     <div id="pieCharts" style="width: 100%;height:800px;"></div>
                 </div>
                 <div class="col-sm-12 col-md-12">
-                    <div id="chart2" style="width: 100%;height:1000px;"></div>
+                    <div id="chart2" style="width: 100%;height:850px;"></div>
                 </div>
             
             

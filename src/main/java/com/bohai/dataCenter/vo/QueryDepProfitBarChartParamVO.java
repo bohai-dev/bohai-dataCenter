@@ -10,6 +10,15 @@ public class QueryDepProfitBarChartParamVO {
  * 要查询的营业部名称
  */
 private String depName;
+private String year;
+
+public String getYear() {
+	return year;
+}
+
+public void setYear(String year) {
+	this.year = year;
+}
 
 public String getDepName() {
 	return depName;

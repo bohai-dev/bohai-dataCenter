@@ -18,6 +18,7 @@
     <result column="MARKETER_PROFIT" property="marketerProfit" jdbcType="DECIMAL" />
     <result column="DEP_PROFIT" property="depProfit" jdbcType="DECIMAL" />
     <result column="MONTH" property="month" jdbcType="CHAR" />
+     <result column="all_PROFIT" property="allProfit" jdbcType="DECIMAL" />
   </resultMap>
   
   <select id="selectByMonth" resultMap="BaseResultMap" parameterType="com.bohai.dataCenter.vo.QueryDepProfitPieChartParamVO">
@@ -29,6 +30,16 @@
     <if test="month == null or month == ''">
         MONTH = (select max(MONTH) from T_REPORT_DEP)
     </if>
+  </select>
+  
+   <select id="selectByDep" resultMap="BaseResultMap" parameterType="com.bohai.dataCenter.vo.QueryDepProfitBarChartParamVO">
+   select b.month,nvl(a.DEP_PROFIT,0) as dep_profit, nvl(a.INTEREST+a.EXCHANGE_RETURN_TICKTIX+a.COMMISSION,0) as allProfit from T_REPORT_DEP a right join (SELECT distinct TYEAR||'-'||TMONTH as month from T_TRADING_DATE) b 
+   on a.month = b.month 
+
+    <if test="depName != null and depName != ''">
+        AND  a.DEP_NAME= #{depName}
+    </if>
+    order by b.month
   </select>
   
   
