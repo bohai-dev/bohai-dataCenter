@@ -25,6 +25,9 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0) {
         // TODO Auto-generated method stub
+    	String userName = (String) arg0.fromRealm(getName()).iterator().next();
+    	System.out.println("用户名："+userName);
+    	
         return null;
     }
 
