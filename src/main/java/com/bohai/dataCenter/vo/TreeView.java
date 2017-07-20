@@ -4,15 +4,20 @@ import java.util.List;
 
 /**
  * bootstrap-treeview
- * 返回 给前端JSON格式
+ * 前端JSON格式的treeView
  * @author caojia
  */
-public class TreeView {
+public class TreeView<T> {
 	
 	/**
 	 * 菜单文本内容
 	 */
 	private String text;
+	
+	/**
+	 * 承载的数据
+	 */
+	private T data;
 	
 	/**
 	 * 菜单URL
@@ -42,11 +47,9 @@ public class TreeView {
 	/**
 	 * 子树
 	 */
-	private List<TreeView> nodes;
+	private List<TreeView<T>> nodes;
 	
 	
-	
-
 	public String getText() {
 		return text;
 	}
@@ -95,11 +98,11 @@ public class TreeView {
 		this.tags = tags;
 	}
 
-	public List<TreeView> getNodes() {
+	public List<TreeView<T>> getNodes() {
 		return nodes;
 	}
 
-	public void setNodes(List<TreeView> nodes) {
+	public void setNodes(List<TreeView<T>> nodes) {
 		this.nodes = nodes;
 	} 
 	
@@ -148,5 +151,15 @@ public class TreeView {
 		}
 		
 	}
+
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+	
 	
 }

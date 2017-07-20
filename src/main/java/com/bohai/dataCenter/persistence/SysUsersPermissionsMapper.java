@@ -1,5 +1,7 @@
 package com.bohai.dataCenter.persistence;
 
+import org.apache.ibatis.annotations.Delete;
+
 import com.bohai.dataCenter.entity.SysUsersPermissions;
 
 public interface SysUsersPermissionsMapper {
@@ -18,4 +20,7 @@ public interface SysUsersPermissionsMapper {
      * @mbggenerated Thu Jul 20 10:14:17 CST 2017
      */
     int insertSelective(SysUsersPermissions record);
+    
+    @Delete("delete from SYS_USERS_PERMISSIONS where USER_NAME = #{0}")
+    int deleteByUserName(String userName);
 }
