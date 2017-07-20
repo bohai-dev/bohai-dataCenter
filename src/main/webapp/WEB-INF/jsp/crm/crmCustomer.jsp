@@ -651,6 +651,7 @@
                                       <option value="0">营业部</option>
                                       <option value="1">营销人员</option>
                                       <option value="2">居间人</option>
+                                      <option value="9">无归属</option>
                                   </select>
                                 </div>
                                 

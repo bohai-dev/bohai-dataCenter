@@ -389,8 +389,11 @@
         <if test="investorName != null and investorName != ''">
             and t.INVESTOR_NAME like '%'||#{investorName}||'%'
         </if>
-        <if test="belongType != null and belongType != ''">
+        <if test="belongType != null and belongType != '' and belongType != '9'.toString()">
             and t.BELONG_TYPE = #{belongType}
+        </if>
+        <if test="belongType == '9'.toString()">
+            and (t.BELONG_TYPE is null or t.BELONG_TO is null)
         </if>
         <if test="belongTo != null and belongTo != ''">
             and t.BELONG_TO = #{belongTo}

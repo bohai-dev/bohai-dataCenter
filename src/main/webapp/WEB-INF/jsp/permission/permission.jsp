@@ -27,7 +27,7 @@
         });
         
         function operationFormatter(value,row,index) {
-        	
+            
             var html = '<button type="button" id="cog'+row.username+'" class="btn btn-default btn-sm" title="设置">'
                          + '<i class="glyphicon glyphicon-cog"></i>'
                      + '</button>'
@@ -36,8 +36,8 @@
                      + '</button>';
             
             $("#sysUserTable").on("click","#cog"+row.username,row,function(event){
-            	
-            	console.log(row);
+                
+                //console.log(row);
                 config(row);
                 
             });
@@ -46,38 +46,48 @@
         
         /* 修改任务模态框 */
         function config(row){
-        	
-        	$.ajax({
+            
+            $('#userName').val(row.username);
+            
+            var param = {userName:row.username};
+            
+            $.ajax({
                 url: 'queryUserPermissions',
                 type: 'post',
                 dataType: 'json',
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify(param),
                 success: function (result) {
-                	
-		        	$('#permissionTree').treeview({data: result,showCheckbox:true});
-		        	
+                    
+                    $('#permissionTree').treeview({data: result,showCheckbox:true});
+                    
                 }
             });
-            
             
             $("#configModal").modal('show');
             
         }
         
         function updateUsersPermissions(){
-        	
-        	var checkedList = $('#permissionTree').treeview('getChecked');
-        	
-        	$.ajax({
+            
+            var checkedList = $('#permissionTree').treeview('getChecked');
+            console.info(checkedList);
+            
+            var userName = $('#userName').val();
+            var param = {userName:userName,
+                         permissionList:checkedList}
+            
+            $.ajax({
                 url: 'updateUserPermissions',
                 type: 'post',
                 contentType: "application/json;charset=UTF-8",
-                data:JSON.stringify(checkedList),
+                data:JSON.stringify(param),
                 success: function (result) {
                     alert("保存成功");
                     $('#configModal').modal('hide')
                 }
             });
-        	
+            
         }
         
         /* var nodeCheckedSilent = false;
@@ -253,7 +263,7 @@
             <h4 class="modal-title" id="myModalLabel">用户权限设置</h4>
           </div>
           <div class="modal-body">
-                
+                <input type="hidden" id="userName" />
                 <div id="permissionTree"></div>
           </div>
           <div class="modal-footer">

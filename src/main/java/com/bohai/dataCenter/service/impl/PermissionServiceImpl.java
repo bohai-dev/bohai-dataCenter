@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.bohai.dataCenter.entity.SysPermission;
@@ -62,21 +63,26 @@ public class PermissionServiceImpl implements PermissionService {
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("parentPermissionId", parentPermissionId);
+        map.put("userName", userName);
         
         List<TreeView<SysPermission>> treeList = null;
         
-        List<SysPermission> list = this.sysPermissionMapper.queryPermissionsSelective(map);
+        List<SysPermission> list = this.sysPermissionMapper.queryPermissionsLeftJoinUserName(map);
         if(list != null && list.size() > 0 ){
             
             treeList = new ArrayList<TreeView<SysPermission>>();
             
             for (SysPermission permission : list){
+                
                 TreeView<SysPermission> treeView = new TreeView<SysPermission>();
                 treeView.setText(permission.getDescription());
                 treeView.setHref(permission.getUrl());
                 treeView.setData(permission);
                 State state = new State();
-                state.setChecked(true);
+                if(!StringUtils.isEmpty(permission.getHasPermission())){
+                    state.setChecked(true);
+                }
+                    
                 state.setExpanded(true);
                 treeView.setState(state);
                 

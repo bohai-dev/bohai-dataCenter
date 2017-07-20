@@ -854,7 +854,7 @@
                                 <td class="col-sm-2 col-md-3" id="MEDIATOR_NET_PROFIT0"></td>
                             </tr>
                             <tr>
-                                <td class="col-sm-2 col-md-3" >留存手续费</td>
+                                <td class="col-sm-2 col-md-3" >手续费净收入(未扣除提成)</td>
                                 <td class="col-sm-2 col-md-3" id="MEDIATOR_SXFJSR0"></td>
                                 <td class="col-sm-2 col-md-3">净留存</td>
                                 <td class="col-sm-2 col-md-3" id="MEDIATOR_NET_SXFJSR0"></td>
@@ -881,7 +881,7 @@
                                 <td class="col-sm-2 col-md-3" id="MEDIATOR_NET_PROFIT1"></td>
                             </tr>
                             <tr>
-                                <td class="col-sm-2 col-md-3" >手续费净收入</td>
+                                <td class="col-sm-2 col-md-3" >手续费净收入(未扣除提成)</td>
                                 <td class="col-sm-2 col-md-3" id="MEDIATOR_SXFJSR1"></td>
                                 <td class="col-sm-2 col-md-3">净留存</td>
                                 <td class="col-sm-2 col-md-3" id="MEDIATOR_NET_SXFJSR1"></td>
@@ -908,7 +908,7 @@
                                 <td class="col-sm-2 col-md-3" id="MEDIATOR_NET_PROFIT2"></td>
                             </tr>
                             <tr>
-                                <td class="col-sm-2 col-md-3" >留存手续费</td>
+                                <td class="col-sm-2 col-md-3" >手续费净收入(未扣除提成)</td>
                                 <td class="col-sm-2 col-md-3" id="MEDIATOR_SXFJSR2"></td>
                                 <td class="col-sm-2 col-md-3">净留存</td>
                                 <td class="col-sm-2 col-md-3" id="MEDIATOR_NET_SXFJSR2"></td>
@@ -935,7 +935,7 @@
                                 <td class="col-sm-2 col-md-3" id="MEDIATOR_NET_PROFIT_SUM"></td>
                             </tr>
                             <tr>
-                                <td class="col-sm-2 col-md-3" >谁续费净收入</td>
+                                <td class="col-sm-2 col-md-3" >手续费净收入</td>
                                 <td class="col-sm-2 col-md-3" id="MEDIATOR_SXFJSR_SUM"></td>
                                 <td class="col-sm-2 col-md-3">净留存</td>
                                 <td class="col-sm-2 col-md-3" id="MEDIATOR_NET_SXFJSR_SUM"></td>
