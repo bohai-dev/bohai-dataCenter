@@ -14,6 +14,7 @@ import com.bohai.dataCenter.entity.CrmCustomer;
 import com.bohai.dataCenter.entity.ReportDep;
 import com.bohai.dataCenter.persistence.CrmCustomerMapper;
 import com.bohai.dataCenter.persistence.ReportDepMapper;
+import com.bohai.dataCenter.vo.QueryDepProfitBarChartParamVO;
 import com.bohai.dataCenter.vo.QueryDepProfitPieChartParamVO;
 
 /**
@@ -62,13 +63,13 @@ public class ChartsController {
         return crmCustomerMapper.querySumByProvince();
     }
     /**
-     * 查询营业部每个月利润
+     * 查询某营业部每个月利润
      * @return
      */
     @RequestMapping(value="queryMonthProfitByDep")
     @ResponseBody
-    public List<Map<String,Object>> queryMonthProfitByDep(){
+    public List<ReportDep> queryMonthProfitByDep(@RequestBody(required=false) QueryDepProfitBarChartParamVO paramVO){
         
-        return crmCustomerMapper.querySumByProvince();
+        return reportDepMapper.selectByDep(paramVO);
     }
 }

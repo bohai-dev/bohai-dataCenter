@@ -17,7 +17,7 @@ public class ShiroTest {
     public void testHelloworld() {  
         
         //1、获取SecurityManager工厂，此处使用Ini配置文件初始化SecurityManager  
-        Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro-realm.ini");
+        Factory<SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro/shiro-realm.ini");
         //2、得到SecurityManager实例 并绑定给SecurityUtils  
         SecurityManager securityManager = factory.getInstance();
         SecurityUtils.setSecurityManager(securityManager);
