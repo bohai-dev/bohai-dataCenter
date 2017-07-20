@@ -246,6 +246,10 @@
         enableUpdateByExample="false" selectByExampleQueryId="false">
     </table> -->
     
+    <table schema="" tableName="SYS_USERS_PERMISSIONS" domainObjectName="SysUsersPermissions"
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table>
     
   </context>
 </generatorConfiguration>

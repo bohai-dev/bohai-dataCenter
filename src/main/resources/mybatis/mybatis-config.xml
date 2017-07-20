@@ -109,6 +109,7 @@
         <mapper resource="mybatis/mapper/CrmMediatorHistoryMapper.xml"/>
         <mapper resource="mybatis/mapper/CrmMarketerHistoryMapper.xml"/>
         <mapper resource="mybatis/mapper/CrmDeptHistoryMapper.xml"/>
+        <mapper resource="mybatis/mapper/SysUsersPermissionsMapper.xml"/>
         
         <!-- 视图 -->
         <mapper resource="mybatis/mapper/VTradeDetailMapper.xml"/>
