@@ -23,7 +23,6 @@ public class ReportServiceTest extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void countExchangeRebate() throws BohaiException {
 
-
 		CountExchangeRebateParamVO paramVO = new CountExchangeRebateParamVO();
 		paramVO.setMonth("2017-03");
 		

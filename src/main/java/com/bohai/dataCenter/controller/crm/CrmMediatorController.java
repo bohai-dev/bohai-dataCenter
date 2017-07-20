@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -40,6 +41,7 @@ public class CrmMediatorController {
 
 	//跳转到居间人信息维护页面
 	@RequestMapping(value="toCrmMediator")
+	@RequiresPermissions(value="crm:mediator:view")
 	public String toCrmMediator(){
 		
 		return "crm/crmMediator";

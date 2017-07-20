@@ -59,4 +59,9 @@
       </if>
     </trim>
   </insert>
+  
+  <select id="select"  resultMap="BaseResultMap" parameterType="com.bohai.dataCenter.entity.SysUsersPermissions">
+  
+  select PERMISSION from SYS_USERS_PERMISSIONS where USER_NAME=#{userName}
+  </select>
 </mapper>
