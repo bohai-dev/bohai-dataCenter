@@ -81,6 +81,7 @@
                 if (params.componentType === 'series') {
                // 点击到了 index 为 1 的 series 的 pie 上。   
                      if (params.seriesIndex === 1) {
+                    	 
                         // console.log(params.data);
                     	 var json = params.data;
                     	 depName=json.name;
@@ -105,6 +106,73 @@
                                  data: seriesData
                              }]
                          });
+                    	  option2 = {
+                          		title : {
+                           	        text:'',
+                           	        x:'center'
+                           	    },
+                          		 tooltip : {
+                           	        trigger: 'axis',
+                           	        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                           	            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                           	        },
+                                    formatter:profitFormat
+                           	    },
+                           	    legend: {
+                           	    	 x: 'left',
+                           	        data: ['净利润', '毛利润']
+                           	    },
+                           	    grid: {
+                           	        left: '3%',
+                           	        right: '4%',
+                           	        bottom: '2%',
+                           	        containLabel: true
+                           	    },
+                           	    xAxis:  {
+                           	        type: 'value',
+                           	        scale:true,
+                           	        min:0
+                           	        
+                           	    },
+                           	    yAxis: {
+                           	        type: 'category',
+                           	        max:11,
+                           	        data: ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']
+                           	    },
+                           	    series: [
+                           	        {
+                           	            name: '净利润',
+                           	            type: 'bar',
+                           	            stack: '总量',            	            
+                           	            label: {
+                           	                normal: {
+                           	                    show: true,
+                           	                    position: 'insideRight',
+                           	                   
+                           	                }
+                           	            },
+                           	            data: []
+                           	        },
+                           	        {
+                           	            name: '毛利润',
+                           	            type: 'bar',
+                           	            stack: '总量',
+                           	            barWidth:35,
+                           	           
+                           	            label: {
+                           	                normal: {
+                           	                    show: true,
+                           	                    position: 'insideRight',
+                           	                    formatter:numformat
+                           	                }
+                           	            },
+                           	            data: []
+                           	        }
+                           	        
+                           	    ]
+                           	};
+                           myChart2.setOption(option2);
+                    	  
                      }
                      if (params.seriesIndex === 0){
                     	     $.ajax({
@@ -114,8 +182,7 @@
                              contentType: "application/json;charset=UTF-8",
                              data: JSON.stringify({'depName':depName}),
                              success: function (result) {
-                            	// console.log(result);
-                            	// console.log(result);
+                            	
                             	 var profitList=new Array();       //净利润数组
                             	 var showAllProfitList=new Array();
                             	 allProfitList.splice(0,allProfitList.length);  //清空毛利润数组
@@ -191,6 +258,10 @@
                                  	    ]
                                  	};
                                  myChart2.setOption(option2);
+                                 $("html,body").stop(true);    //让页面跳转到柱状图位置
+                                 $("html,body").animate({
+                                	 scrollTop: $("#barDiv").offset().top
+                                	 }, 1000);
                                  
                                  }
                              }); 
@@ -342,8 +413,8 @@
                 <div class="col-sm-12 col-md-12">
                     <div id="pieCharts" style="width: 100%;height:800px;"></div>
                 </div>
-                <div class="col-sm-12 col-md-12">
-                    <div id="chart2" style="width: 100%;height:850px;"></div>
+                <div class="col-sm-12 col-md-12" id="barDiv">
+                    <div id="chart2" style="width: 100%;height:800px;"></div>
                 </div>
             
             
