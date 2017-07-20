@@ -14,11 +14,143 @@
     <link href="resources/css/sticky-footer.css" rel="stylesheet">
     <script type="text/javascript" src="resources/tree/bootstrap-treeview.min.js"></script>
     
+    <link rel="stylesheet" href="resources/bootstrap-table/bootstrap-table.css">
+    <script src="resources/bootstrap-table/bootstrap-table.js"></script>
+    <!-- put your locale files after bootstrap-table.js -->
+    <script src="resources/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+    
     <script type="text/javascript">
         $(function(){
             var treeObj = ${sessionScope.treeView};
             $('#tree').treeview({data: treeObj,enableLinks: true});
+            
         });
+        
+        function operationFormatter(value,row,index) {
+        	
+            var html = '<button type="button" id="cog'+row.username+'" class="btn btn-default btn-sm" title="设置">'
+                         + '<i class="glyphicon glyphicon-cog"></i>'
+                     + '</button>'
+                     + '<button type="button" id="trash'+row.username+'" class="btn btn-default btn-sm" title="删除任务">'
+                         + '<i class="glyphicon glyphicon-trash"></i>'
+                     + '</button>';
+            
+            $("#sysUserTable").on("click","#cog"+row.username,row,function(event){
+            	
+            	console.log(row);
+                config(row);
+                
+            });
+            return html;
+        }
+        
+        /* 修改任务模态框 */
+        function config(row){
+        	
+        	$.ajax({
+                url: 'queryUserPermissions',
+                type: 'post',
+                dataType: 'json',
+                success: function (result) {
+                	
+		        	$('#permissionTree').treeview({data: result,showCheckbox:true});
+		        	
+                }
+            });
+            
+            
+            $("#configModal").modal('show');
+            
+        }
+        
+        function updateUsersPermissions(){
+        	
+        	var checkedList = $('#permissionTree').treeview('getChecked');
+        	
+        	$.ajax({
+                url: 'updateUserPermissions',
+                type: 'post',
+                contentType: "application/json;charset=UTF-8",
+                data:JSON.stringify(checkedList),
+                success: function (result) {
+                    alert("保存成功");
+                    $('#configModal').modal('hide')
+                }
+            });
+        	
+        }
+        
+        /* var nodeCheckedSilent = false;
+        function nodeChecked (event, node){  
+            if(nodeCheckedSilent){  
+                return;  
+            }  
+            nodeCheckedSilent = true;  
+            checkAllParent(node);  
+            checkAllSon(node);  
+            nodeCheckedSilent = false;  
+        }  
+          
+        var nodeUncheckedSilent = false;  
+        
+        function nodeUnchecked  (event, node){
+            if(nodeUncheckedSilent)  
+                return;  
+            nodeUncheckedSilent = true;  
+            uncheckAllParent(node);  
+            uncheckAllSon(node);  
+            nodeUncheckedSilent = false;  
+        }  
+          
+        //选中全部父节点  
+        function checkAllParent(node){ 
+            $('#permissionTree').treeview('checkNode',node.nodeId,{silent:true});  
+            var parentNode = $('#permissionTree').treeview('getParent',node.nodeId);  
+            if(!("id" in parentNode)){  
+                return;  
+            }else{  
+                checkAllParent(parentNode);  
+            }  
+        }  
+        //取消全部父节点  
+        function uncheckAllParent(node){
+            $('#permissionTree').treeview('uncheckNode',node.nodeId,{silent:true});  
+            var siblings = $('#permissionTree').treeview('getSiblings', node.nodeId);  
+            var parentNode = $('#permissionTree').treeview('getParent',node.nodeId);  
+            if(!("id" in parentNode)) {
+                return;  
+            }
+            var isAllUnchecked = true;  //是否全部没选中  
+            for(var i in siblings){
+                if(siblings[i].state.checked){
+                    isAllUnchecked=false;  
+                    break;
+                }
+            }
+            if(isAllUnchecked){  
+                uncheckAllParent(parentNode);  
+            }  
+          
+        }  
+          
+        //级联选中所有子节点  
+        function checkAllSon(node){  
+            $('#permissionTree').treeview('checkNode',node.nodeId,{silent:true});  
+            if(node.nodes!=null&&node.nodes.length>0){  
+                for(var i in node.nodes){  
+                    checkAllSon(node.nodes[i]);  
+                }  
+            }  
+        }  
+        //级联取消所有子节点  
+        function uncheckAllSon(node){  
+            $('#permissionTree').treeview('uncheckNode',node.nodeId,{silent:true});  
+            if(node.nodes!=null&&node.nodes.length>0){  
+                for(var i in node.nodes){  
+                    uncheckAllSon(node.nodes[i]);  
+                }  
+            }  
+        } */
     </script>
   </head>
 
@@ -60,156 +192,47 @@
           <h4 class="page-header"><a href="toHome" style="text-decoration: none;"><i class="glyphicon glyphicon-home"></i></a> --> <a href="" style="text-decoration: none;">权限管理</a> --> <a href="toPermission" style="text-decoration: none;">用户权限管理</a></h1>
 
           <div class="row placeholders">
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
-            <div class="col-xs-6 col-sm-3 placeholder">
-              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
-              <h4>Label</h4>
-              <span class="text-muted">Something else</span>
-            </div>
           </div>
 
-          <h2 class="sub-header">Section title</h2>
+          <h2 class="sub-header">用户权限信息</h2>
           <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
+            <div id="toolbar" class="btn-group">
+            
+            </div>
+            <table id="sysUserTable"
+                   class="table table-striped"
+                   data-toggle="table" 
+                   data-toolbar="#toolbar"
+                   data-show-refresh="true"
+                   data-show-toggle="true"
+                   data-show-columns="true"
+                   data-show-export="true"
+                   data-detail-view="true"
+                   data-detail-formatter="detailFormatter"
+                   data-height="542"
+                   data-url="user/queryUsers"
+                   data-pagination="true"
+                   data-side-pagination="server"
+                   data-method="get"
+                   data-page-list="[5, 10, 20, 50]"
+                   data-search="true"
+                   data-height="300">
+                <thead>
                 <tr>
-                  <th>#</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
+                    <!-- <th data-field="state" data-checkbox="true"></th> -->
+                    <th data-field="username" data-align="center" >用户名</th>
+                    <th data-field="password" data-formatter="********" data-align="center" >密码</th>
+                    <th data-field="dept" data-align="center" >部门</th>
+                    <th data-field="locked" data-align="center" >状态</th>
+                    <th data-field="createTime" data-align="center" data-sortable="true">创建时间</th>
+                    <th data-field="updateTime" data-align="center" >更新时间</th>
+                    <th data-field="" data-formatter="operationFormatter">操作</th>
                 </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1,001</td>
-                  <td>Lorem</td>
-                  <td>ipsum</td>
-                  <td>dolor</td>
-                  <td>sit</td>
-                </tr>
-                <tr>
-                  <td>1,002</td>
-                  <td>amet</td>
-                  <td>consectetur</td>
-                  <td>adipiscing</td>
-                  <td>elit</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>Integer</td>
-                  <td>nec</td>
-                  <td>odio</td>
-                  <td>Praesent</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>libero</td>
-                  <td>Sed</td>
-                  <td>cursus</td>
-                  <td>ante</td>
-                </tr>
-                <tr>
-                  <td>1,004</td>
-                  <td>dapibus</td>
-                  <td>diam</td>
-                  <td>Sed</td>
-                  <td>nisi</td>
-                </tr>
-                <tr>
-                  <td>1,005</td>
-                  <td>Nulla</td>
-                  <td>quis</td>
-                  <td>sem</td>
-                  <td>at</td>
-                </tr>
-                <tr>
-                  <td>1,006</td>
-                  <td>nibh</td>
-                  <td>elementum</td>
-                  <td>imperdiet</td>
-                  <td>Duis</td>
-                </tr>
-                <tr>
-                  <td>1,007</td>
-                  <td>sagittis</td>
-                  <td>ipsum</td>
-                  <td>Praesent</td>
-                  <td>mauris</td>
-                </tr>
-                <tr>
-                  <td>1,008</td>
-                  <td>Fusce</td>
-                  <td>nec</td>
-                  <td>tellus</td>
-                  <td>sed</td>
-                </tr>
-                <tr>
-                  <td>1,009</td>
-                  <td>augue</td>
-                  <td>semper</td>
-                  <td>porta</td>
-                  <td>Mauris</td>
-                </tr>
-                <tr>
-                  <td>1,010</td>
-                  <td>massa</td>
-                  <td>Vestibulum</td>
-                  <td>lacinia</td>
-                  <td>arcu</td>
-                </tr>
-                <tr>
-                  <td>1,011</td>
-                  <td>eget</td>
-                  <td>nulla</td>
-                  <td>Class</td>
-                  <td>aptent</td>
-                </tr>
-                <tr>
-                  <td>1,012</td>
-                  <td>taciti</td>
-                  <td>sociosqu</td>
-                  <td>ad</td>
-                  <td>litora</td>
-                </tr>
-                <tr>
-                  <td>1,013</td>
-                  <td>torquent</td>
-                  <td>per</td>
-                  <td>conubia</td>
-                  <td>nostra</td>
-                </tr>
-                <tr>
-                  <td>1,014</td>
-                  <td>per</td>
-                  <td>inceptos</td>
-                  <td>himenaeos</td>
-                  <td>Curabitur</td>
-                </tr>
-                <tr>
-                  <td>1,015</td>
-                  <td>sodales</td>
-                  <td>ligula</td>
-                  <td>in</td>
-                  <td>libero</td>
-                </tr>
-              </tbody>
+                </thead>
             </table>
           </div>
+
+
         </div>
       </div>
     </div>
@@ -219,6 +242,27 @@
         <p class="text-muted">Place sticky footer content here.</p>
       </div>
     </footer>
+    
+    
+        <!-- 新建客户模态框 -->
+    <div class="modal fade" id="configModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">用户权限设置</h4>
+          </div>
+          <div class="modal-body">
+                
+                <div id="permissionTree"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary" onclick="updateUsersPermissions();">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </body>
 </html>
