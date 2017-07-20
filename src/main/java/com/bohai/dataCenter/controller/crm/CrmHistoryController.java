@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -57,6 +58,7 @@ public class CrmHistoryController {
     private CrmCustomerHistoryMapper crmCustomerHistoryMapper;
     
     @RequestMapping(value="toCrmHistory")
+    @RequiresPermissions(value="crm:history:view")
     public String toCrmHistory(){
         
         return "crm/crmHistory";

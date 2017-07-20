@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,26 +55,31 @@ public class ReportController {
 	
 	
 	@RequestMapping(value="toBusinessReport")
+	@RequiresPermissions(value="report:business:view")
 	public String toBusinessReport(){
 		return "report/business";
 	}
 	
 	@RequestMapping(value="toSoftServeReport")
+	@RequiresPermissions(value="report:softServe:view")
 	public String toSoftServeReport(){
 		return "report/softServe";
 	}
 	
 	@RequestMapping(value="toRebateReport")
+	@RequiresPermissions(value="report:rebate:view")
 	public String toRebateReport(){
 		return "report/rebate";
 	}
 	
 	@RequestMapping(value="toExchangeRebateReport")
+	@RequiresPermissions(value="report:exchangeRebate:view")
 	public String toExchangeRebateReport(){
 		return "report/exchangeRebate";
 	}
 	
 	@RequestMapping(value="toInvestorReport")
+	@RequiresPermissions(value="report:investor:view")
 	public String toInvestorReport(){
 	    return "report/investor";
 	}

@@ -2,6 +2,7 @@ package com.bohai.dataCenter.controller.crm;
 
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,7 @@ public class CrmDeptController {
 
 	//跳转到营业部信息维护页面
 	@RequestMapping(value="toCrmDept")
+	@RequiresPermissions(value="crm:dept:view")
 	public String toCrmDept(){
 		
 		return "crm/crmDept";

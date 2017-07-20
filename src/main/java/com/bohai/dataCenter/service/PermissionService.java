@@ -6,6 +6,6 @@ import com.bohai.dataCenter.vo.TreeView;
 
 public interface PermissionService {
 	
-	public List<TreeView> queryUserPermissionTree(Long userId,Long permissionLevel);
+	public List<TreeView> queryUserPermissionTree(String userName,Long permissionLevel);
 
 }

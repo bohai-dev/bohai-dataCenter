@@ -24,11 +24,11 @@ public class PermissionServiceImpl implements PermissionService {
 	private SysPermissionMapper sysPermissionMapper;
 	
 	@Override
-	public List<TreeView> queryUserPermissionTree(Long userId,Long parentPermissionId) {
+	public List<TreeView> queryUserPermissionTree(String userName,Long parentPermissionId) {
 
 		List<TreeView> treeList = null;
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("userId", 123L);
+		map.put("userName", userName);
 		map.put("parentPermissionId", parentPermissionId);
 		List<SysPermission> list = this.sysPermissionMapper.queryPermissionsSelective(map);
 		
@@ -38,9 +38,10 @@ public class PermissionServiceImpl implements PermissionService {
 			for (SysPermission permission : list){
 				TreeView treeView = new TreeView();
 				treeView.setText(permission.getDescription());
+				System.out.println(permission.getDescription());
 				treeView.setHref(permission.getUrl());
 				//递归查询子菜单权限
-				treeView.setNodes(this.queryUserPermissionTree(userId,permission.getId()));
+				treeView.setNodes(this.queryUserPermissionTree(userName,permission.getId()));
 				
 				treeList.add(treeView);
 			}

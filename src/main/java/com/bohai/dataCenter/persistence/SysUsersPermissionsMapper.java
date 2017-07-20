@@ -1,5 +1,7 @@
 package com.bohai.dataCenter.persistence;
 
+import java.util.ArrayList;
+
 import com.bohai.dataCenter.entity.SysUsersPermissions;
 
 public interface SysUsersPermissionsMapper {
@@ -18,4 +20,6 @@ public interface SysUsersPermissionsMapper {
      * @mbggenerated Thu Jul 20 10:14:17 CST 2017
      */
     int insertSelective(SysUsersPermissions record);
+    
+    ArrayList<SysUsersPermissions> select(String userName);
 }

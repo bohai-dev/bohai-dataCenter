@@ -182,19 +182,20 @@
   
   <select id="queryPermissionsSelective" resultMap="BaseResultMap" parameterType="java.util.Map">
     select 
-        <include refid="Base_Column_List" />
-    from sys_permissions
+    	a.*
+    from sys_permissions a , sys_users_permissions b
     <where>
-        <if test="userId != null">1 = 1</if>
+    	 a.permission = b.permission
+        <if test="userName != null">
+         and b.USER_NAME=#{userName}
+        </if>
         <if test="parentPermissionId != null">
-            and parent_permission_id = #{parentPermissionId,jdbcType=BIGINT}
+           and a.parent_permission_id = #{parentPermissionId,jdbcType=BIGINT}
         </if>
         <if test="parentPermissionId == null">
-            and parent_permission_id is null
+           and a.PARENT_PERMISSION_ID is null
         </if>
-        <if test="userId != null"></if>
     </where>
-    order by sort
   </select>
   
   
