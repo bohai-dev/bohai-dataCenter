@@ -64,10 +64,30 @@
                     var checkableTree=$('#permissionTree').treeview({
                 		data:result,
                 		showCheckbox: true,
-                		levels:1,
+                		levels:3,
                 		
                 		onNodeChecked:function(event,node){
                 			console.log(node.id);
+                			function doCheckedNode(node){
+                				//parent
+                				var parentNode=$('#permissionTree').treeview('getParent',node);
+                				console.log(parentNode);
+                				if(parentNode && 0 <= parentNode.nodeId){
+                					console.log(parentNode);
+                					//选中
+                					$('#permissionTree').treeview('checkNode',parentNode.nodeId,{silent:true});
+                					doCheckedNode(parentNode);
+                				}
+                				else{
+                					var childNodes=node.nodes;
+                					console.log(childNodes);
+                					if(childNodes!=null){
+                					for(var i=0;i<childNodes.length;i++){
+                						$('#permissionTree').treeview('checkNode',childNodes[i].nodeId,{silent:true});
+                					}
+                					}
+                				}
+                			}
                 			doCheckedNode(node);
                 		},
                 		
@@ -124,33 +144,6 @@
             });
             
         }
-        
-        /* 选中节点事件 */
-        function doCheckedNode(node){
-			//parent		
-			checkAllParent(node);
-			
-			var childNodes=node.nodes;
-			console.log(childNodes);
-			if(childNodes!=null){
-				for(var i=0;i<childNodes.length;i++){
-					$('#permissionTree').treeview('checkNode',childNodes[i].nodeId,{silent:true});
-				}
-			}
-			
-		}
-        
-        function checkAllParent(node){ 
-            
-        	$('#permissionTree').treeview('checkNode',node.nodeId,{silent:true});  
-            var parentNode = $('#permissionTree').treeview('getParent',node);  
-            if(parentNode && 0 <= parentNode.nodeId){  
-                checkAllParent(parentNode);  
-            }else{  
-                return;  
-            }  
-        }  
-        
                /*/* var nodeCheckedSilent = false;
         function nodeChecked (event, node){  
             if(nodeCheckedSilent){  
