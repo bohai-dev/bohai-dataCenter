@@ -32,9 +32,9 @@
             var html = '<button type="button" id="cog'+row.username+'" class="btn btn-default btn-sm" title="设置">'
                          + '<i class="glyphicon glyphicon-cog"></i>'
                      + '</button>'
-                     + '<button type="button" id="trash'+row.username+'" class="btn btn-default btn-sm" title="删除任务">'
+                     /* + '<button type="button" id="trash'+row.username+'" class="btn btn-default btn-sm" title="删除任务">'
                          + '<i class="glyphicon glyphicon-trash"></i>'
-                     + '</button>';
+                     + '</button>' */;
             
             $("#sysUserTable").on("click","#cog"+row.username,row,function(event){
                 
