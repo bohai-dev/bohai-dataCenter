@@ -328,10 +328,13 @@
             <h4 class="modal-title" id="myModalLabel">用户权限设置</h4>
           </div>
           <div class="modal-body">
-          <button type="button" class="btn btn-success" id="btn-check-all">Check All</button>  
-        <button type="button" class="btn btn-danger" id="btn-uncheck-all">Uncheck All</button>  
+	          <div class="form-group">
+	            <button type="button" class="btn btn-success" id="btn-check-all">Check All</button>  
+	            <button type="button" class="btn btn-danger" id="btn-uncheck-all">Uncheck All</button>  
                 <input type="hidden" id="userName" />
-                <div id="permissionTree"></div>
+              </div>
+                
+              <div id="permissionTree" class="form-group"></div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
