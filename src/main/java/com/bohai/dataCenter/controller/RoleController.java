@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RoleController {
 
 	@RequestMapping(value="toRole")
-	@RequiresPermissions(value="permission:view")
+	@RequiresPermissions(value="role:view")
 	public String toRole(){
 		return "permission/role";
 	}

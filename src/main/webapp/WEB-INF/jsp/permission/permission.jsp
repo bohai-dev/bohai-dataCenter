@@ -19,6 +19,7 @@
     <!-- put your locale files after bootstrap-table.js -->
     <script src="resources/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
     
+    
     <script type="text/javascript">
         $(function(){
             var treeObj = ${sessionScope.treeView};
@@ -59,7 +60,41 @@
                 data: JSON.stringify(param),
                 success: function (result) {
                     
-                    $('#permissionTree').treeview({data: result,showCheckbox:true});
+                    //$('#permissionTree').treeview({data: result,showCheckbox:true});
+                    var checkableTree=$('#permissionTree').treeview({
+                		data:result,
+                		showCheckbox: true,
+                		levels:1,
+                		
+                		onNodeChecked:function(event,node){
+                			console.log(node.id);
+                			doCheckedNode(node);
+                		},
+                		
+                		onNodeUnchecked:function(event,node){
+                			//child 无父无子
+                			function doUncheckedNode(node){
+                				//初始化
+                				if(node&&node.nodes&&0<node.nodes.length){
+                					var childNodes=node.nodes;
+                					for(var i=0;i<childNodes.length;i++){
+                						//取消选中
+                						$('#permissionTree').treeview('uncheckNode',childNodes[i].nodeId,{silent:true});
+                						//递归
+                						doUncheckedNode(childNodes[i]);
+                						
+                					}
+                				}
+                			}
+                			doUncheckedNode(node);
+                		}
+                	});
+                	 $('#btn-check-all').on('click', function (e) {  
+                		 $('#permissionTree').treeview('checkAll', { silent: true});  
+                     });  
+                     $('#btn-uncheck-all').on('click', function (e) {  
+                    	 $('#permissionTree').treeview('uncheckAll', { silent: true });  
+                     }); 
                     
                 }
             });
@@ -90,7 +125,33 @@
             
         }
         
-        /* var nodeCheckedSilent = false;
+        /* 选中节点事件 */
+        function doCheckedNode(node){
+			//parent		
+			checkAllParent(node);
+			
+			var childNodes=node.nodes;
+			console.log(childNodes);
+			if(childNodes!=null){
+				for(var i=0;i<childNodes.length;i++){
+					$('#permissionTree').treeview('checkNode',childNodes[i].nodeId,{silent:true});
+				}
+			}
+			
+		}
+        
+        function checkAllParent(node){ 
+            
+        	$('#permissionTree').treeview('checkNode',node.nodeId,{silent:true});  
+            var parentNode = $('#permissionTree').treeview('getParent',node);  
+            if(parentNode && 0 <= parentNode.nodeId){  
+                checkAllParent(parentNode);  
+            }else{  
+                return;  
+            }  
+        }  
+        
+               /*/* var nodeCheckedSilent = false;
         function nodeChecked (event, node){  
             if(nodeCheckedSilent){  
                 return;  
@@ -263,6 +324,8 @@
             <h4 class="modal-title" id="myModalLabel">用户权限设置</h4>
           </div>
           <div class="modal-body">
+          <button type="button" class="btn btn-success" id="btn-check-all">Check All</button>  
+        <button type="button" class="btn btn-danger" id="btn-uncheck-all">Uncheck All</button>  
                 <input type="hidden" id="userName" />
                 <div id="permissionTree"></div>
           </div>
