@@ -68,25 +68,15 @@
                 		
                 		onNodeChecked:function(event,node){
                 			console.log(node.id);
-                			doCheckedNode(node);
+                			//doCheckedNode(node);
+                			nodeChecked(event,node);
                 		},
                 		
                 		onNodeUnchecked:function(event,node){
                 			//child 无父无子
-                			function doUncheckedNode(node){
-                				//初始化
-                				if(node&&node.nodes&&0<node.nodes.length){
-                					var childNodes=node.nodes;
-                					for(var i=0;i<childNodes.length;i++){
-                						//取消选中
-                						$('#permissionTree').treeview('uncheckNode',childNodes[i].nodeId,{silent:true});
-                						//递归
-                						doUncheckedNode(childNodes[i]);
-                						
-                					}
-                				}
-                			}
-                			doUncheckedNode(node);
+                			
+                			//doUncheckedNode(node);
+                			nodeUnchecked(event,node);
                 		}
                 	});
                 	 $('#btn-check-all').on('click', function (e) {  
@@ -126,7 +116,7 @@
         }
         
         /* 选中节点事件 */
-        function doCheckedNode(node){
+        /* function doCheckedNode(node){
 			//parent		
 			checkAllParent(node);
 			
@@ -140,6 +130,20 @@
 			
 		}
         
+        function doUncheckedNode(node){
+            //初始化
+            if(node&&node.nodes&&0<node.nodes.length){
+                var childNodes=node.nodes;
+                for(var i=0;i<childNodes.length;i++){
+                    //取消选中
+                    $('#permissionTree').treeview('uncheckNode',childNodes[i].nodeId,{silent:true});
+                    //递归
+                    doUncheckedNode(childNodes[i]);
+                    
+                }
+            }
+        }
+        
         function checkAllParent(node){ 
             
         	$('#permissionTree').treeview('checkNode',node.nodeId,{silent:true});  
@@ -149,9 +153,9 @@
             }else{  
                 return;  
             }  
-        }  
+        } */  
         
-               /*/* var nodeCheckedSilent = false;
+         var nodeCheckedSilent = false;
         function nodeChecked (event, node){  
             if(nodeCheckedSilent){  
                 return;  
@@ -168,7 +172,7 @@
             if(nodeUncheckedSilent)  
                 return;  
             nodeUncheckedSilent = true;  
-            uncheckAllParent(node);  
+            //uncheckAllParent(node);  
             uncheckAllSon(node);  
             nodeUncheckedSilent = false;  
         }  
@@ -177,7 +181,7 @@
         function checkAllParent(node){ 
             $('#permissionTree').treeview('checkNode',node.nodeId,{silent:true});  
             var parentNode = $('#permissionTree').treeview('getParent',node.nodeId);  
-            if(!("id" in parentNode)){  
+            if(!("nodeId" in parentNode)){  
                 return;  
             }else{  
                 checkAllParent(parentNode);  
@@ -188,7 +192,7 @@
             $('#permissionTree').treeview('uncheckNode',node.nodeId,{silent:true});  
             var siblings = $('#permissionTree').treeview('getSiblings', node.nodeId);  
             var parentNode = $('#permissionTree').treeview('getParent',node.nodeId);  
-            if(!("id" in parentNode)) {
+            if(!("nodeId" in parentNode)) {
                 return;  
             }
             var isAllUnchecked = true;  //是否全部没选中  
@@ -221,7 +225,7 @@
                     uncheckAllSon(node.nodes[i]);  
                 }  
             }  
-        } */
+        } 
     </script>
   </head>
 
