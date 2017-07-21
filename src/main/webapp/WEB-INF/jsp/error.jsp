@@ -7,10 +7,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-    <h1>对不起，您没有权限操作</h1>
+    <h1>系统异常，请联系管理员</h1>
     <a href="javascript:history.back()">返回</a>
     <br/>
-    
+    <br/>
+    <br/>
     ${exception}
 </body>
 </html>

@@ -33,8 +33,6 @@ public class LoginController {
 
     @RequestMapping(value="tologin")
     public String tologin(){
-        logger.info("123");
-        System.out.println(123123);
         return "redirect:login.jsp";
     }
     

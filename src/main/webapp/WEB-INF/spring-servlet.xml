@@ -58,6 +58,7 @@
     </bean>
     
 	<!-- 异常处理类 -->
-	<bean class="com.bohai.dataCenter.controller.exception.CommonExceptionResolver"/>
+	<bean class="com.bohai.dataCenter.controller.exception.BohaiExceptionResolver">
+	</bean>
 	
 </beans>

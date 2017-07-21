@@ -342,23 +342,23 @@
                  NET_AMOUNT_SUM += content.NET_AMOUNT;
                  
                  $('#MONTH'+index).html(content.MONTH);
-                 $('#NET_PROFIT'+index).html(content.NET_PROFIT.toFixed(2));
-                 $('#LCSXF'+index).html(content.LCSXF);
-                 $('#SXFJSR'+index).html(content.SXFJSR);
-                 $('#INTEREST'+index).html(content.INTEREST.toFixed(2));
-                 $('#NET_INTEREST'+index).html(content.NET_INTEREST.toFixed(2));
-                 $('#EXCHANGE_RETURN'+index).html(content.EXCHANGE_RETURN.toFixed(2));
-                 $('#NET_AMOUNT'+index).html(content.NET_AMOUNT.toFixed(2));
+                 $('#NET_PROFIT'+index).html(numberFormate(content.NET_PROFIT.toFixed(2)));
+                 $('#LCSXF'+index).html(numberFormate(content.LCSXF));
+                 $('#SXFJSR'+index).html(numberFormate(content.SXFJSR));
+                 $('#INTEREST'+index).html(numberFormate(content.INTEREST.toFixed(2)));
+                 $('#NET_INTEREST'+index).html(numberFormate(content.NET_INTEREST.toFixed(2)));
+                 $('#EXCHANGE_RETURN'+index).html(numberFormate(content.EXCHANGE_RETURN.toFixed(2)));
+                 $('#NET_AMOUNT'+index).html(numberFormate(content.NET_AMOUNT.toFixed(2)));
                  
              });
              //合计
-             $('#NET_PROFIT_SUM').html(NET_PROFIT_SUM.toFixed(2));
-             $('#LCSXF_SUM').html(LCSXF_SUM);
-             $('#SXFJSR_SUM').html(SXFJSR_SUM);
-             $('#INTEREST_SUM').html(INTEREST_SUM.toFixed(2));
-             $('#NET_INTEREST_SUM').html(NET_INTEREST_SUM.toFixed(2));
-             $('#EXCHANGE_RETURN_SUM').html(EXCHANGE_RETURN_SUM.toFixed(2));
-             $('#NET_AMOUNT_SUM').html(NET_AMOUNT_SUM.toFixed(2));
+             $('#NET_PROFIT_SUM').html(numberFormate(NET_PROFIT_SUM.toFixed(2)));
+             $('#LCSXF_SUM').html(numberFormate(LCSXF_SUM));
+             $('#SXFJSR_SUM').html(numberFormate(SXFJSR_SUM));
+             $('#INTEREST_SUM').html(numberFormate(INTEREST_SUM.toFixed(2)));
+             $('#NET_INTEREST_SUM').html(numberFormate(NET_INTEREST_SUM.toFixed(2)));
+             $('#EXCHANGE_RETURN_SUM').html(numberFormate(EXCHANGE_RETURN_SUM.toFixed(2)));
+             $('#NET_AMOUNT_SUM').html(numberFormate(NET_AMOUNT_SUM.toFixed(2)));
              
              $('#investorArea').css('display','block');
              $("#investorArea").jqprint();
@@ -399,24 +399,24 @@
                 
                 
                 $('#MEDIATOR_MONTH'+index).html(content.MONTH);
-                $('#MEDIATOR_NET_PROFIT'+index).html(content.NET_PROFIT.toFixed(2));
-                $('#MEDIATOR_SXFJSR'+index).html(content.SXFJSR.toFixed(2));
-                $('#MEDIATOR_NET_SXFJSR'+index).html((content.SXFJSR - content.DBL16).toFixed(2));
-                $('#MEDIATOR_INTEREST'+index).html(content.INTEREST.toFixed(2));
-                $('#MEDIATOR_NET_INTEREST'+index).html((content.INTEREST - content.INVESTOR_SPECIAL_INTEREST - content.MEDIATOR_SPECIAL_INTEREST).toFixed(2));
-                $('#MEDIATOR_EXCHANGE_RETURN'+index).html(content.EXCHANGE_RETURN.toFixed(2));
-                $('#MEDIATOR_NET_AMOUNT'+index).html((content.EXCHANGE_RETURN - content.INVESTOR_SPECIAL_EXCHANGE - content.MEDIATOR_SPECIAL_EXCHANGE).toFixed(2));
+                $('#MEDIATOR_NET_PROFIT'+index).html(numberFormate(content.NET_PROFIT.toFixed(2)));
+                $('#MEDIATOR_SXFJSR'+index).html(numberFormate(content.SXFJSR.toFixed(2)));
+                $('#MEDIATOR_NET_SXFJSR'+index).html(numberFormate((content.SXFJSR - content.DBL16).toFixed(2)));
+                $('#MEDIATOR_INTEREST'+index).html(numberFormate(content.INTEREST.toFixed(2)));
+                $('#MEDIATOR_NET_INTEREST'+index).html(numberFormate((content.INTEREST - content.INVESTOR_SPECIAL_INTEREST - content.MEDIATOR_SPECIAL_INTEREST).toFixed(2)));
+                $('#MEDIATOR_EXCHANGE_RETURN'+index).html(numberFormate(content.EXCHANGE_RETURN.toFixed(2)));
+                $('#MEDIATOR_NET_AMOUNT'+index).html(numberFormate((content.EXCHANGE_RETURN - content.INVESTOR_SPECIAL_EXCHANGE - content.MEDIATOR_SPECIAL_EXCHANGE).toFixed(2)));
                 
             });
         	
             //合计
-            $('#MEDIATOR_NET_PROFIT_SUM').html(NET_PROFIT_SUM.toFixed(2));
-            $('#MEDIATOR_SXFJSR_SUM').html(SXFJSR_SUM.toFixed(2));
-            $('#MEDIATOR_NET_SXFJSR_SUM').html(NET_SXF_SUM.toFixed(2));
-            $('#MEDIATOR_INTEREST_SUM').html(INTEREST_SUM.toFixed(2));
-            $('#MEDIATOR_NET_INTEREST_SUM').html(NET_INTEREST_SUM.toFixed(2));
-            $('#MEDIATOR_EXCHANGE_RETURN_SUM').html(EXCHANGE_RETURN_SUM.toFixed(2));
-            $('#MEDIATOR_NET_AMOUNT_SUM').html(NET_AMOUNT_SUM.toFixed(2));
+            $('#MEDIATOR_NET_PROFIT_SUM').html(numberFormate(NET_PROFIT_SUM.toFixed(2)));
+            $('#MEDIATOR_SXFJSR_SUM').html(numberFormate(SXFJSR_SUM.toFixed(2)));
+            $('#MEDIATOR_NET_SXFJSR_SUM').html(numberFormate(NET_SXF_SUM.toFixed(2)));
+            $('#MEDIATOR_INTEREST_SUM').html(numberFormate(INTEREST_SUM.toFixed(2)));
+            $('#MEDIATOR_NET_INTEREST_SUM').html(numberFormate(NET_INTEREST_SUM.toFixed(2)));
+            $('#MEDIATOR_EXCHANGE_RETURN_SUM').html(numberFormate(EXCHANGE_RETURN_SUM.toFixed(2)));
+            $('#MEDIATOR_NET_AMOUNT_SUM').html(numberFormate(NET_AMOUNT_SUM.toFixed(2)));
             
             $('#mediatorArea').css('display','block');
             $('#mediatorArea').jqprint();
@@ -454,24 +454,24 @@
                 
                 
                 $('#MARKETER_MONTH'+index).html(content.MONTH);
-                $('#MARKETER_NET_PROFIT'+index).html(content.NET_PROFIT.toFixed(2));
-                $('#MARKETER_SXFJSR'+index).html(content.SXFJSR.toFixed(2));
-                $('#MARKETER_NET_SXFJSR'+index).html((content.SXFJSR - content.DBL16).toFixed(2));
-                $('#MARKETER_INTEREST'+index).html(content.INTEREST.toFixed(2));
-                $('#MARKETER_NET_INTEREST'+index).html((content.INTEREST - content.INVESTOR_SPECIAL_INTEREST - content.MEDIATOR_SPECIAL_INTEREST).toFixed(2));
-                $('#MARKETER_EXCHANGE_RETURN'+index).html(content.EXCHANGE_RETURN.toFixed(2));
-                $('#MARKETER_NET_AMOUNT'+index).html((content.EXCHANGE_RETURN - content.INVESTOR_SPECIAL_EXCHANGE - content.MEDIATOR_SPECIAL_EXCHANGE).toFixed(2));
+                $('#MARKETER_NET_PROFIT'+index).html(numberFormate(content.NET_PROFIT.toFixed(2)));
+                $('#MARKETER_SXFJSR'+index).html(numberFormate(content.SXFJSR.toFixed(2)));
+                $('#MARKETER_NET_SXFJSR'+index).html(numberFormate((content.SXFJSR - content.DBL16).toFixed(2)));
+                $('#MARKETER_INTEREST'+index).html(numberFormate(content.INTEREST.toFixed(2)));
+                $('#MARKETER_NET_INTEREST'+index).html(numberFormate((content.INTEREST - content.INVESTOR_SPECIAL_INTEREST - content.MEDIATOR_SPECIAL_INTEREST).toFixed(2)));
+                $('#MARKETER_EXCHANGE_RETURN'+index).html(numberFormate(content.EXCHANGE_RETURN.toFixed(2)));
+                $('#MARKETER_NET_AMOUNT'+index).html(numberFormate((content.EXCHANGE_RETURN - content.INVESTOR_SPECIAL_EXCHANGE - content.MEDIATOR_SPECIAL_EXCHANGE).toFixed(2)));
                 
             });
             
           //合计
-            $('#MARKETER_NET_PROFIT_SUM').html(NET_PROFIT_SUM.toFixed(2));
-            $('#MARKETER_SXFJSR_SUM').html(SXFJSR_SUM.toFixed(2));
-            $('#MARKETER_NET_SXFJSR_SUM').html(NET_SXF_SUM.toFixed(2));
-            $('#MARKETER_INTEREST_SUM').html(INTEREST_SUM.toFixed(2));
-            $('#MARKETER_NET_INTEREST_SUM').html(NET_INTEREST_SUM.toFixed(2));
-            $('#MARKETER_EXCHANGE_RETURN_SUM').html(EXCHANGE_RETURN_SUM.toFixed(2));
-            $('#MARKETER_NET_AMOUNT_SUM').html(NET_AMOUNT_SUM.toFixed(2));
+            $('#MARKETER_NET_PROFIT_SUM').html(numberFormate(NET_PROFIT_SUM.toFixed(2)));
+            $('#MARKETER_SXFJSR_SUM').html(numberFormate(SXFJSR_SUM.toFixed(2)));
+            $('#MARKETER_NET_SXFJSR_SUM').html(numberFormate(NET_SXF_SUM.toFixed(2)));
+            $('#MARKETER_INTEREST_SUM').html(numberFormate(INTEREST_SUM.toFixed(2)));
+            $('#MARKETER_NET_INTEREST_SUM').html(numberFormate(NET_INTEREST_SUM.toFixed(2)));
+            $('#MARKETER_EXCHANGE_RETURN_SUM').html(numberFormate(EXCHANGE_RETURN_SUM.toFixed(2)));
+            $('#MARKETER_NET_AMOUNT_SUM').html(numberFormate(NET_AMOUNT_SUM.toFixed(2)));
             
             $('#marketerArea').css('display','block');
             $('#marketerArea').jqprint();
