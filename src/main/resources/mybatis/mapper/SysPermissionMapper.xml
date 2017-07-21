@@ -196,6 +196,7 @@
            and a.PARENT_PERMISSION_ID is null
         </if>
     </where>
+    order by sort
   </select>
   
   
