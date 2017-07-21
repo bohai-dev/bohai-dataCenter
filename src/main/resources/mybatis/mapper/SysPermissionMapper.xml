@@ -16,6 +16,7 @@
     <result column="url" property="url" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="HAS_PERMISSION" property="hasPermission" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     <!--
@@ -196,7 +197,29 @@
            and a.PARENT_PERMISSION_ID is null
         </if>
     </where>
-    order by sort
+    order by a.sort
+  </select>
+  
+  
+  <select id="queryPermissionsLeftJoinUserName" resultMap="BaseResultMap" parameterType="java.util.Map">
+    
+    select a.*,b.permission as HAS_PERMISSION
+    from sys_permissions a 
+    left join sys_users_permissions b
+    on a.permission = b.permission
+    
+    and b.USER_NAME=#{userName}
+    
+    <where>
+        <if test="parentPermissionId != null">
+           and a.parent_permission_id = #{parentPermissionId,jdbcType=BIGINT}
+	    </if>
+	    <if test="parentPermissionId == null">
+	       and a.PARENT_PERMISSION_ID is null
+	    </if>
+    </where>
+    
+    order by a.sort
   </select>
   
   

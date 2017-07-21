@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bohai.dataCenter.entity.SysPermission;
 import com.bohai.dataCenter.service.PermissionService;
+import com.bohai.dataCenter.vo.QueryUserPermissionsParamVO;
 import com.bohai.dataCenter.vo.TreeView;
+import com.bohai.dataCenter.vo.UpdateUserPermissionsParamVO;
 
 @Controller
 public class PermissionController {
@@ -24,39 +26,40 @@ public class PermissionController {
     @Autowired
     private PermissionService permissionService;
 
-	@RequestMapping(value="toPermission")
-	//@RequiresPermissions("permission:view")
-	public String toPermission(){
-		return "permission/permission";
-	}
-	
-	/**
-	 * 查询用户拥有的权限
-	 * @return
-	 */
-	@RequestMapping(value="queryUserPermissions")
-	@ResponseBody
-	public List<TreeView<SysPermission>> queryUserPermissions(){
-	    
-	    Subject subject = SecurityUtils.getSubject();
-	    String userName = (String) subject.getPrincipal();
-	    
-	    return this.permissionService.queryUserPermissions(userName, null);
-	}
-	
-	/**
-	 * 更新用户的权限
-	 * @param list
-	 */
-	@RequestMapping(value="updateUserPermissions")
-	@ResponseBody
-	public void updateUserPermissions(@RequestBody List<TreeView<SysPermission>> list){
-	    
-	    Subject subject = SecurityUtils.getSubject();
-        String userName = (String) subject.getPrincipal();
+    @RequestMapping(value="toPermission")
+    @RequiresPermissions("permission:view")
+    public String toPermission(){
+        return "permission/permission";
+    }
+    
+    /**
+     * 查询所有权限及用户是否拥有该权限
+     * @param userName
+     * @param parentPermissionId
+     * @return
+     */
+    @RequestMapping(value="queryUserPermissions")
+    @ResponseBody
+    public List<TreeView<SysPermission>> queryUserPermissions(@RequestBody QueryUserPermissionsParamVO paramVO){
+        
+        logger.debug("查询用户权限入参："+paramVO.getUserName());
+        
+        return this.permissionService.queryUserPermissions(paramVO.getUserName(), null);
+    }
+    
+    /**
+     * 更新用户的权限
+     * @param list
+     */
+    @RequestMapping(value="updateUserPermissions")
+    @ResponseBody
+    public void updateUserPermissions(@RequestBody(required=false) UpdateUserPermissionsParamVO paramVO){
+        
+        String userName = paramVO.getUserName();
+        List<TreeView<SysPermission>> list = paramVO.getPermissionList();
         
         this.permissionService.updateUserPermissions(userName, list);
-	    
-	}
-	
+        
+    }
+    
 }

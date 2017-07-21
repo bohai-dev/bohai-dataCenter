@@ -61,5 +61,7 @@ public interface SysPermissionMapper {
      */
     List<SysPermission> queryPermissionsSelective(Map<String,Object> map);
     
+    List<SysPermission> queryPermissionsLeftJoinUserName(Map<String,Object> map);
+    
     
 }

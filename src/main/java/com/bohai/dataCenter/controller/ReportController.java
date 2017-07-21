@@ -84,6 +84,11 @@ public class ReportController {
 	    return "report/investor";
 	}
 	
+	@RequestMapping(value="toRetainedReport")
+	public String toRetainedReport(){
+	    return "report/retained";
+	}
+	
 	/**
 	 * 查询客户贡献
 	 * @param paramVO
