@@ -102,8 +102,25 @@ public class CrmCustomerServiceImpl implements CrmCustomerService {
                         resultVO.setMarketerName(marketer.getMarketerName());
                         String marketerRate = this.crmMarketerMapper.getMarketerRate(marketer.getMarketerNo());
                         resultVO.setMarketerRate(marketerRate);
+                    }else {
+                        resultVO.setMarketerNo(null);
+                        resultVO.setMarketerName(null);
+                        resultVO.setMarketerRate(null);
                     }
+                }else {
+                    resultVO.setMarketerNo(null);
+                    resultVO.setMarketerName(null);
+                    resultVO.setMarketerRate(null);
                 }
+            }else {
+                resultVO.setMediatorNo(null);
+                resultVO.setMediatorName(null);
+                resultVO.setInterestRate(null);
+                resultVO.setExchangeRate(null);
+                resultVO.setChargeRate(null);
+                resultVO.setMarketerNo(null);
+                resultVO.setMarketerName(null);
+                resultVO.setMarketerRate(null);
             }
         }
         
