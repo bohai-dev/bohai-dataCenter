@@ -32,9 +32,9 @@
             var html = '<button type="button" id="cog'+row.username+'" class="btn btn-default btn-sm" title="设置">'
                          + '<i class="glyphicon glyphicon-cog"></i>'
                      + '</button>'
-                     + '<button type="button" id="trash'+row.username+'" class="btn btn-default btn-sm" title="删除任务">'
+                     /* + '<button type="button" id="trash'+row.username+'" class="btn btn-default btn-sm" title="删除任务">'
                          + '<i class="glyphicon glyphicon-trash"></i>'
-                     + '</button>';
+                     + '</button>' */;
             
             $("#sysUserTable").on("click","#cog"+row.username,row,function(event){
                 
@@ -61,6 +61,7 @@
                 success: function (result) {
                     
                     //$('#permissionTree').treeview({data: result,showCheckbox:true});
+                  
                     var checkableTree=$('#permissionTree').treeview({
                 		data:result,
                 		showCheckbox: true,
@@ -68,6 +69,8 @@
                 		
                 		onNodeChecked:function(event,node){
                 			console.log(node.id);
+
+/*
                 			function doCheckedNode(node){
                 				//parent
                 				var parentNode=$('#permissionTree').treeview('getParent',node);
@@ -89,26 +92,21 @@
                 				}
                 			}
                 			doCheckedNode(node);
+=======
+							*/
+                			//doCheckedNode(node);
+                			nodeChecked(event,node);
+
                 		},
                 		
                 		onNodeUnchecked:function(event,node){
                 			//child 无父无子
-                			function doUncheckedNode(node){
-                				//初始化
-                				if(node&&node.nodes&&0<node.nodes.length){
-                					var childNodes=node.nodes;
-                					for(var i=0;i<childNodes.length;i++){
-                						//取消选中
-                						$('#permissionTree').treeview('uncheckNode',childNodes[i].nodeId,{silent:true});
-                						//递归
-                						doUncheckedNode(childNodes[i]);
-                						
-                					}
-                				}
-                			}
-                			doUncheckedNode(node);
+                			
+                			//doUncheckedNode(node);
+                			nodeUnchecked(event,node);
                 		}
                 	});
+                   
                 	 $('#btn-check-all').on('click', function (e) {  
                 		 $('#permissionTree').treeview('checkAll', { silent: true});  
                      });  
@@ -144,7 +142,52 @@
             });
             
         }
+
                /*/* var nodeCheckedSilent = false;
+=======
+        
+        /* 选中节点事件 */
+        /* function doCheckedNode(node){
+			//parent		
+			checkAllParent(node);
+			
+			var childNodes=node.nodes;
+			console.log(childNodes);
+			if(childNodes!=null){
+				for(var i=0;i<childNodes.length;i++){
+					$('#permissionTree').treeview('checkNode',childNodes[i].nodeId,{silent:true});
+				}
+			}
+			
+		}
+        
+        function doUncheckedNode(node){
+            //初始化
+            if(node&&node.nodes&&0<node.nodes.length){
+                var childNodes=node.nodes;
+                for(var i=0;i<childNodes.length;i++){
+                    //取消选中
+                    $('#permissionTree').treeview('uncheckNode',childNodes[i].nodeId,{silent:true});
+                    //递归
+                    doUncheckedNode(childNodes[i]);
+                    
+                }
+            }
+        }
+        
+        function checkAllParent(node){ 
+            
+        	$('#permissionTree').treeview('checkNode',node.nodeId,{silent:true});  
+            var parentNode = $('#permissionTree').treeview('getParent',node);  
+            if(parentNode && 0 <= parentNode.nodeId){  
+                checkAllParent(parentNode);  
+            }else{  
+                return;  
+            }  
+        } */  
+        
+         var nodeCheckedSilent = false;
+
         function nodeChecked (event, node){  
             if(nodeCheckedSilent){  
                 return;  
@@ -161,7 +204,7 @@
             if(nodeUncheckedSilent)  
                 return;  
             nodeUncheckedSilent = true;  
-            uncheckAllParent(node);  
+            //uncheckAllParent(node);  
             uncheckAllSon(node);  
             nodeUncheckedSilent = false;  
         }  
@@ -170,7 +213,7 @@
         function checkAllParent(node){ 
             $('#permissionTree').treeview('checkNode',node.nodeId,{silent:true});  
             var parentNode = $('#permissionTree').treeview('getParent',node.nodeId);  
-            if(!("id" in parentNode)){  
+            if(!("nodeId" in parentNode)){  
                 return;  
             }else{  
                 checkAllParent(parentNode);  
@@ -181,7 +224,7 @@
             $('#permissionTree').treeview('uncheckNode',node.nodeId,{silent:true});  
             var siblings = $('#permissionTree').treeview('getSiblings', node.nodeId);  
             var parentNode = $('#permissionTree').treeview('getParent',node.nodeId);  
-            if(!("id" in parentNode)) {
+            if(!("nodeId" in parentNode)) {
                 return;  
             }
             var isAllUnchecked = true;  //是否全部没选中  
@@ -214,7 +257,7 @@
                     uncheckAllSon(node.nodes[i]);  
                 }  
             }  
-        } */
+        } 
     </script>
   </head>
 
@@ -317,10 +360,13 @@
             <h4 class="modal-title" id="myModalLabel">用户权限设置</h4>
           </div>
           <div class="modal-body">
-          <button type="button" class="btn btn-success" id="btn-check-all">Check All</button>  
-        <button type="button" class="btn btn-danger" id="btn-uncheck-all">Uncheck All</button>  
+	          <div class="form-group">
+	            <button type="button" class="btn btn-success" id="btn-check-all">Check All</button>  
+	            <button type="button" class="btn btn-danger" id="btn-uncheck-all">Uncheck All</button>  
                 <input type="hidden" id="userName" />
-                <div id="permissionTree"></div>
+              </div>
+                
+              <div id="permissionTree" class="form-group"></div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
