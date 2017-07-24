@@ -61,15 +61,42 @@
                 success: function (result) {
                     
                     //$('#permissionTree').treeview({data: result,showCheckbox:true});
+                  
                     var checkableTree=$('#permissionTree').treeview({
                 		data:result,
                 		showCheckbox: true,
-                		levels:1,
+                		levels:3,
                 		
                 		onNodeChecked:function(event,node){
                 			console.log(node.id);
+
+/*
+                			function doCheckedNode(node){
+                				//parent
+                				var parentNode=$('#permissionTree').treeview('getParent',node);
+                				console.log(parentNode);
+                				if(parentNode && 0 <= parentNode.nodeId){
+                					console.log(parentNode);
+                					//选中
+                					$('#permissionTree').treeview('checkNode',parentNode.nodeId,{silent:true});
+                					doCheckedNode(parentNode);
+                				}
+                				else{
+                					var childNodes=node.nodes;
+                					console.log(childNodes);
+                					if(childNodes!=null){
+                					for(var i=0;i<childNodes.length;i++){
+                						$('#permissionTree').treeview('checkNode',childNodes[i].nodeId,{silent:true});
+                					}
+                					}
+                				}
+                			}
+                			doCheckedNode(node);
+=======
+							*/
                 			//doCheckedNode(node);
                 			nodeChecked(event,node);
+
                 		},
                 		
                 		onNodeUnchecked:function(event,node){
@@ -79,6 +106,7 @@
                 			nodeUnchecked(event,node);
                 		}
                 	});
+                   
                 	 $('#btn-check-all').on('click', function (e) {  
                 		 $('#permissionTree').treeview('checkAll', { silent: true});  
                      });  
@@ -114,6 +142,9 @@
             });
             
         }
+
+               /*/* var nodeCheckedSilent = false;
+=======
         
         /* 选中节点事件 */
         /* function doCheckedNode(node){
@@ -156,6 +187,7 @@
         } */  
         
          var nodeCheckedSilent = false;
+
         function nodeChecked (event, node){  
             if(nodeCheckedSilent){  
                 return;  

@@ -67,6 +67,8 @@ public class SysUser {
      *
      * @mbggenerated Mon Dec 12 08:56:50 CST 2016
      */
+    private String fullName;
+    
     public Long getId() {
         return id;
     }
@@ -226,4 +228,15 @@ public class SysUser {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	
+    
 }
