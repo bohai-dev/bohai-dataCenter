@@ -48,6 +48,7 @@ public class UserController {
 	@RequestMapping(value="updateUser")
 	@ResponseBody
 	public void updateUser(@RequestBody(required=false) SysUser paramVO){
+		paramVO.setUpdateTime(new Date());
 	    this.sysUserMapper.updateByPrimaryKeySelective(paramVO);
 	}
 	
