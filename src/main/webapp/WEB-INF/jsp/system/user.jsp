@@ -5,6 +5,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Welcome  </title>
+     <!-- datepicker -->
+    <link href="resources/bootstrap-datepicker/css/bootstrap-datepicker3.css" rel="stylesheet">
     <!-- jquery -->
     <script type="text/javascript" src="resources/jquery/jquery-3.1.1.min.js"></script>
     <!-- Bootstrap -->
@@ -13,10 +15,20 @@
     <link rel="stylesheet" href="resources/bootstrap-table/bootstrap-table.css">
     <link href="resources/css/dashboard.css" rel="stylesheet">
     <link href="resources/css/sticky-footer.css" rel="stylesheet">
+    
     <script type="text/javascript" src="resources/tree/bootstrap-treeview.min.js"></script>
     <script src="resources/bootstrap-table/bootstrap-table.js"></script>
     <!-- put your locale files after bootstrap-table.js -->
     <script src="resources/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+    
+     <!-- datepicker -->
+    <script src="resources/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="resources/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+    
+    <!-- bootstrap-select -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+    
     <script type="text/javascript">
         function operationFormatter(value,row,index) {
             var html = '<button type="button" id="cog'+index+'" class="btn btn-default btn-sm" title="设置">'
@@ -34,6 +46,46 @@
             $('#tree').treeview({data: treeObj,enableLinks: true});
             $('li a[href="toUser"]').parent().addClass("active");
         });
+        
+       
+function saveSysUser(){
+            
+            var param = {
+            		     username:$('#username').val(),
+                         password:$('#password').val(),
+                         locked:$('#locked').val(),
+                         createTime:$('#createTime').val(),
+                         fullName:$('#fullName').val()
+                         }
+            console.log(param);
+            $.ajax({
+                url: 'saveSysUser',
+                type: 'post',
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify(param),
+                success: function (data,status) {
+                    $('#addModal').modal('hide')
+                	alert("添加成功")
+                    $("#investorTable").bootstrapTable('refresh');
+                }
+            });
+        }
+        
+function queryUsersPagination(){
+    
+    $("#investorTable").bootstrapTable(
+        'refresh',{url:"queryUsersPagination",
+                   query: { username:$('#username').val(),
+                       		password:$('#password').val(),
+                       		locked:$('#locked').val(),
+                       		crateTime:$('#createTime').val(),
+                       		updateTime:$('#updateTime').val()
+                       
+                          }
+                  }
+    );
+}
+
     </script>
   </head>
 
@@ -103,7 +155,8 @@
                     <i class="glyphicon glyphicon-plus"></i>
                 </button>
             </div>
-            <table class="table table-striped"
+            <table id="userTable"
+                   class="table table-striped"
                    data-toggle="table" 
                    data-toolbar="#toolbar"
                    data-show-refresh="true"
@@ -143,6 +196,47 @@
       </div>
     </div>
     
+     <!-- 新建用户模态框 -->
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myModalLabel">新建用户</h4>
+          </div>
+          <div class="modal-body">
+              <form id="addForm" class="form-horizontal" role="form">
+                  
+                  
+                  <div class="form-group">
+                    <label for="username" class="col-sm-3 control-label">用户名</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="username" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="password" class="col-sm-3 control-label">密码</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="password" placeholder="">
+                    </div>
+                  </div>
+
+ 					<div class="form-group">
+                    <label for="fullname" class="col-sm-3 control-label">全名</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="fullName" placeholder="">
+                    </div>
+                  </div>
+                </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary" onclick="saveSysUser()">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </body>
 </html>
