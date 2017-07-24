@@ -191,106 +191,8 @@
 						style="text-decoration: none;">用户管理</a>
 					</h1>
 
-<<<<<<< HEAD
 
-
-          <h2 class="sub-header">用户信息</h2>
-          <div class="table-responsive">
-            <div id="toolbar" class="btn-group">
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addModal" title="创建任务">
-                    <i class="glyphicon glyphicon-plus"></i>
-                </button>
-            </div>
-            <table id="userTable"
-                   class="table table-striped"
-                   data-toggle="table" 
-                   data-toolbar="#toolbar"
-                   data-show-refresh="true"
-                   data-show-toggle="true"
-                   data-show-columns="true"
-                   data-show-export="true"
-                   data-detail-view="true"
-                   data-detail-formatter="detailFormatter"
-                   data-height="542"
-                   data-url="user/queryUsers"
-                   data-pagination="true"
-                   data-side-pagination="server"
-                   data-method="get"
-                   data-page-list="[5, 10, 20, 50]"
-                   data-search="true"
-                   data-height="300">
-                <thead>
-                <tr>
-                    <!-- <th data-field="state" data-checkbox="true"></th> -->
-                    <th data-field="username" data-align="center" >用户名</th>
-                    <th data-field="password" data-formatter="********" data-align="center" >密码</th>
-                    <th data-field="dept" data-align="center" >部门</th>
-                    <th data-field="locked" data-align="center" >状态</th>
-                    <th data-field="createTime" data-align="center" data-sortable="true">创建时间</th>
-                    <th data-field="updateTime" data-align="center" >更新时间</th>
-                    <th data-field="" data-formatter="operationFormatter">操作</th>
-                </tr>
-                </thead>
-            </table>
-          </div>
-        </div>
-      </div>
-      <div class="row placeholders">
-        <footer class="footer">
-                <p class="text-muted">   版权所有 渤海期货    </p>
-        </footer>
-      </div>
-    </div>
     
-     <!-- 新建用户模态框 -->
-    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title" id="myModalLabel">新建用户</h4>
-          </div>
-          <div class="modal-body">
-              <form id="addForm" class="form-horizontal" role="form">
-                  
-                  
-                  <div class="form-group">
-                    <label for="username" class="col-sm-3 control-label">用户名</label>
-                    <div class="col-sm-8">
-                      <input type="text" class="form-control" id="username" placeholder="">
-                    </div>
-                  </div>
-                  
-                  <div class="form-group">
-                    <label for="password" class="col-sm-3 control-label">密码</label>
-                    <div class="col-sm-8">
-                      <input type="text" class="form-control" id="password" placeholder="">
-                    </div>
-                  </div>
-
- 					<div class="form-group">
-                    <label for="fullname" class="col-sm-3 control-label">全名</label>
-                    <div class="col-sm-8">
-                      <input type="text" class="form-control" id="fullName" placeholder="">
-                    </div>
-                  </div>
-                </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button type="button" class="btn btn-primary" onclick="saveSysUser()">保存</button>
-          </div>
-        </div>
-      </div>
-    </div>
-=======
->>>>>>> branch 'dev' of https://github.com/bohai-dev/bohai-dataCenter.git
-
-<<<<<<< HEAD
-
-				
-	
-=======
 					<h2 class="sub-header">用户信息</h2>
 					<div class="table-responsive">
 						<div id="toolbar" class="btn-group">
@@ -384,13 +286,7 @@
 
 
 
-	<div class="row placeholders">
-		<footer class="footer">
-		<p class="text-muted">版权所有 渤海期货</p>
-		</footer>
-	</div>
-	</div>
->>>>>>> branch 'dev' of https://github.com/bohai-dev/bohai-dataCenter.git
+
 	<!-- 修改用户户模态框 -->
 	<div class="modal fade" id="editModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true">
