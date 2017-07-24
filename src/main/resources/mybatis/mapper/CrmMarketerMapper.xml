@@ -381,7 +381,7 @@
   </select>
   
   <select id="queryMarketerProfit" parameterType="com.bohai.dataCenter.vo.QueryMarketerProfitParamVO" resultType="java.util.Map">
-    select MONTH ,
+    select to_char(TO_DATE(MONTH,'yyyymm'),'yyyy-mm') as  MONTH ,
 			MARKETER_NO ,
 			MARKETER_NAME ,
 			INTEREST ,

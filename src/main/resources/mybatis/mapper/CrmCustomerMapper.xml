@@ -404,7 +404,7 @@
   <!-- 查询投资者产生的利润 -->
   <select id="queryInvestorProfit" parameterType="com.bohai.dataCenter.vo.QueryInvestorProfitParamVO" resultType="java.util.Map">
     
-    select MONTH ,
+    select to_char(TO_DATE(MONTH,'yyyymm'),'yyyy-mm') as  MONTH,
 			INVESTOR_NO ,
 			INVESTOR_NAME ,
 			INTEREST ,

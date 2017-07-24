@@ -75,7 +75,7 @@ public class QueryInvestorOverviewResultVO {
     }
 
     public void setMarketerRate(String marketerRate) {
-        this.marketerRate = marketerRate;
+        this.marketerRate = marketerRate ==null?"无": marketerRate;
     }
 
     public String getInvestorNo() {

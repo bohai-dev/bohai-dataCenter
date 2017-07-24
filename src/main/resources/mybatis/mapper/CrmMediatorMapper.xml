@@ -426,7 +426,7 @@
   </select>
   
   <select id="queryMediatorProfit" parameterType="com.bohai.dataCenter.vo.QueryMediatorProfitParamVO" resultType="java.util.Map">
-    select MONTH ,
+    select to_char(TO_DATE(MONTH,'yyyymm'),'yyyy-mm') as  MONTH ,
 			MEDIATOR_NO ,
 			MEDIATOR_NAME ,
 			SXFJSR ,
