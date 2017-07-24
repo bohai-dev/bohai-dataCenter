@@ -31,6 +31,8 @@ public class UserServiceImpl implements UserService {
 			userVO.setPassword(user.getPassword());
 			userVO.setCreateTime(user.getCreateTime());
 			userVO.setUpdateTime(user.getUpdateTime());
+			userVO.setId(user.getId());
+			
 			if(user.getLocked() != null){
 				String locked = user.getLocked().equals("0")?"正常":"锁定";
 				userVO.setLocked(locked);

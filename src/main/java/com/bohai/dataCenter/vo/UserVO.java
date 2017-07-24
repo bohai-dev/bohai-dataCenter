@@ -5,7 +5,26 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class UserVO {
+	private Long id;
+	private String full_name;
 	
+
+	public String getFull_name() {
+		return full_name;
+	}
+
+	public void setFull_name(String full_name) {
+		this.full_name = full_name;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	/**
 	 * 用户名
 	 */
