@@ -22,7 +22,10 @@
 <script src="resources/bootstrap-table/bootstrap-table.js"></script>
 <!-- put your locale files after bootstrap-table.js -->
 <script src="resources/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+
 <script type="text/javascript">
+
+
 
         function operationFormatter(value,row,index) {
             var html = '<button type="button" id="cog'+index+'" class="btn btn-default btn-sm" title="设置">'
@@ -121,6 +124,8 @@ function queryUsersPagination(){
     );
 }
 
+
+	
     </script>
 </head>
 
@@ -167,24 +172,8 @@ function queryUsersPagination(){
 						style="text-decoration: none;">用户管理</a>
 					</h1>
 
-<<<<<<< HEAD
-					<div class="row placeholders">
-						<div class="col-xs-6 col-sm-3 placeholder">
-							<div class="row placeholders">
-								<div class="col-xs-3 col-sm-3 placeholder">
-									<label for="name">用户名：</label>
-								</div>
-								<div class="col-xs-6 col-sm-6 placeholder ">
-									<input type="text" class="form-control" id="name"
-										placeholder="">
-								</div>
-							</div>
-						</div>
-						<div class="col-xs-6 col-sm-3 placeholder">123</div>
-						<div class="col-xs-6 col-sm-3 placeholder">123</div>
-						<div class="col-xs-6 col-sm-3 placeholder">123</div>
-					</div>
-=======
+
+
           <h2 class="sub-header">用户信息</h2>
           <div class="table-responsive">
             <div id="toolbar" class="btn-group">
@@ -274,49 +263,10 @@ function queryUsersPagination(){
         </div>
       </div>
     </div>
->>>>>>> branch 'dev' of https://github.com/bohai-dev/bohai-dataCenter
 
-					<h2 class="sub-header">用户信息</h2>
-					<div class="table-responsive">
-						<div id="toolbar" class="btn-group">
-							<button type="button" class="btn btn-default" data-toggle="modal"
-								data-target="#addModal" title="创建任务">
-								<i class="glyphicon glyphicon-plus"></i>
-							</button>
-						</div>
-						<table id="userTable" class="table table-striped"
-							data-toggle="table" data-toolbar="#toolbar"
-							data-show-refresh="true" data-show-toggle="true"
-							data-show-columns="true" data-show-export="true"
-							data-detail-view="true" data-detail-formatter="detailFormatter"
-							data-height="542" data-url="user/queryUsers"
-							data-pagination="true" data-side-pagination="server"
-							data-method="get" data-page-list="[5, 10, 20, 50]"
-							data-search="true" data-height="300">
-							<thead>
-								<tr>
-									<!-- <th data-field="state" data-checkbox="true"></th> -->
-									<th data-field="username" data-align="center">用户名</th>
-									<th data-field="password" data-formatter="********"
-										data-align="center">密码</th>
-									<th data-field="dept" data-align="center">部门</th>
-									<th data-field="locked" data-align="center">状态</th>
-									<th data-field="createTime" data-align="center"
-										data-sortable="true">创建时间</th>
-									<th data-field="updateTime" data-align="center">更新时间</th>
-									<th data-field="" data-formatter="operationFormatter">操作</th>
-								</tr>
-							</thead>
-						</table>
-					</div>
-			</div>
-		</div>
-		<div class="row placeholders">
-			<footer class="footer">
-			<p class="text-muted">版权所有 渤海期货</p>
-			</footer>
-		</div>
-	</div>
+
+				
+	
 	<!-- 修改用户户模态框 -->
 	<div class="modal fade" id="editModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true">
