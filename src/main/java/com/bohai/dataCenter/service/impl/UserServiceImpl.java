@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 			userVO.setCreateTime(user.getCreateTime());
 			userVO.setUpdateTime(user.getUpdateTime());
 			userVO.setId(user.getId());
-			
+			userVO.setFullName(user.getFullName());
 			if(user.getLocked() != null){
 				String locked = user.getLocked().equals("0")?"正常":"锁定";
 				userVO.setLocked(locked);
