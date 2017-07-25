@@ -99,15 +99,15 @@
             //柱状图
             var myChart2 = echarts.init(document.getElementById('chart2'));
             var depName;
-            myChart.on('click',function(params){
+            var year;
+            myChart.on('click',function(params){            	
                 // 点击到了 pie 上
                 if (params.componentType === 'series') {
                // 点击到了 index 为 1 的 series 的 pie 上。   
-                     if (params.seriesIndex === 1) {
-                    	 
-                         console.log(params.data);
+                     if (params.seriesIndex === 1) {                    	
                     	 var json = params.data;
                     	 depName=json.name;
+                    	 year=(json.date).split('-')[0];
                     	 var seriesData = new Array();
                     	 var insterestJson = {};
                     	 insterestJson['value'] = json.interest;
@@ -155,7 +155,7 @@
                                  
                                  option2 = {
                                 		title : {
-                                 	        text: depName+'利润分布柱状图',
+                                 	        text: depName+year+'年'+'利润分布柱状图',
                                  	        x:'center'
                                  	    },
                                 		 tooltip : {
@@ -167,7 +167,8 @@
                                  	    },
                                  	    legend: {
                                  	    	 x: 'left',
-                                 	        data: ['净利润', '毛利润']
+                                 	        data: ['净利润', '毛利润'],
+                                 	        selectedMode:false
                                  	    },
                                  	    grid: {
                                  	        left: '3%',
@@ -246,7 +247,6 @@
                 success: function (result) {
                     var legendData = new Array();
                     var seriesData = new Array();
-                    
                     $.each(result, function(index, content){
                         legendData[index] = content.depName;
                         var json = {};
@@ -255,6 +255,7 @@
                         json['interest'] = content.interest;
                         json['exchangeReturnTicktix'] = content.exchangeReturnTicktix;
                         json['commission'] = content.commission;
+                        json['date']=content.month;
                         seriesData[index] = json;
                     });
                     
@@ -320,7 +321,7 @@
         	 //饼图
             var myChart = echarts.init(document.getElementById('pieCharts'));
            
-        	console.log($("#datepicker").val());
+        //	console.log($("#datepicker").val());
         	
         	var jsonMonth={month:$("#datepicker").val()};
         	$.ajax({
@@ -343,6 +344,7 @@
                         json['interest'] = content.interest;
                         json['exchangeReturnTicktix'] = content.exchangeReturnTicktix;
                         json['commission'] = content.commission;
+                        json['date']=content.month;
                         seriesData[index] = json;
                     });
                     
@@ -396,6 +398,7 @@
                     
                 }else{
                 	$("#pieCharts").hide(1000);
+                	$("#barDiv").hide(1000);
                 	alert("该月份暂无数据");
                 }
                }

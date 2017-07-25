@@ -43,9 +43,10 @@
   </select> -->
    <select id="selectByDep" resultMap="BaseResultMap" parameterType="com.bohai.dataCenter.vo.QueryDepProfitBarChartParamVO">
    select a.month,nvl(a.DEP_PROFIT,0) as dep_profit, nvl(a.INTEREST+a.EXCHANGE_RETURN_TICKTIX+a.COMMISSION,0) as allProfit from T_REPORT_DEP a 
-   where 
+   where
      <if test=" year!= null and year!= ''">
-        a.month like #{year} and
+        a.month like #{year}||'%'
+
     </if>
     <if test="depName != null and depName != ''">
         a.DEP_NAME= #{depName}

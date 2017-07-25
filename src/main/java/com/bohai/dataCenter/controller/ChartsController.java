@@ -71,17 +71,22 @@ public class ChartsController {
     @ResponseBody
     public ReportDep[] queryMonthProfitByDep(@RequestBody(required=false) QueryDepProfitBarChartParamVO paramVO){
     	ReportDep[] reportDepArray=new ReportDep[12];
-    	for(int i=0;i<reportDepArray.length;i++){
-    		reportDepArray[i].setAllProfit(new BigDecimal("10"));
-    		reportDepArray[i].setDepProfit(new BigDecimal("10"));
+
+    	for(int i=0;i<reportDepArray.length;i++) {
+    		reportDepArray[i]=new ReportDep();
+    		reportDepArray[i].setAllProfit(new BigDecimal(0));
+    		reportDepArray[i].setDepProfit(new BigDecimal(0));
+
     	}
     	List<ReportDep> listReportDep=reportDepMapper.selectByDep(paramVO);
     	System.out.println("=====================================");
     	for (int i = 0; i < listReportDep.size(); i++) {
+
 			System.out.println(listReportDep.get(i).getMonth());
 		}
     	System.out.println("=====================================");
     	for (int i = 0; i < listReportDep.size(); i++) {
+
 			if(listReportDep.get(i).getMonth().split("-")[1].equals("01")){
 				reportDepArray[0]=listReportDep.get(i);
 			}else if(listReportDep.get(i).getMonth().split("-")[1].equals("02")){
@@ -109,6 +114,8 @@ public class ChartsController {
 			}
 			
 		}
-        return reportDepArray ;
+
+        return reportDepArray;
+
     }
 }

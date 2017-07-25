@@ -58,7 +58,6 @@ public class CrmCustomerController {
 	    
 	    PageHelper.startPage(paramVO.getPageNumber(), paramVO.getPageSize());
 		List<CrmCustomer> list = this.crmCustomerMapper.selectByCondition(paramVO);
-		
 		Page<CrmCustomer> page = (Page)list;
 		TableJsonResponse<CrmCustomer> response = new TableJsonResponse<CrmCustomer>();
 		response.setTotal(page.getTotal());
