@@ -398,7 +398,7 @@
                    data-show-toggle="true"
                    data-show-columns="true"
                    data-show-export="true"
-                   data-detail-view="true"
+                   data-detail-view="false"
                    data-detail-formatter="detailFormatter"
                    data-height="562"
                    data-url="queryCrmMarketer"
