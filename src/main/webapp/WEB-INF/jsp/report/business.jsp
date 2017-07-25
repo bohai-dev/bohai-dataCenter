@@ -66,13 +66,25 @@
         //柱状图毛利润显示
         function numformat(params){
         	
-        	return params.value=allProfitList[params.dataIndex];
+        	return params.value=numMod(allProfitList[params.dataIndex]);
+        }
+        //柱状图净利润，加分号
+        function barProfit(params){
+        	
+        	return params.value=numMod(params.value);
         }
         //毛利润阴影显示
         function profitFormat(params){
         	
-        	return '净利润：'+params[0].value+'<br>毛利润：'+allProfitList[params[1].dataIndex];
+        	return '净利润：'+numMod(params[0].value)+'<br>毛利润：'+numMod(allProfitList[params[1].dataIndex]);
         	
+        }
+        function profitPieFormat(params){
+        	
+        	return params.seriesName+'<br>'+params.name+':'+numMod(params.value)+'('+params.percent+'%)';
+        }
+        function numMod(num){
+        	return (num+'').replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
         }
         $(function(){
             var treeObj = ${sessionScope.treeView};
@@ -100,16 +112,14 @@
             var myChart2 = echarts.init(document.getElementById('chart2'));
             var depName;
             var year;
-            myChart.on('click',function(params){
-            	console.log(params);
+            myChart.on('click',function(params){            	
                 // 点击到了 pie 上
                 if (params.componentType === 'series') {
                // 点击到了 index 为 1 的 series 的 pie 上。   
-                     if (params.seriesIndex === 1) {
-                    	
+                     if (params.seriesIndex === 1) {                    	
                     	 var json = params.data;
                     	 depName=json.name;
-                    	 year=json.date.split('-')[0];
+                    	 year=(json.date).split('-')[0];
                     	 var seriesData = new Array();
                     	 var insterestJson = {};
                     	 insterestJson['value'] = json.interest;
@@ -157,7 +167,7 @@
                                  
                                  option2 = {
                                 		title : {
-                                 	        text: depName+'利润分布柱状图',
+                                 	        text: depName+year+'年'+'利润分布柱状图',
                                  	        x:'center'
                                  	    },
                                 		 tooltip : {
@@ -198,7 +208,7 @@
                                  	                normal: {
                                  	                    show: true,
                                  	                    position: 'insideRight',
-                                 	                   
+                                 	                    formatter:barProfit
                                  	                }
                                  	            },
                                  	            data: profitList
@@ -248,8 +258,6 @@
                 success: function (result) {
                     var legendData = new Array();
                     var seriesData = new Array();
-                    console.log('初始数据');
-                    console.log(result);
                     $.each(result, function(index, content){
                         legendData[index] = content.depName;
                         var json = {};
@@ -269,7 +277,8 @@
                     	    },
                             tooltip: {
                                 trigger: 'item',
-                                formatter: "{a} <br/>{b}: {c} ({d}%)"
+                               // formatter: "{a} <br/>{b}: "+("{c}")+" ({d}%)"
+                                formatter: profitPieFormat
                             },
                             legend: {
                                 orient: 'vertical',
@@ -324,7 +333,7 @@
         	 //饼图
             var myChart = echarts.init(document.getElementById('pieCharts'));
            
-        	console.log($("#datepicker").val());
+        //	console.log($("#datepicker").val());
         	
         	var jsonMonth={month:$("#datepicker").val()};
         	$.ajax({
@@ -347,6 +356,7 @@
                         json['interest'] = content.interest;
                         json['exchangeReturnTicktix'] = content.exchangeReturnTicktix;
                         json['commission'] = content.commission;
+                        json['date']=content.month;
                         seriesData[index] = json;
                     });
                     
@@ -357,7 +367,7 @@
                     	    },
                             tooltip: {
                                 trigger: 'item',
-                                formatter: "{a} <br/>{b}: {c} ({d}%)"
+                                formatter: "{a} <br/>{b}: "+numMod("{c}")+" ({d}%)"
                             },
                             legend: {
                                 orient: 'vertical',
@@ -400,6 +410,7 @@
                     
                 }else{
                 	$("#pieCharts").hide(1000);
+                	$("#barDiv").hide(1000);
                 	alert("该月份暂无数据");
                 }
                }
