@@ -353,8 +353,8 @@
              });
              //合计
              $('#NET_PROFIT_SUM').html(numberFormate(NET_PROFIT_SUM.toFixed(2)));
-             $('#LCSXF_SUM').html(numberFormate(LCSXF_SUM));
-             $('#SXFJSR_SUM').html(numberFormate(SXFJSR_SUM));
+             $('#LCSXF_SUM').html(numberFormate(LCSXF_SUM.toFixed(2)));
+             $('#SXFJSR_SUM').html(numberFormate(SXFJSR_SUM.toFixed(2)));
              $('#INTEREST_SUM').html(numberFormate(INTEREST_SUM.toFixed(2)));
              $('#NET_INTEREST_SUM').html(numberFormate(NET_INTEREST_SUM.toFixed(2)));
              $('#EXCHANGE_RETURN_SUM').html(numberFormate(EXCHANGE_RETURN_SUM.toFixed(2)));
