@@ -153,7 +153,7 @@
                              type: 'post',
                              dataType: 'json',
                              contentType: "application/json;charset=UTF-8",
-                             data: JSON.stringify({'depName':depName,'year':$("#datepicker").val()}),
+                             data: JSON.stringify({'depName':depName,'year':year}),
                              success: function (result) {
                             	
                             	 var profitList=new Array();       //净利润数组
@@ -247,7 +247,6 @@
                 }
                 
             });
-            
             
             
             $.ajax({
@@ -368,7 +367,7 @@
                     	    },
                             tooltip: {
                                 trigger: 'item',
-                              
+                                formatter: "{a} <br/>{b}: "+numMod("{c}")+" ({d}%)"
                             },
                             legend: {
                                 orient: 'vertical',
