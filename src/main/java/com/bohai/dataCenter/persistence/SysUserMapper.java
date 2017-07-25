@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.bohai.dataCenter.entity.SysUser;
-import com.bohai.dataCenter.vo.QueryUserParamVO;
-import com.bohai.dataCenter.vo.UserVO;
 
 public interface SysUserMapper {
     /**
