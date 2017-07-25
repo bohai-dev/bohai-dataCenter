@@ -177,4 +177,5 @@
     <include refid="Base_Column_List" />
     from sys_users
   </select>
+
 </mapper>

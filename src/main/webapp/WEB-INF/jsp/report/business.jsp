@@ -22,6 +22,9 @@
     <!-- the main fileinput plugin file -->
     <script src="resources/fileInput/js/fileinput.min.js"></script>
     
+     <!-- datepicker -->
+    <link href="resources/bootstrap-datepicker/css/bootstrap-datepicker3.css" rel="stylesheet">
+    
     <!-- Bootstrap -->
     <script type="text/javascript" src="resources/bootstrap/js/bootstrap.min.js"></script>
     <link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -43,6 +46,10 @@
     
     <!-- echarts -->
     <script src="resources/echarts/echarts.min.js"></script>
+    
+    <!-- datepicker -->
+    <script src="resources/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="resources/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
     
     <script type="text/javascript">
         function operationFormatter(value,row,index) {
@@ -71,6 +78,22 @@
             var treeObj = ${sessionScope.treeView};
             $('#tree').treeview({data: treeObj,enableLinks: true});
             $('li a[href="toBusinessReport"]').parent().addClass("active");
+            
+            /* 初始化datepicker */
+           $(function(){
+            $('#datepicker').datepicker({
+                format: "yyyy-mm",
+                  startView: 1,
+                  minViewMode: 1,
+                  maxViewMode: 2,
+                  todayBtn: "linked",
+                  clearBtn: true,
+                  language: "zh-CN",
+                  autoclose: true,
+                  todayHighlight: true
+            });
+           });      
+            
             //饼图
             var myChart = echarts.init(document.getElementById('pieCharts'));
             //柱状图
@@ -82,7 +105,7 @@
                // 点击到了 index 为 1 的 series 的 pie 上。   
                      if (params.seriesIndex === 1) {
                     	 
-                        // console.log(params.data);
+                         console.log(params.data);
                     	 var json = params.data;
                     	 depName=json.name;
                     	 var seriesData = new Array();
@@ -118,7 +141,7 @@
                              type: 'post',
                              dataType: 'json',
                              contentType: "application/json;charset=UTF-8",
-                             data: JSON.stringify({'depName':depName}),
+                             data: JSON.stringify({'depName':depName,'year':year}),
                              success: function (result) {
                             	
                             	 var profitList=new Array();       //净利润数组
@@ -291,6 +314,93 @@
         
         });
         
+        
+        function countDepReport(){
+        	 //饼图
+            var myChart = echarts.init(document.getElementById('pieCharts'));
+           
+        	console.log($("#datepicker").val());
+        	
+        	var jsonMonth={month:$("#datepicker").val()};
+        	$.ajax({
+                url: 'queryMarketProfitPieChart',
+                type: 'post',
+                dataType: 'json',
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify(jsonMonth),
+                success: function (result) {
+                	if(result.length>0){
+                	$("#pieCharts").show(1000);
+                    var legendData = new Array();
+                    var seriesData = new Array();
+                    
+                    $.each(result, function(index, content){
+                        legendData[index] = content.depName;
+                        var json = {};
+                        json['value'] = (content.interest + content.exchangeReturnTicktix + content.commission).toFixed(2);
+                        json['name'] = content.depName;
+                        json['interest'] = content.interest;
+                        json['exchangeReturnTicktix'] = content.exchangeReturnTicktix;
+                        json['commission'] = content.commission;
+                        seriesData[index] = json;
+                    });
+                    
+                    option = {
+                    		title : {
+                    	        text: result[0].month+'营业部利润分布饼图',
+                    	        x:'center'
+                    	    },
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: "{a} <br/>{b}: {c} ({d}%)"
+                            },
+                            legend: {
+                                orient: 'vertical',
+                                x: 'left',
+                                data:legendData
+                            },
+                            series: [
+                                {
+                                    name:'利润组成',
+                                    type:'pie',
+                                    selectedMode: 'single',
+                                    radius: [0, '35%'],
+
+                                    label: {
+                                        normal: {
+                                            position: 'inner'
+                                        }
+                                    },
+                                    labelLine: {
+                                        normal: {
+                                            show: false
+                                        }
+                                    },
+                                    data:[
+                                      /*   {value:335, name:'直达'},
+                                        {value:679, name:'营销广告'},
+                                        {value:1548, name:'搜索引擎'} */
+                                    ]
+                                },
+                                {
+                                    name:'毛利润',
+                                    type:'pie',
+                                    radius: ['45%', '60%'],
+
+                                    data:seriesData
+                                }
+                            ]
+                        };
+                    myChart.setOption(option);
+                    
+                }else{
+                	$("#pieCharts").hide(1000);
+                	alert("该月份暂无数据");
+                }
+               }
+            });
+        	
+        }
     </script>
   </head>
 
@@ -328,6 +438,7 @@
             <div id="tree"></div>
             
         </div>
+        
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h4 class="page-header"><a href="toHome" style="text-decoration: none;"><i class="glyphicon glyphicon-home"></i></a> --> <a href="toBusinessReport" style="text-decoration: none;">统计报表</a> --> <a href="toBusinessReport" style="text-decoration: none;">营业部统计表</a></h1>
 
@@ -347,6 +458,10 @@
                });
             </script> -->
             
+            	<div class="form-group">
+                <label for="datepicker">请选择统计年月： <input type="text" class="form-control" id="datepicker"></label>
+                <input class="btn btn-default" type="button" value="开始统计" onclick="countDepReport()">
+              	</div>
             
                 <div class="col-sm-12 col-md-12">
                     <div id="pieCharts" style="width: 100%;height:800px;"></div>

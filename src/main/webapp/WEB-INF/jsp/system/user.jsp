@@ -207,7 +207,7 @@
 							data-show-columns="true" data-show-export="true"
 							data-detail-view="true" data-detail-formatter="detailFormatter"
 							data-height="542" data-url="user/queryUsers"
-							data-pagination="true" data-side-pagination="server"
+							data-pagination="true"
 							data-method="get" data-page-list="[5, 10, 20, 50]"
 							data-search="true" data-height="300">
 							<thead>
