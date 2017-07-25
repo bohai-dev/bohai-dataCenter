@@ -319,8 +319,8 @@
                    data-height="542"
                    data-url="user/queryUsers"
                    data-pagination="true"
-                   data-side-pagination="server"
-                   data-method="get"
+                   data-side-pagination="client"
+                   data-method="post"
                    data-page-list="[5, 10, 20, 50]"
                    data-search="true"
                    data-height="300">

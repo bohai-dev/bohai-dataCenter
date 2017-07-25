@@ -202,15 +202,23 @@
 							</button>
 						</div>
 
-						<table id="userTable" class="table table-striped"
-							data-toggle="table" data-toolbar="#toolbar"
-							data-show-refresh="true" data-show-toggle="true"
-							data-show-columns="true" data-show-export="true"
-							data-detail-view="false" data-detail-formatter="detailFormatter"
-							data-height="542" data-url="user/queryUsers"
+						<table id="userTable"
+						 	class="table table-striped"
+							data-toggle="table"
+							data-toolbar="#toolbar"
+							data-show-refresh="true"
+							data-show-toggle="true"
+							data-show-columns="true"
+							data-show-export="true"
+							data-detail-view="false"
+							data-detail-formatter="detailFormatter"
+							data-height="542"
+							data-url="user/queryUsers"
 							data-pagination="true"
-							data-method="get" data-page-list="[5, 10, 20, 50]"
-							data-search="true" data-height="300">
+							data-method="post"
+							data-page-list="[5, 10, 20, 50]"
+							data-search="true"
+							data-height="300">
 
 							<thead>
 								<tr>
