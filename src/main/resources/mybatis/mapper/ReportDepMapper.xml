@@ -49,7 +49,7 @@
 
     </if>
     <if test="depName != null and depName != ''">
-        a.DEP_NAME= #{depName}
+        and a.DEP_NAME= #{depName}
     </if>
    
   </select>
