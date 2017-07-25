@@ -202,6 +202,7 @@
 							</button>
 						</div>
 
+
 						<table id="userTable" 
 							class="table table-striped"
 							data-toggle="table" 
@@ -212,7 +213,7 @@
 							data-show-export="true"
 							data-detail-view="false" 
 							data-detail-formatter="detailFormatter"
-							data-height="542" 
+							data-height="542" 			
 							data-url="user/queryUsers"
 							data-pagination="true"
 							data-method="get" 

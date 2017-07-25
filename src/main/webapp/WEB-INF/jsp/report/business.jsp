@@ -66,13 +66,25 @@
         //柱状图毛利润显示
         function numformat(params){
         	
-        	return params.value=allProfitList[params.dataIndex];
+        	return params.value=numMod(allProfitList[params.dataIndex]);
+        }
+        //柱状图净利润，加分号
+        function barProfit(params){
+        	
+        	return params.value=numMod(params.value);
         }
         //毛利润阴影显示
         function profitFormat(params){
         	
-        	return '净利润：'+params[0].value+'<br>毛利润：'+allProfitList[params[1].dataIndex];
+        	return '净利润：'+numMod(params[0].value)+'<br>毛利润：'+numMod(allProfitList[params[1].dataIndex]);
         	
+        }
+        function profitPieFormat(params){
+        	
+        	return params.seriesName+'<br>'+params.name+':'+numMod(params.value)+'('+params.percent+'%)';
+        }
+        function numMod(num){
+        	return (num+'').replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
         }
         $(function(){
             var treeObj = ${sessionScope.treeView};
@@ -196,7 +208,7 @@
                                  	                normal: {
                                  	                    show: true,
                                  	                    position: 'insideRight',
-                                 	                   
+                                 	                    formatter:barProfit
                                  	                }
                                  	            },
                                  	            data: profitList
@@ -266,7 +278,8 @@
                     	    },
                             tooltip: {
                                 trigger: 'item',
-                                formatter: "{a} <br/>{b}: {c} ({d}%)"
+                               // formatter: "{a} <br/>{b}: "+("{c}")+" ({d}%)"
+                                formatter: profitPieFormat
                             },
                             legend: {
                                 orient: 'vertical',
@@ -355,7 +368,7 @@
                     	    },
                             tooltip: {
                                 trigger: 'item',
-                                formatter: "{a} <br/>{b}: {c} ({d}%)"
+                              
                             },
                             legend: {
                                 orient: 'vertical',
