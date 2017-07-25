@@ -99,15 +99,17 @@
             //柱状图
             var myChart2 = echarts.init(document.getElementById('chart2'));
             var depName;
+            var year;
             myChart.on('click',function(params){
+            	console.log(params);
                 // 点击到了 pie 上
                 if (params.componentType === 'series') {
                // 点击到了 index 为 1 的 series 的 pie 上。   
                      if (params.seriesIndex === 1) {
-                    	 
-                         console.log(params.data);
+                    	
                     	 var json = params.data;
                     	 depName=json.name;
+                    	 year=json.date.split('-')[0];
                     	 var seriesData = new Array();
                     	 var insterestJson = {};
                     	 insterestJson['value'] = json.interest;
@@ -167,7 +169,8 @@
                                  	    },
                                  	    legend: {
                                  	    	 x: 'left',
-                                 	        data: ['净利润', '毛利润']
+                                 	        data: ['净利润', '毛利润'],
+                                 	        selectedMode:false
                                  	    },
                                  	    grid: {
                                  	        left: '3%',
@@ -245,7 +248,8 @@
                 success: function (result) {
                     var legendData = new Array();
                     var seriesData = new Array();
-                    
+                    console.log('初始数据');
+                    console.log(result);
                     $.each(result, function(index, content){
                         legendData[index] = content.depName;
                         var json = {};
@@ -254,6 +258,7 @@
                         json['interest'] = content.interest;
                         json['exchangeReturnTicktix'] = content.exchangeReturnTicktix;
                         json['commission'] = content.commission;
+                        json['date']=content.month;
                         seriesData[index] = json;
                     });
                     

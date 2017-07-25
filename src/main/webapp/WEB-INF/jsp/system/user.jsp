@@ -201,6 +201,7 @@
 								<i class="glyphicon glyphicon-plus"></i>
 							</button>
 						</div>
+
 						<table id="userTable" class="table table-striped"
 							data-toggle="table" data-toolbar="#toolbar"
 							data-show-refresh="true" data-show-toggle="true"
@@ -210,6 +211,7 @@
 							data-pagination="true"
 							data-method="get" data-page-list="[5, 10, 20, 50]"
 							data-search="true" data-height="300">
+
 							<thead>
 								<tr>
 									<!-- <th data-field="state" data-checkbox="true"></th> -->
