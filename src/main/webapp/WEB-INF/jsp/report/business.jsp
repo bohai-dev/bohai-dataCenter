@@ -141,7 +141,7 @@
                              type: 'post',
                              dataType: 'json',
                              contentType: "application/json;charset=UTF-8",
-                             data: JSON.stringify({'depName':depName,'year':year}),
+                             data: JSON.stringify({'depName':depName,'year':$("#datepicker").val()}),
                              success: function (result) {
                             	
                             	 var profitList=new Array();       //净利润数组
@@ -234,6 +234,7 @@
                 }
                 
             });
+            
             
             
             $.ajax({
