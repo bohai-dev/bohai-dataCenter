@@ -208,6 +208,13 @@
                 });
             });
             
+            $("#queryForm").keypress(function(e){
+                var eCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+                if (eCode == 13){
+                    //自己写判断函数
+                    queryCrmMarketer();
+                }
+            });
             
         });
         
