@@ -272,7 +272,7 @@
                     
                     option = {
                     		title : {
-                    	        text: result[0].month+'营业部利润分布饼图',
+                    	        text: result[0].month+'各营业部利润分布饼图',
                     	        x:'center'
                     	    },
                             tooltip: {
@@ -366,8 +366,7 @@
                     	        x:'center'
                     	    },
                             tooltip: {
-                                trigger: 'item',
-                                formatter: "{a} <br/>{b}: "+numMod("{c}")+" ({d}%)"
+                                trigger: 'item'
                             },
                             legend: {
                                 orient: 'vertical',

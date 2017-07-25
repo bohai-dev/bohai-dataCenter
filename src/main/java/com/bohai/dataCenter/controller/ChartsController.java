@@ -79,12 +79,7 @@ public class ChartsController {
 
     	}
     	List<ReportDep> listReportDep=reportDepMapper.selectByDep(paramVO);
-    	System.out.println("=====================================");
-    	for (int i = 0; i < listReportDep.size(); i++) {
-
-			System.out.println(listReportDep.get(i).getMonth());
-		}
-    	System.out.println("=====================================");
+    	
     	for (int i = 0; i < listReportDep.size(); i++) {
 
 			if(listReportDep.get(i).getMonth().split("-")[1].equals("01")){
