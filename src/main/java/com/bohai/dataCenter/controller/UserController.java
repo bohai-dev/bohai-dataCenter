@@ -34,14 +34,11 @@ public class UserController {
 	
 	@RequestMapping(value="user/queryUsers")
 	@ResponseBody
-	public TableJsonResponse<UserVO> queryUsersPagination(){
-		TableJsonResponse<UserVO> response = new TableJsonResponse<UserVO>();
-		
+	public List<UserVO> queryUsersPagination(){
+	
 		List<UserVO> list = this.userService.queryUsersPagination(null);
-		response.setRows(list);
-		response.setTotal(1L);
 		
-		return response;
+		return list;
 	}
 	
 	

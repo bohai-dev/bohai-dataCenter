@@ -69,7 +69,36 @@ public class ChartsController {
     @RequestMapping(value="queryMonthProfitByDep")
     @ResponseBody
     public List<ReportDep> queryMonthProfitByDep(@RequestBody(required=false) QueryDepProfitBarChartParamVO paramVO){
-        
+    	ReportDep[] reportDepArray=new ReportDep[12];
+    	List<ReportDep> listReportDep=reportDepMapper.selectByDep(paramVO);
+    	for (int i = 0; i < listReportDep.size(); i++) {
+			if(listReportDep.get(i).getMonth().split("-",1).equals("01")){
+				reportDepArray[0]=listReportDep.get(i);
+			}else if(listReportDep.get(i).getMonth().split("-",1).equals("02")){
+				reportDepArray[1]=listReportDep.get(i);
+			}else if(listReportDep.get(i).getMonth().split("-",1).equals("03")){
+				reportDepArray[2]=listReportDep.get(i);
+			}else if(listReportDep.get(i).getMonth().split("-",1).equals("04")){
+				reportDepArray[3]=listReportDep.get(i);
+			}else if(listReportDep.get(i).getMonth().split("-",1).equals("05")){
+				reportDepArray[4]=listReportDep.get(i);
+			}else if(listReportDep.get(i).getMonth().split("-",1).equals("06")){
+				reportDepArray[5]=listReportDep.get(i);
+			}else if(listReportDep.get(i).getMonth().split("-",1).equals("07")){
+				reportDepArray[6]=listReportDep.get(i);
+			}else if(listReportDep.get(i).getMonth().split("-",1).equals("08")){
+				reportDepArray[7]=listReportDep.get(i);
+			}else if(listReportDep.get(i).getMonth().split("-",1).equals("09")){
+				reportDepArray[8]=listReportDep.get(i);
+			}else if(listReportDep.get(i).getMonth().split("-",1).equals("10")){
+				reportDepArray[9]=listReportDep.get(i);
+			}else if(listReportDep.get(i).getMonth().split("-",1).equals("11")){
+				reportDepArray[10]=listReportDep.get(i);
+			}else if(listReportDep.get(i).getMonth().split("-",1).equals("12")){
+				reportDepArray[11]=listReportDep.get(i);
+			}
+			
+		}
         return reportDepMapper.selectByDep(paramVO);
     }
 }

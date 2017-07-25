@@ -22,7 +22,9 @@
 <script src="resources/bootstrap-table/bootstrap-table.js"></script>
 <!-- put your locale files after bootstrap-table.js -->
 <script src="resources/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+
 <script type="text/javascript">
+
 	function operationFormatter(value, row, index) {
 		var html = '<button type="button" id="cog'+index+'" class="btn btn-default btn-sm" title="设置">'
 				+ '<i class="glyphicon glyphicon-cog"></i>'
@@ -92,6 +94,10 @@
              }
          });
      }
+
+
+	
+    
 
 	$(function() {
 		var treeObj = ${sessionScope.treeView};
@@ -186,6 +192,7 @@
 					</h1>
 
 
+    
 					<h2 class="sub-header">用户信息</h2>
 					<div class="table-responsive">
 						<div id="toolbar" class="btn-group">
@@ -194,24 +201,17 @@
 								<i class="glyphicon glyphicon-plus"></i>
 							</button>
 						</div>
-						<table id="userTable" 
-						    class="table table-striped"
-							data-toggle="table" 
-							data-toolbar="#toolbar"
-							data-show-refresh="true" 
-							data-show-toggle="true"
-							data-show-columns="true"
-							 data-show-export="true"
-							data-detail-view="true" 
-							data-detail-formatter="detailFormatter"
-							data-height="542" 
-							data-url="user/queryUsers"
-							data-pagination="true" 
-							data-side-pagination="server"
-							data-method="get" 
-							data-page-list="[5, 10, 20, 50]"
-							data-search="true" 
-							data-height="300">
+
+						<table id="userTable" class="table table-striped"
+							data-toggle="table" data-toolbar="#toolbar"
+							data-show-refresh="true" data-show-toggle="true"
+							data-show-columns="true" data-show-export="true"
+							data-detail-view="true" data-detail-formatter="detailFormatter"
+							data-height="542" data-url="user/queryUsers"
+							data-pagination="true"
+							data-method="get" data-page-list="[5, 10, 20, 50]"
+							data-search="true" data-height="300">
+
 							<thead>
 								<tr>
 									<!-- <th data-field="state" data-checkbox="true"></th> -->
@@ -288,12 +288,7 @@
 
 
 
-	<div class="row placeholders">
-		<footer class="footer">
-		<p class="text-muted">版权所有 渤海期货</p>
-		</footer>
-	</div>
-	</div>
+
 	<!-- 修改用户户模态框 -->
 	<div class="modal fade" id="editModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true">
