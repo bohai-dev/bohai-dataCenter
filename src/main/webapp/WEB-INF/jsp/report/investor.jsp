@@ -58,10 +58,35 @@
             return html;
         }
         
+        //加载页面后自动初始化
         $(function(){
             var treeObj = ${sessionScope.treeView};
             $('#tree').treeview({data: treeObj,enableLinks: true});
             $('li a[href="toInvestorReport"]').parent().addClass("active");
+            
+            $("#customerForm").keypress(function(e){
+                var eCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+                if (eCode == 13){
+                    //自己写判断函数
+                    queryInvestorProfit();
+                }
+            });
+            
+            $("#mediatorForm").keypress(function(e){
+                var eCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+                if (eCode == 13){
+                    //自己写判断函数
+                    queryMediatorProfit();
+                }
+            });
+            
+            $("#marketerForm").keypress(function(e){
+                var eCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+                if (eCode == 13){
+                    //自己写判断函数
+                    queryMarketerProfit();
+                }
+            });
             
         });
         
@@ -533,7 +558,7 @@
                 <!-- 客户带来利润查询 -->
                 <div role="tabpanel" class="tab-pane fade  in active" id="messages">
                 
-                    <form class="form-horizontal" style="margin-top: 30px">
+                    <form class="form-horizontal" style="margin-top: 30px" id="customerForm">
                         <div class="form-group">
                         
                               <!-- <label for="reportMonth1" class="col-sm-2 col-md-1 col-md-offset-1 control-label">统计年月</label>
@@ -740,7 +765,7 @@
               <!-- 居间人带来利润查询 -->
               <div role="tabpanel" class="tab-pane fade  in " id="home">
                 
-                  <form class="form-horizontal" style="margin-top: 30px">
+                  <form class="form-horizontal" style="margin-top: 30px" id="mediatorForm">
                       <div class="form-group">
                       
                             <!-- <label for="reportMonth1" class="col-sm-2 col-md-1 col-md-offset-1 control-label">统计年月</label>
@@ -957,7 +982,7 @@
               <!-- 营销人员带来利润查询 -->
               <div role="tabpanel" class="tab-pane fade  in " id="profile">
                 
-                  <form class="form-horizontal" style="margin-top: 30px">
+                  <form class="form-horizontal" style="margin-top: 30px" id="marketerForm">
                       <div class="form-group">
                       
                             <!-- <label for="reportMonth1" class="col-sm-2 col-md-1 col-md-offset-1 control-label">统计年月</label>
