@@ -144,7 +144,8 @@
                                  	    },
                                  	    legend: {
                                  	    	 x: 'left',
-                                 	        data: ['净利润', '毛利润']
+                                 	        data: ['净利润', '毛利润'],
+                                 	        selectedMode:false
                                  	    },
                                  	    grid: {
                                  	        left: '3%',

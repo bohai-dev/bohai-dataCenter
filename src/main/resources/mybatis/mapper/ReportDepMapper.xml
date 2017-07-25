@@ -25,7 +25,7 @@
     select * from T_REPORT_DEP
     where 
     <if test="month != null and month != ''">
-        MONTH = #{0}
+        MONTH = #{month}
     </if>
     <if test="month == null or month == ''">
         MONTH = (select max(MONTH) from T_REPORT_DEP)
