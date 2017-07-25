@@ -124,6 +124,10 @@ public class CtpTradeDataCSVUploadImpl implements FileUploadService {
 					    //期权不返
 					    continue;
 					}
+					if(instrument.length() > 8){
+					  //期权不返
+                        continue;
+					}
 					//买卖方向
 					String direction = record.get(directionIndex);
 					//开平

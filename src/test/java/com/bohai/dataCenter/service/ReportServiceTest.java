@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
+import org.springframework.util.StopWatch;
 
 import com.bohai.dataCenter.controller.exception.BohaiException;
 import com.bohai.dataCenter.vo.CountExchangeRebateParamVO;
@@ -39,7 +40,7 @@ public class ReportServiceTest extends AbstractJUnit4SpringContextTests{
 	public void countInvestorExchangeRebate() throws BohaiException{
 	    
 	    CountExchangeRebateParamVO paramVO = new CountExchangeRebateParamVO();
-        paramVO.setMonth("2017-05");
+        paramVO.setMonth("2017-06");
 	    
         this.reportService.countInvestorExchangeRebate(paramVO);
 	}
@@ -52,7 +53,7 @@ public class ReportServiceTest extends AbstractJUnit4SpringContextTests{
 	public void reportSpecialReturn() throws BohaiException{
 	    
 	    CountExchangeRebateParamVO paramVO = new CountExchangeRebateParamVO();
-        paramVO.setMonth("2017-05");
+        paramVO.setMonth("2017-06");
 	    this.reportService.reportSpecialReturn(paramVO);
 	    
 	}
@@ -73,7 +74,7 @@ public class ReportServiceTest extends AbstractJUnit4SpringContextTests{
 	public void countRebatReport() throws BohaiException{
 	    CountRebatReportParamVO paramVO = new CountRebatReportParamVO();
 	    paramVO.setYear("2017");
-	    paramVO.setMonth("05");
+	    paramVO.setMonth("06");
 	    this.reportService.countRebatReport(paramVO);
 	}
 	
@@ -83,11 +84,13 @@ public class ReportServiceTest extends AbstractJUnit4SpringContextTests{
 	 */
 	@Test
 	public void reportInvestorInterest() throws BohaiException{
+	    
+	    
 	    CountRebatReportParamVO paramVO = new CountRebatReportParamVO();
 	    paramVO.setYear("2017");
-	    paramVO.setMonth("05");
-	    //this.reportService.countRebatReport(paramVO);
+	    paramVO.setMonth("06");
 	    this.reportService.reportInvestorInterest(paramVO);
+	    
 	}
 	
 	/**-----------------------------------统计返利息结束----------------------------------**/

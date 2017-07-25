@@ -461,7 +461,7 @@ public class ReportServiceImpl implements ReportService {
 	    this.reportInvestorRebateService.removeByMonth(paramVO.getMonth());
 	    
 	    //统计上期所返还到客户
-	    List<Map<String, Object>> slist = this.vTradeDetailMapper.selectInvestorChargeShanghai("201705");
+	    List<Map<String, Object>> slist = this.vTradeDetailMapper.selectInvestorChargeShanghai("201706");
 	    if(slist != null){
             for(Map<String, Object> map : slist){
                 ReporteInvestorRebate investorRebate = new ReporteInvestorRebate();
@@ -480,7 +480,7 @@ public class ReportServiceImpl implements ReportService {
         }
 	    
 	    //统计郑商所返还到客户
-        List<Map<String, Object>> zlist = this.vTradeDetailMapper.selectInvestorChargeZhengzhou("201704");
+        List<Map<String, Object>> zlist = this.vTradeDetailMapper.selectInvestorChargeZhengzhou("201705");
         if(slist != null){
             for(Map<String, Object> map : zlist){
                 ReporteInvestorRebate investorRebate = new ReporteInvestorRebate();
@@ -709,7 +709,7 @@ public class ReportServiceImpl implements ReportService {
         
         
         //分段计算交易所返还   20170626  begin
-        List<Map<String,Object>> dlist = this.vTradeDetailMapper.selectInvestorTradeInfoByDate("20170401", "20170414");
+        List<Map<String,Object>> dlist = this.vTradeDetailMapper.selectInvestorTradeInfoByDate("20170501", "20170531");
         if(dlist != null){
             for(Map<String, Object> map : dlist){
                 //投资者编号
@@ -761,6 +761,20 @@ public class ReportServiceImpl implements ReportService {
                 
                 //交易所返还
                 BigDecimal rebate = new BigDecimal("0");
+                
+                //扣交割暂时需要手动维护
+                if(investorNo.equals("80119999") && instrument.equals("cs") && hadgeFlag.equals("投")){
+                    volume = volume.subtract(new BigDecimal("200"));
+                }
+                if(investorNo.equals("80111999") && instrument.equals("c") && hadgeFlag.equals("投")){
+                    volume = volume.subtract(new BigDecimal("1500"));
+                }
+                if(investorNo.equals("86000026") && instrument.equals("cs") && hadgeFlag.equals("保")){
+                    volume = volume.subtract(new BigDecimal("400"));
+                }
+                if(investorNo.equals("86000026") && instrument.equals("cs") && hadgeFlag.equals("投")){
+                    volume = volume.subtract(new BigDecimal("850"));
+                }
                 
               //鸡蛋和两版
                 if(instrument.equals("jd")||instrument.equals("bb")||instrument.equals("fb")){
@@ -819,7 +833,7 @@ public class ReportServiceImpl implements ReportService {
             }
         }
         
-        Map<String, String> commissionMap = new HashMap<String, String>(){
+        /*Map<String, String> commissionMap = new HashMap<String, String>(){
             {
                 put("iopen", "0.00006");
                 put("icloseT", "0.00024");
@@ -956,7 +970,7 @@ public class ReportServiceImpl implements ReportService {
                 investorRebate.setInvestorName(investorName);
                 this.reportInvestorRebateService.updateRebate(investorRebate);
             }
-        }
+        }*/
         
         //分段计算交易所返还   20170626  end
         
