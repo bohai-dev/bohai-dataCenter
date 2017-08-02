@@ -37,7 +37,7 @@
     <link rel="stylesheet" href="resources/bootstrap-table/bootstrap-table.css">
     <script src="resources/bootstrap-table/bootstrap-table.js"></script>
     <script src="resources/bootstrap-table/extensions/export/bootstrap-table-export.js"></script>
-    <script src="//rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
+    <!-- <script src="//rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script> -->
     <!-- put your locale files after bootstrap-table.js -->
     <script src="resources/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
     

@@ -138,7 +138,7 @@
             <if test="depNo != null and depNo != ''">
                 and DEP_NO = #{depNo}
             </if>
-            <if test="isChange != null and isChange != ''">
+            <if test="isChange != null and isChange != '' and isChange==1">
                 and (MOD_INTEREST is not null or MOD_EXCHANGE_REBATE is not null)
             </if>
         </where>
