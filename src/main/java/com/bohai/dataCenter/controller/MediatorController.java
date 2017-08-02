@@ -25,7 +25,7 @@ public class MediatorController {
     @RequestMapping(value="toMediatorReport")
     public String toMediatorReport(){
         
-        return "mediator";
+        return "report/mediator";
         
     }
     
