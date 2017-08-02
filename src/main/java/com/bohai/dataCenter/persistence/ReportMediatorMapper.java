@@ -23,4 +23,6 @@ public interface ReportMediatorMapper {
     int insertSelective(ReportMediator record);
     
     List<ReportMediator> queryByCondition(QueryMediatorReportParamVO paramVO);
+    
+    void updateByMediatorAndMonth(ReportMediator mediator);
 }

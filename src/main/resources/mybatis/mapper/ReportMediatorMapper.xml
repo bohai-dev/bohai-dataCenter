@@ -143,4 +143,16 @@
             </if>
         </where>
   </select>
+  
+  <update id="updateByMediatorAndMonth" parameterType="com.bohai.dataCenter.entity.ReportMediator">
+    update T_REPORT_MEDIATOR
+    <set>
+        MOD_INTEREST = #{modInterest},
+        MOD_EXCHANGE_REBATE = #{modExchangeRebate},
+        REMARK = #{remark}
+    </set>
+    where REPORT_MONTH = #{reportMonth}
+    and MEDIATOR_NO = #{mediatorNo}
+  </update>
+  
 </mapper>
