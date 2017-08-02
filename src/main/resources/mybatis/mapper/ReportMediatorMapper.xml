@@ -126,19 +126,19 @@
         
         select * from T_REPORT_MEDIATOR 
         <where>
-            <if test="reportMonth != null">
+            <if test="reportMonth != null and reportMonth != ''">
                 and REPORT_MONTH = #{reportMonth}
             </if>
-            <if test="mediatorNo != null">
+            <if test="mediatorNo != null and mediatorNo != ''">
                 and MEDIATOR_NO = #{mediatorNo}
             </if>
-            <if test="mediatorName != null">
+            <if test="mediatorName != null and mediatorName != ''">
                 and MEDIATOR_NAME = #{mediatorName}
             </if>
-            <if test="depNo != null">
+            <if test="depNo != null and depNo != ''">
                 and DEP_NO = #{depNo}
             </if>
-            <if test="isChange != null">
+            <if test="isChange != null and isChange != ''">
                 and (MOD_INTEREST is not null or MOD_EXCHANGE_REBATE is not null)
             </if>
         </where>
