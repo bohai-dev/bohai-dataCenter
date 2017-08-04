@@ -11,8 +11,10 @@
     <script type="text/javascript" src="resources/bootstrap/js/bootstrap.min.js"></script>
     <link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="resources/css/dashboard.css" rel="stylesheet">
-    <link href="resources/css/sticky-footer.css" rel="stylesheet">
+    <link href="resources/css/sticky-footer.css" rel="stylesheet">   
+    <link href="resources/favicon.ico" rel="shortcut icon"/>
     <script type="text/javascript" src="resources/tree/bootstrap-treeview.min.js"></script>
+    
      <!-- echarts -->
     <script src="resources/echarts/echarts.min.js"></script>
     <script src="resources/echarts/china.js"></script>
@@ -93,11 +95,11 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Profile</a></li>
+            
+            
+            
             <li><a href="#">欢迎：${sessionScope.username}</a></li>
-            <li><a href="logout">Sign Out</a></li>
+            <li><a href="logout">退出</a></li>
           </ul>
           <form class="navbar-form navbar-right">
             <input type="text" class="form-control" placeholder="Search...">

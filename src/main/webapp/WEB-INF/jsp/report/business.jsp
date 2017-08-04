@@ -62,30 +62,42 @@
                      
             return html;
         }
+        
         var allProfitList=new Array();   //毛利润数组
         //柱状图毛利润显示
         function numformat(params){
         	
         	return params.value=numMod(allProfitList[params.dataIndex]);
         }
+        
         //柱状图净利润，加分号
         function barProfit(params){
         	
         	return params.value=numMod(params.value);
         }
+        function isNull(value){
+            if(value == "" || value == undefined || value == null){
+                return true;
+            }else{
+                return false;
+            }
+        } 
         //毛利润阴影显示
         function profitFormat(params){
         	
         	return '净利润：'+numMod(params[0].value)+'<br>毛利润：'+numMod(allProfitList[params[1].dataIndex]);
         	
         }
+        
         function profitPieFormat(params){
         	
         	return params.seriesName+'<br>'+params.name+':'+numMod(params.value)+'('+params.percent+'%)';
         }
+        
         function numMod(num){
         	return (num+'').replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
         }
+        
         $(function(){
             var treeObj = ${sessionScope.treeView};
             $('#tree').treeview({data: treeObj,enableLinks: true});
@@ -146,7 +158,7 @@
                          $("#barDiv").hide(1000);
                     	  
                      }
-                     if (params.seriesIndex === 0){
+                     if (params.seriesIndex === 0 && !isNull(depName)){
                     	 $("#barDiv").show(1000);
                     	     $.ajax({
                              url: 'queryMonthProfitByDep',
@@ -258,22 +270,47 @@
                 success: function (result) {
                     var legendData = new Array();
                     var seriesData = new Array();
+                    var totalData=new Array();
+                    var toatalInterest=0,totalExchangeReturnTicktix=0,toatlCommission=0;
+                    var grossProfit=0;
                     $.each(result, function(index, content){
+                    	
                         legendData[index] = content.depName;
                         var json = {};
-                        json['value'] = (content.interest + content.exchangeReturnTicktix + content.commission).toFixed(2);
+                        var profit=content.interest + content.exchangeReturnTicktix + content.commission;
+                        json['value'] = profit.toFixed(2);
                         json['name'] = content.depName;
                         json['interest'] = content.interest;
                         json['exchangeReturnTicktix'] = content.exchangeReturnTicktix;
                         json['commission'] = content.commission;
                         json['date']=content.month;
                         seriesData[index] = json;
+                        grossProfit+=profit;
+                        toatalInterest+=content.interest;
+                        totalExchangeReturnTicktix+=content.exchangeReturnTicktix;
+                        toatlCommission+=content.commission;
+                    });
+                    
+                    grossProfit = numMod(grossProfit.toFixed(2));
+                    
+                    totalData.push({
+                    	name:'利息',
+                    	value:toatalInterest.toFixed(2)	
+                    });
+                    totalData.push({
+                    	name:'交返（剔税）',
+                    	value:totalExchangeReturnTicktix.toFixed(2)	
+                    });
+                    totalData.push({
+                    	name:'手续费',
+                    	value:toatlCommission.toFixed(2)
                     });
                     
                     option = {
                     		title : {
                     	        text: result[0].month+'各营业部利润分布饼图',
-                    	        x:'center'
+                    	        x:'center',
+                    	        subtext:'总毛利润：'+grossProfit
                     	    },
                             tooltip: {
                                 trigger: 'item',
@@ -302,11 +339,7 @@
                                             show: false
                                         }
                                     },
-                                    data:[
-                                      /*   {value:335, name:'直达'},
-                                        {value:679, name:'营销广告'},
-                                        {value:1548, name:'搜索引擎'} */
-                                    ]
+                                    data:totalData
                                 },
                                 {
                                     name:'毛利润',
@@ -343,27 +376,53 @@
                 contentType: "application/json;charset=UTF-8",
                 data: JSON.stringify(jsonMonth),
                 success: function (result) {
+               
                 	if(result.length>0){
                 	$("#pieCharts").show(1000);
                     var legendData = new Array();
                     var seriesData = new Array();
-                    
+                    var totalData=new Array();
+                    var toatalInterest=0,totalExchangeReturnTicktix=0,toatlCommission=0;
+                    var grossProfit=0;
                     $.each(result, function(index, content){
                         legendData[index] = content.depName;
                         var json = {};
-                        json['value'] = (content.interest + content.exchangeReturnTicktix + content.commission).toFixed(2);
+                        var profit=content.interest + content.exchangeReturnTicktix + content.commission;
+                        json['value'] = profit.toFixed(2);
                         json['name'] = content.depName;
                         json['interest'] = content.interest;
                         json['exchangeReturnTicktix'] = content.exchangeReturnTicktix;
                         json['commission'] = content.commission;
                         json['date']=content.month;
                         seriesData[index] = json;
+                        grossProfit+=profit;
+                        toatalInterest+=content.interest;
+                        totalExchangeReturnTicktix+=content.exchangeReturnTicktix;
+                        toatlCommission+=content.commission;
+                       
                     });
+                    
+                    grossProfit=numMod(grossProfit.toFixed(2));
+                    
+                    totalData.push({
+                    	name:'利息',
+                    	value:toatalInterest	
+                    });
+                    totalData.push({
+                    	name:'交返（剔税）',
+                    	value:totalExchangeReturnTicktix	
+                    });
+                    totalData.push({
+                    	name:'手续费',
+                    	value:toatlCommission	
+                    });
+                 
                     
                     option = {
                     		title : {
-                    	        text: result[0].month+'营业部利润分布饼图',
-                    	        x:'center'
+                    	        text: result[0].month+'各营业部利润分布饼图',
+                    	        x:'center',
+                    	        subtext:'总毛利润：'+grossProfit
                     	    },
                             tooltip: {
                                 trigger: 'item'
@@ -390,11 +449,7 @@
                                             show: false
                                         }
                                     },
-                                    data:[
-                                      /*   {value:335, name:'直达'},
-                                        {value:679, name:'营销广告'},
-                                        {value:1548, name:'搜索引擎'} */
-                                    ]
+                                    data:totalData
                                 },
                                 {
                                     name:'毛利润',
@@ -434,11 +489,11 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Profile</a></li>
+            
+            
+            
             <li><a href="#">欢迎：${sessionScope.username}</a></li>
-            <li><a href="logout">Sign Out</a></li>
+            <li><a href="logout">退出</a></li>
           </ul>
           <form class="navbar-form navbar-right">
             <input type="text" class="form-control" placeholder="Search...">

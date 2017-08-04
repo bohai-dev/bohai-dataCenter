@@ -30,7 +30,7 @@
     <link href="resources/css/sticky-footer.css" rel="stylesheet">
     <!-- datepicker -->
     <link href="resources/bootstrap-datepicker/css/bootstrap-datepicker3.css" rel="stylesheet">
-    
+   
     <!-- 菜单树 -->
     <script type="text/javascript" src="resources/tree/bootstrap-treeview.min.js"></script>
     <!-- table插件 -->
@@ -42,6 +42,7 @@
     <script src="resources/fileInput/js/locales/zh.js"></script>
     <!-- bootstrap-select -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+    <link href="resources/favicon.ico" rel="shortcut icon"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
     <!-- datepicker -->
     <script src="resources/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
@@ -79,7 +80,7 @@
             $("#editModal").modal('show');
         }
         
-        //更新营业部信息
+        //更新居间人信息
         function updateMediator(){
           var param = {reportMonth:$('#reportMonth1').val(),
             		  mediatorNo:$('#mediatorCode1').val(),
@@ -205,11 +206,11 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Profile</a></li>
+            
+            
+            
             <li><a href="#">欢迎：${sessionScope.username}</a></li>
-            <li><a href="logout">Sign Out</a></li>
+            <li><a href="logout">退出</a></li>
           </ul>
           <form class="navbar-form navbar-right">
             <input type="text" class="form-control" placeholder="Search...">
