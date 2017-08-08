@@ -1,4 +1,4 @@
-package com.bohai.dataCenter.service.impl;
+package com.bohai.dataCenter.service.provider;
 
 import java.util.List;
 import java.util.Map;
