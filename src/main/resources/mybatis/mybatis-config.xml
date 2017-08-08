@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <properties>
+        <property name="username" value="sjzx"/>
+    </properties>
+    
+    <settings>
+      <setting name="cacheEnabled" value="true"/>
+      <setting name="lazyLoadingEnabled" value="true"/>
+      <setting name="multipleResultSetsEnabled" value="true"/>
+      <setting name="useColumnLabel" value="true"/>
+      <setting name="useGeneratedKeys" value="false"/>
+      <setting name="autoMappingBehavior" value="PARTIAL"/>
+      <setting name="defaultExecutorType" value="SIMPLE"/>
+      <setting name="defaultStatementTimeout" value="500"/>
+      <setting name="defaultFetchSize" value="100"/>
+      <setting name="safeRowBoundsEnabled" value="false"/>
+      <setting name="mapUnderscoreToCamelCase" value="false"/>
+      <setting name="localCacheScope" value="SESSION"/>
+      <setting name="jdbcTypeForNull" value="OTHER"/>
+      <setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString"/>
+      <setting name="logImpl" value="LOG4J"/>
+    </settings>
+    
+    
+    <!-- 类型别名是为 Java类型命名一个短的名字。 它只和 XML配置有关,只用来减少类完全 限定名的多余部分 -->
+    <typeAliases>
+        <!-- <typeAlias type="com.eastng.football.core.entity.match.Match" alias="match"/> -->
+    </typeAliases>
+    
+    <!-- 分页插件 -->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+            <!-- 4.0.0以后版本可以不设置该参数 -->
+            <property name="dialect" value="oracle"/>
+            <!-- 该参数默认为false -->
+            <!-- 设置为true时，会将RowBounds第一个参数offset当成pageNum页码使用 -->
+            <!-- 和startPage中的pageNum效果一样-->
+            <property name="offsetAsPageNum" value="true"/>
+            <!-- 该参数默认为false -->
+            <!-- 设置为true时，使用RowBounds分页会进行count查询 -->
+            <property name="rowBoundsWithCount" value="true"/>
+            <!-- 设置为true时，如果pageSize=0或者RowBounds.limit = 0就会查询出全部的结果 -->
+            <!-- （相当于没有执行分页查询，但是返回结果仍然是Page类型）-->
+            <property name="pageSizeZero" value="true"/>
+            <!-- 3.3.0版本可用 - 分页参数合理化，默认false禁用 -->
+            <!-- 启用合理化时，如果pageNum<1会查询第一页，如果pageNum>pages会查询最后一页 -->
+            <!-- 禁用合理化时，如果pageNum<1或pageNum>pages会返回空数据 -->
+            <property name="reasonable" value="false"/>
+            <!-- 3.5.0版本可用 - 为了支持startPage(Object params)方法 -->
+            <!-- 增加了一个`params`参数来配置参数映射，用于从Map或ServletRequest中取值 -->
+            <!-- 可以配置pageNum,pageSize,count,pageSizeZero,reasonable,orderBy,不配置映射的用默认值 -->
+            <!-- 不理解该含义的前提下，不要随便复制该配置 -->
+            <property name="params" value="pageNum=pageHelperStart;pageSize=pageHelperRows;"/>
+            <!-- 支持通过Mapper接口参数来传递分页参数 -->
+            <property name="supportMethodsArguments" value="false"/>
+            <!-- always总是返回PageInfo类型,check检查返回类型是否为PageInfo,none返回Page -->
+            <property name="returnPageInfo" value="none"/>
+        </plugin>
+    </plugins>
+    
+    <environments default="development">
+      <environment id="development">
+        <transactionManager type="JDBC"/>
+        <dataSource type="POOLED">
+          <property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
+          <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+          <property name="username" value="${username}"/>
+          <property name="password" value="${username}"/>
+        </dataSource>
+      </environment>
+    </environments>
+  
+    <!-- 映射资源文件 -->
+    <mappers>
+        <mapper resource="mybatis/mapper/SysUserMapper.xml"/>
+        <mapper resource="mybatis/mapper/SysRoleMapper.xml"/>
+        <mapper resource="mybatis/mapper/SysPermissionMapper.xml"/>
+        <mapper resource="mybatis/mapper/MarketerCustMapper.xml"/>
+        <mapper resource="mybatis/mapper/MarketerMapper.xml"/>
+        <mapper resource="mybatis/mapper/MarketerMediatorMapper.xml"/>
+        <mapper resource="mybatis/mapper/MediatorCustMapper.xml"/>
+        <mapper resource="mybatis/mapper/MediatorMapper.xml"/>
+        <mapper resource="mybatis/mapper/OpenRecordMapper.xml"/>
+        <mapper resource="mybatis/mapper/TransactionStatisticsMapper.xml"/>
+        <mapper resource="mybatis/mapper/CapitalStatementMapper.xml"/>
+        <mapper resource="mybatis/mapper/RebateListMapper.xml"/>
+        <mapper resource="mybatis/mapper/ReportRebateMapper.xml"/>
+        <mapper resource="mybatis/mapper/TradingDateMapper.xml"/>
+        <mapper resource="mybatis/mapper/TradeDataMapper.xml"/>
+        <mapper resource="mybatis/mapper/InstrumentAttributeMapper.xml"/>
+        <mapper resource="mybatis/mapper/CloseDataMapper.xml"/>
+        <mapper resource="mybatis/mapper/ReportExchangeRebateMapper.xml"/>
+        <mapper resource="mybatis/mapper/CtpTradeDataMapper.xml"/>
+        <mapper resource="mybatis/mapper/CrmCustomerMapper.xml"/>
+        <mapper resource="mybatis/mapper/CrmMediatorMapper.xml"/>
+        <mapper resource="mybatis/mapper/CrmMarketerMapper.xml"/>
+        <mapper resource="mybatis/mapper/CrmDeptMapper.xml"/>
+        <mapper resource="mybatis/mapper/ReporteInvestorRebateMapper.xml"/>
+        <mapper resource="mybatis/mapper/ReportSpecialReturnMapper.xml"/>
+        <mapper resource="mybatis/mapper/SpecialReturnMapper.xml"/>
+        <mapper resource="mybatis/mapper/ReportMarketerInterestMapper.xml"/>
+        <mapper resource="mybatis/mapper/ReportDepMapper.xml"/>
+        <mapper resource="mybatis/mapper/CrmCustomerHistoryMapper.xml"/>
+        <mapper resource="mybatis/mapper/CrmMediatorHistoryMapper.xml"/>
+        <mapper resource="mybatis/mapper/CrmMarketerHistoryMapper.xml"/>
+        <mapper resource="mybatis/mapper/CrmDeptHistoryMapper.xml"/>
+        <mapper resource="mybatis/mapper/SysUsersPermissionsMapper.xml"/>
+        <mapper resource="mybatis/mapper/ReportMediatorMapper.xml"/>
+        
+        <!-- 视图 -->
+        <mapper resource="mybatis/mapper/VTradeDetailMapper.xml"/>
+
+    </mappers>
+
+
+</configuration>

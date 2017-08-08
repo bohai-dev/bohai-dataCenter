@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+  <!-- 驱动物理路径 -->
+  <!-- mysql -->
+  <!-- <classPathEntry location="D:\develop\apache-maven-3.3.9\mvnRepo\mysql\mysql-connector-java\5.1.38\mysql-connector-java-5.1.38.jar" /> -->
+  
+  <!-- oracle -->  
+  <classPathEntry location="D:\git\bohai-detaCenter\bohai-dataCenter\ojdbc6.jar" />
+  <context id="MysqlTables" targetRuntime="MyBatis3">
+    <!-- mysql -->
+    <!-- <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+        connectionURL="jdbc:mysql://localhost:3306/sjzx?useUnicode=true&amp;characterEncoding=utf-8"
+        userId="sjzx"
+        password="sjzx@123">
+    </jdbcConnection> -->
+    <!-- oracle -->
+    <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+        connectionURL="jdbc:oracle:thin:@192.168.16.46:1521:xe"
+        userId="sjzx"
+        password="sjzx">
+    </jdbcConnection>
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.bohai.dataCenter.entity" targetProject="src\main\java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="mybatis.mapper"  targetProject="src\main\resources">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="XMLMAPPER" targetPackage="com.bohai.dataCenter.persistence"  targetProject="src\main\java">
+      <property name="enableSubPackages" value="true" />
+    </javaClientGenerator>
+
+	<!-- 去掉Example辅助类 -->
+	<!-- enableSelectByExample="true" enableDeleteByExample="false" enableCountByExample="false"
+    	enableUpdateByExample="false" selectByExampleQueryId="false" --> 
+    <!-- <table schema="sjzx" tableName="sys_users" domainObjectName="SysUser" 
+    enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+    	enableUpdateByExample="false" selectByExampleQueryId="false">
+      <property name="useActualColumnNames" value="true"/>
+      <generatedKey column="ID" sqlStatement="DB2" identity="true" />
+      <columnOverride column="DATE_FIELD" property="startDate" />
+      <ignoreColumn column="FRED" />
+      <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />
+    </table>
+    
+    <table schema="sjzx" tableName="sys_roles" domainObjectName="SysRole" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table>
+    
+    <table schema="sjzx" tableName="sys_permissions" domainObjectName="SysPermission" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table>
+    -->
+    
+    
+    <!-- 营销人员信息表 -->
+    <!-- <table schema="" tableName="T_MARKETER" domainObjectName="Marketer" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- 营销人员与客户关系表 -->
+    <!-- <table schema="" tableName="T_MARKETER_CUST" domainObjectName="MarketerCust" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- 营销人员与居间人关系表 -->
+    <!-- <table schema="" tableName="T_MARKETER_MEDIATOR" domainObjectName="MarketerMediator" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- 居间人信息表 -->
+<!--     <table schema="" tableName="T_MEDIATOR" domainObjectName="Mediator" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- 居间人和客户关系表 -->
+<!--     <table schema="" tableName="T_MEDIATOR_CUST" domainObjectName="MediatorCust" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- TB开户记录表 -->
+<!--     <table schema="" tableName="T_OPEN_RECORD" domainObjectName="OpenRecord" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- 交易统计表 -->
+    <!-- <table schema="" tableName="T_TRANSACTION_STATISTICS" domainObjectName="TransactionStatistics" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- 资金对账表T_CAPITAL_STATEMENT -->
+    <!-- <table schema="" tableName="T_CAPITAL_STATEMENT" domainObjectName="CapitalStatement" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- 返利息名单T_REBATE_LIST -->
+    <!-- <table schema="" tableName="T_REBATE_LIST" domainObjectName="RebateList" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- 返利息统计表T_REPORT_REBATE -->
+    <!-- <table schema="" tableName="T_REPORT_REBATE" domainObjectName="ReportRebate" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- 交易日表  T_TRADING_DATE-->
+    <!-- <table schema="" tableName="T_TRADING_DATE" domainObjectName="TradingDate" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- 期货交易明细表  T_TRADE_DATA-->
+    <!-- <table schema="" tableName="T_TRADE_DATA" domainObjectName="TradeData" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- 合约属性表 T_INSTRUMENT_ATTRIBUTE -->
+    <!-- <table schema="" tableName="T_INSTRUMENT_ATTRIBUTE" domainObjectName="InstrumentAttribute" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- 期货平仓明细表T_CLOSE_DATA -->
+    <!-- <table schema="" tableName="T_CLOSE_DATA" domainObjectName="CloseData" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- 交易所返还统计表  T_REPORT_EXCHANGE_REBATE-->
+    <!-- <table schema="" tableName="T_REPORT_EXCHANGE_REBATE" domainObjectName="ReportExchangeRebate" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- 平今平昨交易明细视图 V_TRADE_DETAIL -->
+    <!-- <table schema="" tableName="V_TRADE_DETAIL" domainObjectName="VTradeDetail" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- CTP交易明细表 T_CTPTRADE_DATA -->
+    <!-- <table schema="" tableName="T_CTPTRADE_DATA" domainObjectName="CtpTradeData" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- CRM客户信息表 T_CRM_CUSTOMER -->
+    <!-- <table schema="" tableName="T_CRM_CUSTOMER" domainObjectName="CrmCustomer" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- CRM 居间人信息表 T_CRM_MEDIATOR -->
+    <!-- <table schema="" tableName="T_CRM_MEDIATOR" domainObjectName="CrmMediator" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- CRM 营销人员信息表 -->
+    <!-- <table schema="" tableName="T_CRM_MARKETER" domainObjectName="CrmMarketer" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- CRM营业部信息表 -->
+    <!-- <table schema="" tableName="T_CRM_DEPT" domainObjectName="CrmDept" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- T_REPORTE_INVESTOR_REBATE 交易所返还到客户表 -->
+    <!-- <table schema="" tableName="T_REPORTE_INVESTOR_REBATE" domainObjectName="ReporteInvestorRebate" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- 交易所返还特例名单 -->
+    <!-- <table schema="" tableName="T_SPECIAL_RETURN" domainObjectName="SpecialReturn" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- 交易所返还特例统计表 -->
+    <!-- <table schema="" tableName="T_REPORT_SPECIAL_RETURN" domainObjectName="ReportSpecialReturn" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!--<table schema="" tableName="T_REPORT_MARKETER_INTEREST" domainObjectName="ReportMarketerInterest" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- caoxx建的表 -->
+    <!-- <table schema="" tableName="T_CUST_TRADE" domainObjectName="CustTrade" 
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- <table schema="" tableName="T_REPORT_DEP" domainObjectName="ReportDep"
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- <table schema="" tableName="T_CRM_CUSTOMER_HISTORY" domainObjectName="CrmCustomerHistory"
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table>
+    
+    <table schema="" tableName="T_CRM_DEPT_HISTORY" domainObjectName="CrmDeptHistory"
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table>
+    
+    <table schema="" tableName="T_CRM_MARKETER_HISTORY" domainObjectName="CrmMarketerHistory"
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table>
+    
+    <table schema="" tableName="T_CRM_MEDIATOR_HISTORY" domainObjectName="CrmMediatorHistory"
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <!-- <table schema="" tableName="SYS_USERS_PERMISSIONS" domainObjectName="SysUsersPermissions"
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <table schema="" tableName="T_REPORT_MEDIATOR" domainObjectName="ReportMediator"
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table>
+    
+  </context>
+</generatorConfiguration>
