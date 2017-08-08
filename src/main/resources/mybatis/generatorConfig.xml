@@ -246,7 +246,12 @@
         enableUpdateByExample="false" selectByExampleQueryId="false">
     </table> -->
     
-    <table schema="" tableName="SYS_USERS_PERMISSIONS" domainObjectName="SysUsersPermissions"
+    <!-- <table schema="" tableName="SYS_USERS_PERMISSIONS" domainObjectName="SysUsersPermissions"
+        enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
+        enableUpdateByExample="false" selectByExampleQueryId="false">
+    </table> -->
+    
+    <table schema="" tableName="T_REPORT_MEDIATOR" domainObjectName="ReportMediator"
         enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"
         enableUpdateByExample="false" selectByExampleQueryId="false">
     </table>
