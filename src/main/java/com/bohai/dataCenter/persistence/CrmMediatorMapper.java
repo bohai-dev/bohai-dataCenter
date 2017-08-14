@@ -6,6 +6,8 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import com.bohai.dataCenter.api.vo.MediatorProfitParamVO;
+import com.bohai.dataCenter.api.vo.MediatorProfitResultVO;
 import com.bohai.dataCenter.entity.CrmMarketer;
 import com.bohai.dataCenter.entity.CrmMediator;
 import com.bohai.dataCenter.vo.CrmMediatorAndCustomer;
@@ -95,7 +97,19 @@ public interface CrmMediatorMapper {
     @Select(" SELECT to_char(sysdate,'yymm')||'2'||lpad(SEQ_CRM_MEDIATORNO.nextval,5,'0') from dual")
     String getMediatorNo();
     
+    /**
+     * 查询居间人产生的利润
+     * @param paramVO
+     * @return
+     */
     List<Map<String, Object>> queryMediatorProfit(QueryMediatorProfitParamVO paramVO);
+    
+    /**
+     * 查询营销人员名下居间人产生的利润
+     * @param paramVO
+     * @return
+     */
+    List<MediatorProfitResultVO> queryMediatorProfitByMarketer(MediatorProfitParamVO paramVO);
     
     @Select("select count(1) from T_CRM_MEDIATOR where belong_type = '1' and belong_to = #{0}")
     Long countByMarketerNo(String marketerNo);

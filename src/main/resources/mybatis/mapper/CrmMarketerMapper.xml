@@ -28,6 +28,22 @@
     <result column="BIRETHDAY" property="birethday" jdbcType="VARCHAR" />
     <result column="DELETE_FLAG" property="deleteFlag" jdbcType="VARCHAR" />
   </resultMap>
+  
+  <resultMap type="com.bohai.dataCenter.api.vo.MarketerProfitResultVO" id="MarketerProfitMap">
+    <result column="MONTH" property="month"/>
+    <result column="MARKETER_NO" property="marketerNo"/>
+    <result column="MARKETER_NAME" property="marketerName"/>
+    <result column="INTEREST" property="interest"/>
+    <result column="EXCHANGE_RETURN" property="exchangeReturn"/>
+    <result column="INVESTOR_SPECIAL_INTEREST" property="investorSpecialInterest"/>
+    <result column="INVESTOR_SPECIAL_EXCHANGE" property="investorSpecialExchange"/>
+    <result column="MEDIATOR_SPECIAL_INTEREST" property="mediatorSpecialInterest"/>
+    <result column="MEDIATOR_SPECIAL_EXCHANGE" property="mediatorSpecialExchange"/>
+    <result column="SXFJSR" property="sxfjsr"/>
+    <result column="DBL16" property="dbl16"/>
+    <result column="MONEY" property="money"/>
+    <result column="NET_PROFIT" property="netProfit"/>
+  </resultMap>
   <sql id="Base_Column_List" >
     <!--
       WARNING - @mbggenerated
@@ -404,6 +420,33 @@
         and MARKETER_NAME = #{marketerName}
        </if>
 	</where> 
+    order by MONTH desc
+  </select>
+  
+  <select id="queryMarketerSelfProfit" parameterType="com.bohai.dataCenter.api.vo.MarketerProfitParamVO" resultMap="MarketerProfitMap">
+    select to_char(TO_DATE(MONTH,'yyyymm'),'yyyy-mm') as  MONTH ,
+            MARKETER_NO ,
+            MARKETER_NAME ,
+            INTEREST ,
+            EXCHANGE_RETURN ,
+            INVESTOR_SPECIAL_INTEREST ,
+            INVESTOR_SPECIAL_EXCHANGE ,
+            MEDIATOR_SPECIAL_INTEREST ,
+            MEDIATOR_SPECIAL_EXCHANGE ,
+            SXFJSR ,
+            DBL16 ,
+            MONEY,
+            INTEREST+EXCHANGE_RETURN+SXFJSR-INVESTOR_SPECIAL_INTEREST-INVESTOR_SPECIAL_EXCHANGE-MEDIATOR_SPECIAL_INTEREST-MEDIATOR_SPECIAL_EXCHANGE-DBL16-MONEY as NET_PROFIT
+    from T_REPORT_MARKETER_PROFIT 
+    <where>
+       MONTH <![CDATA[ >= ]]> '201706'
+       <if test="marketerNo != null and marketerNo != ''">
+        and MARKETER_NO = #{marketerNo}
+       </if>
+       <if test="marketerName != null and marketerName != ''">
+        and MARKETER_NAME = #{marketerName}
+       </if>
+    </where> 
     order by MONTH desc
   </select>
   

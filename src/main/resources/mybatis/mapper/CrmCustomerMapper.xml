@@ -36,6 +36,22 @@
     <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR" />
     <result column="DELETE_FLAG" property="deleteFlag" jdbcType="VARCHAR" />
   </resultMap>
+  
+  <resultMap type="com.bohai.dataCenter.api.vo.InvestorProfitResultVO" id="InvestorProfitResultMap">
+    <result column="MONTH" property="month"/>
+    <result column="INVESTOR_NO" property="investorNo"/>
+    <result column="INVESTOR_NAME" property="investorName"/>
+    <result column="INTEREST" property="interest"/>
+    <result column="EXCHANGE_RETURN" property="exchangeReturn"/>
+    <result column="SPECIAL_INTEREST" property="specialInterest"/>
+    <result column="SPECIAL_EXCHANGE" property="specialExchange"/>
+    <result column="LCSXF" property="lcsxf"/>
+    <result column="SXFJSR" property="sxfjsr"/>
+    <result column="NET_INTEREST" property="netInterest"/>
+    <result column="NET_AMOUNT" property="netAmount"/>
+    <result column="NET_PROFIT" property="netProfit"/>
+  
+  </resultMap>
   <sql id="Base_Column_List" >
     <!--
       WARNING - @mbggenerated
@@ -430,6 +446,37 @@
         
     </where>
     order by MONTH desc
+  </select>
+  
+  <select id="queryInvestorProfitByMarketer" parameterType="com.bohai.dataCenter.api.vo.InvestorProfitParamVO"
+    resultMap="InvestorProfitResultMap">
+    select to_char(TO_DATE(MONTH,'yyyymm'),'yyyy-mm') as  MONTH,
+            INVESTOR_NO ,
+            INVESTOR_NAME ,
+            INTEREST ,
+            EXCHANGE_RETURN ,
+            SPECIAL_INTEREST ,
+            SPECIAL_EXCHANGE ,
+            LCSXF ,
+            SXFJSR ,
+            INTEREST - nvl(SPECIAL_INTEREST,0) as NET_INTEREST ,
+            nvl(EXCHANGE_RETURN,0) - nvl(SPECIAL_EXCHANGE,0) as NET_AMOUNT,
+            INTEREST + nvl(EXCHANGE_RETURN,0) + SXFJSR - nvl(SPECIAL_INTEREST,0)- nvl(SPECIAL_EXCHANGE,0) as NET_PROFIT
+            from T_REPORT_INVESTOR_PROFIT
+    <where> 
+    
+        MONTH <![CDATA[ >= ]]> '201706'
+        <if test="investorNo != null and investorNo != ''">
+            and INVESTOR_NO = #{investorNo}
+        </if>
+        
+        <if test="investorName != null and investorName != ''">
+            and INVESTOR_NAME = #{investorName}
+        </if>
+        
+        and F_GETMARKETERNO(INVESTOR_NO) = #{marketerNo}
+        
+    </where>
   </select>
   
   <insert id="copyCustomerByMediator" parameterType="com.bohai.dataCenter.entity.CrmMediator">
