@@ -5,8 +5,6 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Select;
 
-import com.bohai.dataCenter.api.vo.MarketerProfitParamVO;
-import com.bohai.dataCenter.api.vo.MarketerProfitResultVO;
 import com.bohai.dataCenter.entity.CrmMarketer;
 import com.bohai.dataCenter.vo.CrmMarketerAndCustomer;
 import com.bohai.dataCenter.vo.CrmMarketerAndMediator;
@@ -77,7 +75,7 @@ public interface CrmMarketerMapper {
     
     List<Map<String,Object>> queryMarketerProfit(QueryMarketerProfitParamVO paramVO);
     
-    List<MarketerProfitResultVO> queryMarketerSelfProfit(MarketerProfitParamVO paramVO);
+    //List<MarketerProfitResultVO> queryMarketerSelfProfit(MarketerProfitParamVO paramVO);
     
     String getMarketerRate(String marketerNo);
 }

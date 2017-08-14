@@ -6,8 +6,6 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.bohai.dataCenter.api.vo.MediatorProfitParamVO;
-import com.bohai.dataCenter.api.vo.MediatorProfitResultVO;
 import com.bohai.dataCenter.entity.CrmMarketer;
 import com.bohai.dataCenter.entity.CrmMediator;
 import com.bohai.dataCenter.vo.CrmMediatorAndCustomer;
@@ -109,7 +107,7 @@ public interface CrmMediatorMapper {
      * @param paramVO
      * @return
      */
-    List<MediatorProfitResultVO> queryMediatorProfitByMarketer(MediatorProfitParamVO paramVO);
+    //List<MediatorProfitResultVO> queryMediatorProfitByMarketer(MediatorProfitParamVO paramVO);
     
     @Select("select count(1) from T_CRM_MEDIATOR where belong_type = '1' and belong_to = #{0}")
     Long countByMarketerNo(String marketerNo);

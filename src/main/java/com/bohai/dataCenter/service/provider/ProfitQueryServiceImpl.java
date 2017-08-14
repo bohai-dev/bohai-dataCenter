@@ -1,4 +1,4 @@
-package com.bohai.dataCenter.service.provider;
+/*package com.bohai.dataCenter.service.provider;
 
 import java.util.List;
 
@@ -18,11 +18,11 @@ import com.bohai.dataCenter.persistence.CrmCustomerMapper;
 import com.bohai.dataCenter.persistence.CrmMarketerMapper;
 import com.bohai.dataCenter.persistence.CrmMediatorMapper;
 
-/**
+*//**
  * 查询利润实现类
  * @author caojia
  *
- */
+ *//*
 public class ProfitQueryServiceImpl implements ProfitQueryService {
     
     static Logger logger = Logger.getLogger(ProfitQueryServiceImpl.class);
@@ -59,3 +59,4 @@ public class ProfitQueryServiceImpl implements ProfitQueryService {
     }
 
 }
+*/

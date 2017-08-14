@@ -33,7 +33,7 @@
     <result column="IS_IB" property="isIb" jdbcType="VARCHAR" />
   </resultMap>
   
-  <resultMap type="com.bohai.dataCenter.api.vo.MediatorProfitResultVO" id="MediatorProfitMap">
+  <!-- <resultMap type="com.bohai.dataCenter.api.vo.MediatorProfitResultVO" id="MediatorProfitMap">
     <result column="MONTH" property="month"/>
     <result column="MEDIATOR_NO" property="mediatorNo"/>
     <result column="MEDIATOR_NAME" property="mediatorName"/>
@@ -46,7 +46,7 @@
     <result column="MEDIATOR_SPECIAL_EXCHANGE" property="mediatorSpecialExchange"/>
     <result column="DBL16" property="dbl16"/>
     <result column="NET_PROFIT" property="netProfit"/>
-  </resultMap>
+  </resultMap> -->
   
   <sql id="Base_Column_List" >
     <!--
@@ -470,7 +470,7 @@
   </select>
   
   <!-- 查询营销人员名下居间人利润 -->
-  <select id="queryMediatorProfitByMarketer" parameterType="com.bohai.dataCenter.api.vo.MediatorProfitParamVO" 
+  <!-- <select id="queryMediatorProfitByMarketer" parameterType="com.bohai.dataCenter.api.vo.MediatorProfitParamVO" 
     resultMap="MediatorProfitMap">
     
     select to_char(TO_DATE(MONTH,'yyyymm'),'yyyy-mm') as  MONTH ,
@@ -498,7 +498,7 @@
     </where> 
     
     order by MONTH desc
-  </select>
+  </select> -->
   
   <insert id="copyMediatorByMediatorNo" parameterType="java.lang.String">
     insert into T_CRM_MEDIATOR_HISTORY 

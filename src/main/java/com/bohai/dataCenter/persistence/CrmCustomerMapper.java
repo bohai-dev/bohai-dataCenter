@@ -6,8 +6,6 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.bohai.dataCenter.api.vo.InvestorProfitParamVO;
-import com.bohai.dataCenter.api.vo.InvestorProfitResultVO;
 import com.bohai.dataCenter.entity.CrmCustomer;
 import com.bohai.dataCenter.entity.CrmMarketer;
 import com.bohai.dataCenter.entity.CrmMediator;
@@ -112,7 +110,7 @@ public interface CrmCustomerMapper {
      * @param paramVO
      * @return
      */
-    List<InvestorProfitResultVO> queryInvestorProfitByMarketer(InvestorProfitParamVO paramVO);
+    //List<InvestorProfitResultVO> queryInvestorProfitByMarketer(InvestorProfitParamVO paramVO);
     /**
      * 查询居间人客户数量
      * @param mediator
