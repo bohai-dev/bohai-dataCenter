@@ -55,7 +55,11 @@
         <artifactId>jackson-databind</artifactId>
         <version>2.6.4</version>
     </dependency>
-    
+    <dependency>  
+         <groupId>com.oracle</groupId>  
+         <artifactId>ojdbc6</artifactId>  
+         <version>11.2.0</version>  
+    </dependency>
     <!-- 阿里垃圾数据源 -->
     <dependency>
         <groupId>com.alibaba</groupId>
