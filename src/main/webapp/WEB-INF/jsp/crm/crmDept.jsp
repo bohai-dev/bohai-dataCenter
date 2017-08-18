@@ -34,13 +34,13 @@
                          + '<i class="glyphicon glyphicon-cog"></i>'
                      + '</button> &nbsp;'
                      
-                     + '<button type="button" id="trash'+index+'" class="btn btn-default btn-sm" title="合并">'
+                     /* + '<button type="button" id="trash'+index+'" class="btn btn-default btn-sm" title="合并">'
                          + '<i class="glyphicon glyphicon-plus"></i>'
                      + '</button> &nbsp;'
                      
                      + '<button type="button" id="trash'+index+'" class="btn btn-default btn-sm" title="拆分">'
                          + '<i class="glyphicon glyphicon-minus"></i>'
-                     + '</button> &nbsp;'
+                     + '</button> &nbsp;' */
                      
                      + '<button type="button" id="trash'+row.deptCode+'" class="btn btn-default btn-sm" title="删除">'
                          + '<i class="glyphicon glyphicon-trash"></i>'
