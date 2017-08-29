@@ -461,7 +461,7 @@ public class ReportServiceImpl implements ReportService {
 	    this.reportInvestorRebateService.removeByMonth(paramVO.getMonth());
 	    
 	    //统计上期所返还到客户
-	    List<Map<String, Object>> slist = this.vTradeDetailMapper.selectInvestorChargeShanghai("201706");
+	    List<Map<String, Object>> slist = this.vTradeDetailMapper.selectInvestorChargeShanghai("201707");
 	    if(slist != null){
             for(Map<String, Object> map : slist){
                 ReporteInvestorRebate investorRebate = new ReporteInvestorRebate();
@@ -480,7 +480,7 @@ public class ReportServiceImpl implements ReportService {
         }
 	    
 	    //统计郑商所返还到客户
-        List<Map<String, Object>> zlist = this.vTradeDetailMapper.selectInvestorChargeZhengzhou("201705");
+        List<Map<String, Object>> zlist = this.vTradeDetailMapper.selectInvestorChargeZhengzhou("201706");
         if(slist != null){
             for(Map<String, Object> map : zlist){
                 ReporteInvestorRebate investorRebate = new ReporteInvestorRebate();
@@ -709,7 +709,7 @@ public class ReportServiceImpl implements ReportService {
         
         
         //分段计算交易所返还   20170626  begin
-        List<Map<String,Object>> dlist = this.vTradeDetailMapper.selectInvestorTradeInfoByDate("20170501", "20170531");
+        List<Map<String,Object>> dlist = this.vTradeDetailMapper.selectInvestorTradeInfoByDate("20170601", "20170630");
         if(dlist != null){
             for(Map<String, Object> map : dlist){
                 //投资者编号
@@ -763,18 +763,18 @@ public class ReportServiceImpl implements ReportService {
                 BigDecimal rebate = new BigDecimal("0");
                 
                 //扣交割暂时需要手动维护
-                if(investorNo.equals("80119999") && instrument.equals("cs") && hadgeFlag.equals("投")){
+                /*if(investorNo.equals("80119999") && instrument.equals("cs") && hadgeFlag.equals("投")){
                     volume = volume.subtract(new BigDecimal("200"));
                 }
                 if(investorNo.equals("80111999") && instrument.equals("c") && hadgeFlag.equals("投")){
                     volume = volume.subtract(new BigDecimal("1500"));
-                }
-                if(investorNo.equals("86000026") && instrument.equals("cs") && hadgeFlag.equals("保")){
-                    volume = volume.subtract(new BigDecimal("400"));
-                }
-                if(investorNo.equals("86000026") && instrument.equals("cs") && hadgeFlag.equals("投")){
+                }*/
+                /*if(investorNo.equals("86000026") && instrument.equals("cs") && hadgeFlag.equals("投")){
+                    volume = volume.subtract(new BigDecimal("214"));
+                }*/
+                /*if(investorNo.equals("86000026") && instrument.equals("cs") && hadgeFlag.equals("投")){
                     volume = volume.subtract(new BigDecimal("850"));
-                }
+                }*/
                 
               //鸡蛋和两版
                 if(instrument.equals("jd")||instrument.equals("bb")||instrument.equals("fb")){
@@ -1040,15 +1040,15 @@ public class ReportServiceImpl implements ReportService {
                     }
                     
                     //查询客户月上交手续费
-                    BigDecimal zcharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201704", investorNo, "郑商所");
+                    BigDecimal zcharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201706", investorNo, "郑商所");
                     if(zcharge == null){
                         zcharge = new BigDecimal("0");
                     }
-                    BigDecimal dcharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201704", investorNo, "大商所");
+                    BigDecimal dcharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201706", investorNo, "大商所");
                     if(dcharge == null){
                         dcharge = new BigDecimal("0");
                     }
-                    BigDecimal scharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201705", investorNo, "上期所");
+                    BigDecimal scharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201707", investorNo, "上期所");
                     if(scharge == null){
                         scharge = new BigDecimal("0");
                     }
@@ -1070,17 +1070,17 @@ public class ReportServiceImpl implements ReportService {
                         JSONObject json = JSONObject.parseObject(specialReturn.getCustomInterval());
                         
                         if("居间人".equals(specialReturn.getType())){
-                            BigDecimal mediatorZcharge = this.vTradeDetailMapper.selectMediatorChargeByMonthAndExchange("201704", specialReturn.getMediatorNo(), "郑商所");
+                            BigDecimal mediatorZcharge = this.vTradeDetailMapper.selectMediatorChargeByMonthAndExchange("201706", specialReturn.getMediatorNo(), "郑商所");
                             if(mediatorZcharge == null){
                                 mediatorZcharge = new BigDecimal("0");
                             }
                             
-                            BigDecimal mediatorDcharge = this.vTradeDetailMapper.selectMediatorChargeByMonthAndExchange("201704", specialReturn.getMediatorNo(), "大商所");
+                            BigDecimal mediatorDcharge = this.vTradeDetailMapper.selectMediatorChargeByMonthAndExchange("201706", specialReturn.getMediatorNo(), "大商所");
                             if(mediatorDcharge == null){
                                 mediatorDcharge = new BigDecimal("0");
                             }
                             
-                            BigDecimal mediatorScharge = this.vTradeDetailMapper.selectMediatorChargeByMonthAndExchange("201705", specialReturn.getMediatorNo(), "上期所");
+                            BigDecimal mediatorScharge = this.vTradeDetailMapper.selectMediatorChargeByMonthAndExchange("201707", specialReturn.getMediatorNo(), "上期所");
                             if(mediatorScharge == null){
                                 mediatorScharge = new BigDecimal("0");
                             }
