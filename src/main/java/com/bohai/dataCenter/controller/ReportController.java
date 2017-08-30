@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.bohai.dataCenter.controller.exception.BohaiException;
+import com.bohai.dataCenter.entity.ReportDep;
 import com.bohai.dataCenter.entity.ReportExchangeRebate;
 import com.bohai.dataCenter.entity.ReportRebate;
 import com.bohai.dataCenter.entity.ReportSpecialReturn;
+import com.bohai.dataCenter.persistence.ReportDepMapper;
 import com.bohai.dataCenter.service.ReportExchangeRebateService;
 import com.bohai.dataCenter.service.ReportQueryService;
 import com.bohai.dataCenter.service.ReportRebateService;
@@ -24,6 +26,7 @@ import com.bohai.dataCenter.service.ReportService;
 import com.bohai.dataCenter.service.ReportSpecialReturnService;
 import com.bohai.dataCenter.vo.CountExchangeRebateParamVO;
 import com.bohai.dataCenter.vo.CountRebatReportParamVO;
+import com.bohai.dataCenter.vo.QueryDepProfitParamVO;
 import com.bohai.dataCenter.vo.QueryExchangeRebateParamVO;
 import com.bohai.dataCenter.vo.QueryInvestorProfitParamVO;
 import com.bohai.dataCenter.vo.QueryMarketerProfitParamVO;
@@ -52,6 +55,9 @@ public class ReportController {
 	
 	@Autowired
 	private ReportQueryService reportQueryService;
+	
+	@Autowired
+	private ReportDepMapper reportDepMapper;
 	
 	
 	@RequestMapping(value="toBusinessReport")
@@ -131,8 +137,12 @@ public class ReportController {
         return this.reportQueryService.queryMarketerProfit(paramVO);
     }
 	
-	
-	
+	@RequestMapping(value="queryDepProfit")
+	@ResponseBody
+	public List<ReportDep> queryDepProfit(@RequestBody QueryDepProfitParamVO paramVO) throws BohaiException{
+	    
+	    return this.reportDepMapper.selectByCondition(paramVO);
+	}
 	
 	
 	

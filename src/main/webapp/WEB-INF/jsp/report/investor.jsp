@@ -45,6 +45,10 @@
     <script src="resources/jqprint/jquery.jqprint-0.3.js"></script>
     <script src="http://code.jquery.com/jquery-migrate-1.1.0.js"></script>
     
+    <!-- bootstrap-select -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+    
     
     <script type="text/javascript">
         function operationFormatter(value,row,index) {
@@ -88,18 +92,49 @@
                 }
             });
             
+            $("#depForm").keypress(function(e){
+                var eCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+                if (eCode == 13){
+                    //自己写判断函数
+                    queryDepProfit();
+                }
+            });
+            
+            //初始化
+            $('.selectpicker').selectpicker();
+            
+            //绑定初始化方法
+            $('#depName').on('loaded.bs.select', function (e) {
+                $.ajax({
+                    url: 'queryCrmDept',
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        var len = data.length;
+                         var optionString = "<option > </option>";
+                         for (i = 0; i < len; i++) {
+                             optionString += "<option value=\'"+ data[i].deptCode +"\'>" + data[i].deptName + "</option>";
+                         }
+                         
+                         $('#depName').html(optionString);
+                         $('#depName').selectpicker('refresh');
+                    }
+                });
+            });
+            
+            
         });
         
         /* 查询投资者产生的利润 */
         function queryInvestorProfit(){
             
-        	//删除打印内容
-        	$('#investorNameCell').html('');
+            //删除打印内容
+            $('#investorNameCell').html('');
             $('#investorNoCell').html('');
             $('#depNameCell').html('');
             $('#INVESTOR_MARKETER_NAME').html('');
             $('#INVESTOR_MEDIATOR_NAME').html('');
-        	$('#NET_PROFIT_SUM').html('');
+            $('#NET_PROFIT_SUM').html('');
              $('#LCSXF_SUM').html('');
              $('#SXFJSR_SUM').html('');
              $('#INTEREST_SUM').html('');
@@ -107,7 +142,7 @@
              $('#EXCHANGE_RETURN_SUM').html('');
              $('#NET_AMOUNT_SUM').html('');
              for (var index = 0; index < 3; index++) {
-            	 $('#MONTH'+index).html('');
+                 $('#MONTH'+index).html('');
                  $('#NET_PROFIT'+index).html('');
                  $('#LCSXF'+index).html('');
                  $('#SXFJSR'+index).html('');
@@ -115,7 +150,7 @@
                  $('#NET_INTEREST'+index).html('');
                  $('#EXCHANGE_RETURN'+index).html('');
                  $('#NET_AMOUNT'+index).html('');
-			}
+            }
              
             if(isNull($('#investorName').val()) && isNull($("#investorNo").val())){
                 alert("请输入投资者代码或投资者名称");
@@ -161,8 +196,8 @@
         
         /* 查询居间人产生的利润 */
         function queryMediatorProfit(){
-        	
-        	//删除打印内容
+            
+            //删除打印内容
             $('#mediatorNameCell').html('');
             $('#mediatorNoCell').html('');
             $('#customerCountCell').html('');
@@ -180,7 +215,7 @@
             $('#MEDIATOR_EXCHANGE_RETURN_SUM').html('');
             $('#MEDIATOR_NET_AMOUNT_SUM').html('');
             for (var index = 0; index < 3; index++) {
-            	$('#MEDIATOR_MONTH'+index).html('');
+                $('#MEDIATOR_MONTH'+index).html('');
                 $('#MEDIATOR_NET_PROFIT'+index).html('');
                 $('#MEDIATOR_SXFJSR'+index).html('');
                 $('#MEDIATOR_NET_SXFJSR'+index).html('');
@@ -188,7 +223,7 @@
                 $('#MEDIATOR_NET_INTEREST'+index).html('');
                 $('#MEDIATOR_EXCHANGE_RETURN'+index).html('');
                 $('#MEDIATOR_NET_AMOUNT'+index).html('');
-			}
+            }
             
             if(isNull($('#mediatorNo').val()) && isNull($("#mediatorName").val())){
                 alert("请输入投资者代码或投资者名称");
@@ -239,8 +274,8 @@
         
         /* 查询营销人与贡献度 */
         function queryMarketerProfit(){
-        	
-        	//删除打印内容
+            
+            //删除打印内容
             $('#MARKETER_MARKETER_NAME').html('');
             $('#MARKETER_DEP_NAME').html('');
             $('#MARKETER_CUSTOMER_COUNT').html('');
@@ -254,16 +289,16 @@
             $('#MARKETER_EXCHANGE_RETURN_SUM').html('');
             $('#MARKETER_NET_AMOUNT_SUM').html('');
             for (var index = 0; index < 3; index++) {
-				
-	            $('#MARKETER_MONTH'+index).html('');
-	            $('#MARKETER_NET_PROFIT'+index).html('');
-	            $('#MARKETER_SXFJSR'+index).html('');
-	            $('#MARKETER_NET_SXFJSR'+index).html('');
-	            $('#MARKETER_INTEREST'+index).html('');
-	            $('#MARKETER_NET_INTEREST'+index).html('');
-	            $('#MARKETER_EXCHANGE_RETURN'+index).html('');
-	            $('#MARKETER_NET_AMOUNT'+index).html('');
-			}
+                
+                $('#MARKETER_MONTH'+index).html('');
+                $('#MARKETER_NET_PROFIT'+index).html('');
+                $('#MARKETER_SXFJSR'+index).html('');
+                $('#MARKETER_NET_SXFJSR'+index).html('');
+                $('#MARKETER_INTEREST'+index).html('');
+                $('#MARKETER_NET_INTEREST'+index).html('');
+                $('#MARKETER_EXCHANGE_RETURN'+index).html('');
+                $('#MARKETER_NET_AMOUNT'+index).html('');
+            }
             
             
             if(isNull($('#marketerNo').val()) && isNull($("#marketerName").val())){
@@ -307,8 +342,17 @@
                }
             });
             
+        }
+        
+        //查询营业部利润
+        function queryDepProfit(){
             
-            
+            $("#depProfitTable").bootstrapTable(
+                'refresh',{url:"queryDepProfit",
+                           query: {depName:$('#depName option:selected').text()
+                                  }
+                          }
+            );
         }
         
         
@@ -392,10 +436,10 @@
         
         //打印居间人利润
         function printMediatorProfit(){
-        	
-        	
-        	
-        	var NET_PROFIT_SUM = 0;
+            
+            
+            
+            var NET_PROFIT_SUM = 0;
             var SXFJSR_SUM = 0;
             var DBL16_SUM = 0;
             var NET_SXF_SUM = 0;
@@ -404,7 +448,7 @@
             var EXCHANGE_RETURN_SUM = 0;
             var NET_AMOUNT_SUM = 0;
             
-        	var allTableData = $("#mediatorProfit").bootstrapTable('getData');//获取表格的所有内容行  
+            var allTableData = $("#mediatorProfit").bootstrapTable('getData');//获取表格的所有内容行  
             console.info(allTableData)
             
             $.each(allTableData, function(index, content){
@@ -433,7 +477,7 @@
                 $('#MEDIATOR_NET_AMOUNT'+index).html(numberFormate((content.EXCHANGE_RETURN - content.INVESTOR_SPECIAL_EXCHANGE - content.MEDIATOR_SPECIAL_EXCHANGE).toFixed(2)));
                 
             });
-        	
+            
             //合计
             $('#MEDIATOR_NET_PROFIT_SUM').html(numberFormate(NET_PROFIT_SUM.toFixed(2)));
             $('#MEDIATOR_SXFJSR_SUM').html(numberFormate(SXFJSR_SUM.toFixed(2)));
@@ -450,10 +494,10 @@
         
         //打印营销人员利润
         function printMarketerProfit(){
-        	
-        	var allTableData = $("#marketerProfit").bootstrapTable('getData');//获取表格的所有内容行   
-        	
-        	var NET_PROFIT_SUM = 0;
+            
+            var allTableData = $("#marketerProfit").bootstrapTable('getData');//获取表格的所有内容行   
+            
+            var NET_PROFIT_SUM = 0;
             var SXFJSR_SUM = 0;
             var DBL16_SUM = 0;
             var NET_SXF_SUM = 0;
@@ -550,6 +594,7 @@
                 <li role="presentation" class="active"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">客户利润产出查询</a></li>
                 <li role="presentation"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">居间人利润产出查询</a></li>
                 <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">营销人员利润产出查询</a></li>
+                <li role="presentation"><a href="#depProfit" aria-controls="depProfit" role="tab" data-toggle="tab">营业部利润查询</a></li>
               </ul>
               
               
@@ -1186,6 +1231,77 @@
                   </div>
                   
               </div>
+              
+              <!-- 营业部利润查询 -->
+              <div role="tabpanel" class="tab-pane fade  in " id="depProfit">
+                
+                  <form class="form-horizontal" style="margin-top: 30px" id="depForm">
+                      <div class="form-group">
+                      
+                            <!-- <label for="reportMonth1" class="col-sm-2 col-md-1 col-md-offset-1 control-label">统计年月</label>
+                            <div class="col-sm-10 col-md-2">
+                              <input type="text" class="form-control" id="reportMonth1">
+                            </div> -->
+                            
+                            <label for="depName" class="col-sm-3 col-md-2 control-label">营业部名称</label>
+                            <div class="col-sm-4 col-md-2">
+                              <select class="selectpicker form-control" id="depName" data-live-Search="true">
+                              </select>
+                            </div>
+                            
+                            <div class="col-sm-10 col-md-2 col-md-offset-1 ">
+                                <input class="btn btn-default col-xs-7" type="button" value="查询" onclick="queryDepProfit()">
+                            </div>
+                            
+                            <!-- <div class="col-sm-10 col-md-2 ">
+                                <input class="btn btn-default col-xs-7" type="button" value="打印" onclick="printMarketerProfit()">
+                            </div> -->
+                      </div>
+                        
+                  </form>
+              
+                  <div class="table-responsive">
+                    <div id="toolbar" class="btn-group">
+                      <div id="toolbar2" class="btn-group">
+                          <span id="depOverview"></span>
+                      </div>
+                    </div>
+                    <table id="depProfitTable"
+                           class="table table-striped"
+                           data-toggle="table"
+                           data-toolbar="#toolbar2"
+                           data-show-refresh="true"
+                           data-show-toggle="true"
+                           data-show-columns="true"
+                           data-show-export="true"
+                           data-detail-view="false"
+                           data-height="542"
+                           data-pagination="true"
+                           data-method="post"
+                           data-page-list="[5, 10, 20, 50]"
+                           data-search="true"
+                           data-height="300">
+                        <thead>
+                        <tr>
+                            <!-- <th data-field="state" data-checkbox="true"></th> -->
+                            
+                            <th data-field="month" data-align="center" >月份</th>
+                            <th data-field="depName" data-align="center" >营业部</th>
+                            <th data-field="interest" data-align="center" data-formatter="numberFormate">总利息</th>
+                            <th data-field="exchangeReturnTicktix" data-align="center" data-formatter="numberFormate">总交返（剔税）</th>
+                            <th data-field="commission" data-align="center" data-formatter="numberFormate">总手续费净收入</th>
+                            <th data-field="specialInterest" data-align="center" data-formatter="numberFormate">利息特例</th>
+                            <th data-field="specialExchangeTicktix" data-align="center" data-formatter="numberFormate">交返特例（剔税）</th>
+                            <th data-field="mediatorCommission" data-align="center" data-formatter="numberFormate">居间人拿走返佣</th>
+                            <th data-field="marketerProfit" data-align="center" data-formatter="numberFormate">营销人员提成</th>
+                            <th data-field="depProfit" data-align="center" data-formatter="numberFormate">净利润</th>
+                        </tr>
+                        </thead>
+                    </table>
+                  </div>
+                  
+              </div>
+              
               
             </div>
               
