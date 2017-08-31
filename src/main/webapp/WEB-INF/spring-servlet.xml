@@ -17,6 +17,11 @@
     
     <context:component-scan base-package="com.bohai.dataCenter.controller"/>
     
+    <!-- 扫描activiti在线编辑器的跳转@RestController 整合activiti modeler-->
+    <context:component-scan base-package="org.activiti.rest.editor,org.activiti.rest.diagram" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
+    
     <!-- 读入配置属性文件 -->
     <!-- <context:property-placeholder location="classpath:service.properties" /> -->
     

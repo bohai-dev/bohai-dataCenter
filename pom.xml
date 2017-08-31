@@ -7,6 +7,12 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>bohai-dataCenter Maven Webapp</name>
     <url>http://maven.apache.org</url>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <activiti.version>5.22.0</activiti.version>
+    </properties>
+    
     <dependencies>
 
         <dependency>
@@ -27,6 +33,12 @@
             <artifactId>activiti-modeler</artifactId>
             <version>5.22.0</version>
         </dependency>
+        
+        <dependency>  
+            <groupId>org.activiti</groupId>  
+            <artifactId>activiti-diagram-rest</artifactId>  
+            <version>${activiti.version}</version>  
+        </dependency> 
 
         <dependency>
             <groupId>org.springframework</groupId>

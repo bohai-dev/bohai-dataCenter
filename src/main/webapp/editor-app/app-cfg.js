@@ -21,5 +21,5 @@
 var ACTIVITI = ACTIVITI || {};
 
 ACTIVITI.CONFIG = {
-	'contextRoot' : '/bohai-dataCenter/service',
+	'contextRoot' : '/bohai-dataCenter',
 };

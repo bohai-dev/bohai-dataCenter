@@ -6,11 +6,6 @@
                            http://www.springframework.org/schema/tx      http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
 
-
-    <!-- 扫描activiti在线编辑器的跳转@RestController -->
-    <context:component-scan base-package="org.activiti.rest.editor" use-default-filters="false">
-        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
-    </context:component-scan>
     
     <!-- 单例json对象 -->
     <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
