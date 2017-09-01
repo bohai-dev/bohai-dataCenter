@@ -64,6 +64,17 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+	    <servlet-name>activitiRest</servlet-name>
+	    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	    <load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>activitiRest</servlet-name>
+	    <url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+    
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
