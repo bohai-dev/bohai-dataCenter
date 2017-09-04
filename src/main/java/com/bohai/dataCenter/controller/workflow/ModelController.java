@@ -42,6 +42,17 @@ public class ModelController {
 
     @Autowired
     RepositoryService repositoryService;
+    
+    /**
+     * 模型列表
+     */
+    @RequestMapping(value = "list")
+    public ModelAndView modelList() {
+        ModelAndView mav = new ModelAndView("workflow/model-list");
+        List<Model> list = repositoryService.createModelQuery().list();
+        mav.addObject("list", list);
+        return mav;
+    }
 
     
     /**
@@ -152,6 +163,12 @@ public class ModelController {
         } catch (Exception e) {
             logger.error("导出model的xml文件失败：modelId={}, type={}", modelId, type, e);
         }
+    }
+    
+    @RequestMapping(value = "delete/{modelId}")
+    public String delete(@PathVariable("modelId") String modelId) {
+        repositoryService.deleteModel(modelId);
+        return "redirect:/workflow/model/list";
     }
 
 }
