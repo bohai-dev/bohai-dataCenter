@@ -1,0 +1,42 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Welcome  </title>
+    <%String path=request.getContextPath(); %>
+    <!-- jquery -->
+    <script type="text/javascript" src="<%=path %>/resources/jquery/jquery-3.1.1.min.js"></script>
+    <!-- Bootstrap -->
+    <script type="text/javascript" src="<%=path %>/resources/bootstrap/js/bootstrap.min.js"></script>
+    <link href="<%=path %>/resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<%=path %>/resources/css/dashboard.css" rel="stylesheet">
+    <link href="<%=path %>/resources/css/sticky-footer.css" rel="stylesheet">
+
+  </head>
+  <body>
+
+    <%@include file="head.jsp" %>
+
+    <div class="container-fluid">
+      <div class="row">
+        <%@include file="leftMenu.jsp" %>
+        
+        
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">Dashboard</h1>
+
+
+        </div>
+      </div>
+    </div>
+    
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">Place sticky footer content here.</p>
+      </div>
+    </footer>
+
+  </body>
+</html>
