@@ -23,20 +23,11 @@
       <div class="row">
         <%@include file="leftMenu.jsp" %>
         
+        <%@include file="container.jsp" %>
         
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Dashboard</h1>
-
-
-        </div>
       </div>
     </div>
     
-    <footer class="footer">
-      <div class="container">
-        <p class="text-muted">Place sticky footer content here.</p>
-      </div>
-    </footer>
-
+    <%@include file="footer.jsp" %>
   </body>
 </html>
