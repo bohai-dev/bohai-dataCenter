@@ -320,7 +320,7 @@
                    language: 'zh',
                    uploadAsync: true,
                    uploadUrl: "uploadExchangeRebate", //异步上传地址
-                   maxFileCount: 10,//最大上传文件数限制
+                   maxFileCount: 50,//最大上传文件数限制
                    showCaption: true,//是否显示标题
                    showPreview:false,//默认true
                    'previewFileType':'image',

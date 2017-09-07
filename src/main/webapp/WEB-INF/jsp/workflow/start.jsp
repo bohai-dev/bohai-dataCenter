@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Welcome  </title>
+    <title>流程发起</title>
     <%String path=request.getContextPath(); %>
     <!-- jquery -->
     <script type="text/javascript" src="<%=path %>/resources/jquery/jquery-3.1.1.min.js"></script>
@@ -23,7 +23,7 @@
       <div class="row">
         <%@include file="leftMenu.jsp" %>
         
-        <%@include file="container.jsp" %>
+        <%@include file="startProcessForm.jsp" %>
         
       </div>
     </div>
