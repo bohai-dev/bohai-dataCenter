@@ -14,6 +14,11 @@
     <link href="<%=path %>/resources/css/dashboard.css" rel="stylesheet">
     <link href="<%=path %>/resources/css/sticky-footer.css" rel="stylesheet">
 
+    <!-- datepicker -->
+    <script src="<%=path %>/resources/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="<%=path %>/resources/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+    <!-- datepicker css-->
+    <link href="<%=path %>/resources/bootstrap-datepicker/css/bootstrap-datepicker3.css" rel="stylesheet">
   </head>
   <body>
 
