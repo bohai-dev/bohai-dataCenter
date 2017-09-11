@@ -60,6 +60,7 @@
             });
         }
     </script>
+    
     <input class="btn btn-default" type="button" value="请假申请" onclick="test()">
     
     <div class="modal fade" id="activitiModal" tabindex="-1" role="dialog"

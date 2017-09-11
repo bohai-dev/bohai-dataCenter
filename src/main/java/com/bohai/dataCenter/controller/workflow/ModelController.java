@@ -59,7 +59,7 @@ public class ModelController {
      * 创建模型
      */
     @RequestMapping(value = "create", method = RequestMethod.POST)
-    public void create(@RequestParam("name") String name, @RequestParam("key") String key, @RequestParam("description") String description,
+    public void create(@RequestParam("name") String name, @RequestParam(value="key",required=false) String key, @RequestParam("description") String description,
                        HttpServletRequest request, HttpServletResponse response) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();

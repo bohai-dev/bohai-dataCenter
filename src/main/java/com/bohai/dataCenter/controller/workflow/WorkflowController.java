@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.alibaba.fastjson.JSON;
-
 @Controller
 public class WorkflowController {
     
@@ -30,5 +28,10 @@ public class WorkflowController {
     @RequestMapping(value="workflow/index")
     public String toWorkflowIndex(){
         return "workflow/index";
+    }
+    
+    @RequestMapping(value="workflow/model")
+    public String toWorkflowModel(){
+        return "workflow/model";
     }
 }
