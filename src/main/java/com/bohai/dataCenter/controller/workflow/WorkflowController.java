@@ -10,13 +10,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class WorkflowController {
-    
+
     @Autowired
     private FormService formService;
 
-    @RequestMapping(value="workflow/{processDefinitionId}/start")
-    public ModelAndView startProcess(@PathVariable String processDefinitionId){
-        
+    @RequestMapping(value = "workflow/{processDefinitionId}/start")
+    public ModelAndView startProcess(@PathVariable String processDefinitionId) {
+
         String viewName = "workflow/start";
         ModelAndView mav = new ModelAndView(viewName);
         StartFormData startFormData = formService.getStartFormData(processDefinitionId);
@@ -24,14 +24,19 @@ public class WorkflowController {
         mav.addObject("processDefinitionId", processDefinitionId);
         return mav;
     }
-    
-    @RequestMapping(value="workflow/index")
-    public String toWorkflowIndex(){
+
+    @RequestMapping(value = "workflow/index")
+    public String toWorkflowIndex() {
         return "workflow/index";
     }
-    
-    @RequestMapping(value="workflow/model")
-    public String toWorkflowModel(){
+
+    @RequestMapping(value = "workflow/model")
+    public String toWorkflowModel() {
         return "workflow/model";
+    }
+    
+    @RequestMapping(value = "workflow/process")
+    public String toWorkflowProcess() {
+        return "workflow/process";
     }
 }

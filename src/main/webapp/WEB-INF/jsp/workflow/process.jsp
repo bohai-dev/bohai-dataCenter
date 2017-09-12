@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Welcome</title>
+<title>流程列表</title>
 <%
     String path = request.getContextPath();
 %>
@@ -35,45 +35,48 @@
 <script type="text/javascript">
                     $(function() {
 
-                        $('#modelTable').bootstrapTable({
+                        $('#processTable').bootstrapTable({
                             columns : [ {
-                                field : 'name',
-                                title : '模型名称'
+                                field : 'id',
+                                title : 'ID'
                             }, {
-                                field : 'key',
-                                title : '模型键'
+                                field : 'name',
+                                title : '名称'
                             }, {
                                 field : 'category',
                                 title : '分类'
                             }, {
+                                field : 'key',
+                                title : '键'
+                            }, {
                                 field : 'version',
-                                title : '版本号'
+                                title : '版本'
                             }, {
-                                field : 'metaInfo',
-                                title : '元信息'
-                            }, {
-                                field : 'deploymentId',
-                                title : '部署ID'
-                            }, {
-                                field : 'id',
-                                title : 'ID'
+                                field : 'description',
+                                title : '描述'
                             }, {
                                 field : 'url',
-                                title : '模型url',
+                                title : '流程url',
                                 formatter : function(value,row,index){
                                        return '<a href="'+value+'"><i class="glyphicon glyphicon-eye-open"/></a>';
                                     }
                             }, {
-                                field : 'deploymentUrl',
-                                title : '部署url'
+                                field : 'deploymentId',
+                                title : '部署ID'
                             }, {
-                                field : 'tenantId',
-                                title : 'tenantId'
+                                field : 'deploymentUrl',
+                                title : '部署rul'
+                            }, {
+                                field : 'resource',
+                                title : '流程文件'
+                            }, {
+                                field : 'diagramResource',
+                                title : '流程图片'
                             }, {
                                 title : '操作',
                                 formatter : operationFormatter
                             } ],
-                            url : '<%=path%>/rest/repository/models',
+                            url : '<%=path%>/rest/repository/process-definitions',
             dataField : 'data',
             queryParams : function(params) {
                 return {
@@ -131,16 +134,10 @@
             <%@include file="leftMenu.jsp"%>
 
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                <h1 class="page-header">流程模型设计</h1>
+                <h1 class="page-header">已部署流程列表</h1>
 
                 <div class="table-responsive">
-                    <div id="toolbar" class="btn-group">
-                        <button type="button" class="btn btn-default" data-toggle="modal"
-                            data-target="#addModal" title="创建模型">
-                            <i class="glyphicon glyphicon-plus"></i>
-                        </button>
-                    </div>
-                    <table id="modelTable"</table>
+                    <table id="processTable"</table>
 
                 </div>
             </div>

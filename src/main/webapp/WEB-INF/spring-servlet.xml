@@ -51,12 +51,6 @@
 	    </property>
 	</bean>
 	
-    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor" />
-    
-    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
-        <property name="securityManager" ref="securityManager"/>
-    </bean>
-    
 	<!-- 异常处理类 -->
 	<bean class="com.bohai.dataCenter.controller.exception.BohaiExceptionResolver">
 	</bean>
