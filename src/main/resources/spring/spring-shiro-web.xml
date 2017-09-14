@@ -70,9 +70,22 @@
         <property name="securityManager" ref="securityManager"/>
     </bean>
     
+    <!-- 配置多个Realm -->
+    <bean id="authenticator" class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
+        <property name="realms">
+            <list>
+                <ref bean="myRealm"/>
+                <ref bean="oaRealm"/>
+            </list>
+        </property>
+    </bean>
+    
     <!-- Define the Shiro Realm implementation you want to use to connect to your back-end -->
     <!-- security datasource: -->
     <bean id="myRealm" class="com.bohai.dataCenter.shiro.realm.UserRealm">
     </bean>
-
+    
+    <bean id="oaRealm" class="com.bohai.dataCenter.shiro.realm.OARealm">
+    </bean>
+    
 </beans>
