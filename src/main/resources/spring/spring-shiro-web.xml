@@ -60,14 +60,14 @@
         <!-- By default the servlet container sessions will be used.  Uncomment this line
              to use shiro's native sessions (see the JavaDoc for more): -->
         <!-- <property name="sessionMode" value="native"/> -->
+        <property name="authenticator" ref="authenticator"></property>
+        
         <property name="realms">
             <list>
                 <ref bean="myRealm"/>
                 <ref bean="oaRealm"/>
             </list>
         </property>
-        
-        <property name="authenticator" ref="authenticator"></property>
     </bean>
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
     

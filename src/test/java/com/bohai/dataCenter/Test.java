@@ -1,6 +1,7 @@
 package com.bohai.dataCenter;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class Test {
 
@@ -17,7 +18,7 @@ public class Test {
 		System.out.println(d/2);*/
 		
 		
-		for (int i = 0; i < 100; i++) {
+/*		for (int i = 0; i < 100; i++) {
             
 		    double dd = 100;
 		    BigDecimal b = new BigDecimal(dd);
@@ -25,5 +26,12 @@ public class Test {
 		    System.out.println(b);
 		    
         }
+		*/
+		
+		double f = -1.567;
+		
+		BigDecimal b = new BigDecimal(f).setScale(2, RoundingMode.HALF_UP);
+		
+		System.out.println(b);
 	}
 }
