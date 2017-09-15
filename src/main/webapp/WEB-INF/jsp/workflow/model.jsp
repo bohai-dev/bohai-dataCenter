@@ -33,54 +33,58 @@
 <script src="<%=path%>/resources/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
 
 <script type="text/javascript">
-                    $(function() {
+    $(function() {
 
-                        $('#modelTable').bootstrapTable({
-                            columns : [ {
-                                field : 'name',
-                                title : '模型名称'
-                            }, {
-                                field : 'key',
-                                title : '模型键'
-                            }, {
-                                field : 'category',
-                                title : '分类'
-                            }, {
-                                field : 'version',
-                                title : '版本号'
-                            }, {
-                                field : 'metaInfo',
-                                title : '元信息'
-                            }, {
-                                field : 'deploymentId',
-                                title : '部署ID'
-                            }, {
-                                field : 'id',
-                                title : 'ID'
-                            }, {
-                                field : 'url',
-                                title : '模型url',
-                                formatter : function(value,row,index){
-                                       return '<a href="'+value+'"><i class="glyphicon glyphicon-eye-open"/></a>';
-                                    }
-                            }, {
-                                field : 'deploymentUrl',
-                                title : '部署url'
-                            }, {
-                                field : 'tenantId',
-                                title : 'tenantId'
-                            }, {
-                                title : '操作',
-                                formatter : operationFormatter
-                            } ],
-                            url : '<%=path%>/rest/repository/models',
+        $('#modelTable').bootstrapTable({
+            columns : [ {
+                field : 'name',
+                title : '模型名称'
+            }, {
+                field : 'key',
+                title : '模型键'
+            }, {
+                field : 'category',
+                title : '分类'
+            }, {
+                field : 'version',
+                title : '版本号'
+            }, {
+                field : 'metaInfo',
+                title : '元信息'
+            }, {
+                field : 'deploymentId',
+                title : '部署ID'
+            }, {
+                field : 'id',
+                title : 'ID'
+            }, {
+                field : 'url',
+                title : '模型url',
+                formatter : function(value,row,index){
+                       return '<a href="'+value+'"><i class="glyphicon glyphicon-eye-open"/></a>';
+                    }
+            }, {
+                field : 'deploymentUrl',
+                title : '部署url'
+            }, {
+                field : 'tenantId',
+                title : 'tenantId'
+            }, {
+                title : '操作',
+                formatter : operationFormatter
+            } ],
+            url : '<%=path%>/rest/repository/models',
+            detailView : true,
+            detailFormatter : function(index, row, element) {
+		                return '<img src="'+row.sourceExtraUrl+'"/>';
+		            },
             dataField : 'data',
             queryParams : function(params) {
                 return {
                     start : params.offset,
                     size : params.limit
-                };
-            },
+                    };
+                },
             queryParamsType : 'limit',
             pagination : 'true',
             sidePagination : 'server',
