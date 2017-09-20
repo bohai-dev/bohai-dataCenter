@@ -69,6 +69,27 @@ public class SysUser {
      */
     private String fullName;
     
+    private String oaUser;
+    
+    private String oaPass;
+    
+    
+    public String getOaUser() {
+        return oaUser;
+    }
+
+    public void setOaUser(String oaUser) {
+        this.oaUser = oaUser;
+    }
+
+    public String getOaPass() {
+        return oaPass;
+    }
+
+    public void setOaPass(String oaPass) {
+        this.oaPass = oaPass;
+    }
+
     public Long getId() {
         return id;
     }

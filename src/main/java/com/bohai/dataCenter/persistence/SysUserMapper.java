@@ -63,6 +63,13 @@ public interface SysUserMapper {
     SysUser queryUserByUsername(String username);
     
     /**
+     * OA单点登录
+     * @param username
+     * @return
+     */
+    SysUser queryUserByOA(String username);
+    
+    /**
      * 查询用户
      * @param map
      * @return

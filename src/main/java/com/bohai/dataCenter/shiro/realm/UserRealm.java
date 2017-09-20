@@ -3,6 +3,7 @@ package com.bohai.dataCenter.shiro.realm;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -12,6 +13,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.fastjson.JSON;
@@ -31,9 +33,15 @@ public class UserRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0) {
-        // TODO Auto-generated method stub
-    	String userName = (String) arg0.fromRealm(getName()).iterator().next();
+        
+    	//String userName = (String) arg0.fromRealm(getName()).iterator().next();
+    	String userName = (String)arg0.getPrimaryPrincipal();
     	System.out.println("用户名："+userName);
+    	Subject currentUser = SecurityUtils.getSubject();
+    	
+    	SysUser sysUser = (SysUser) currentUser.getSession().getAttribute("user");
+    	userName = sysUser.getUsername();
+    	System.out.println("系统用户名："+userName);
     	//用户对应权限集合
     	
     	SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
@@ -59,8 +67,10 @@ public class UserRealm extends AuthorizingRealm {
         }
         
         logger.info("token: "+JSON.toJSONString(token));
-        
-        return new SimpleAuthenticationInfo(username, sysUser.getPassword(), getName());
+        AuthenticationInfo authenticationInfo =new SimpleAuthenticationInfo(username, sysUser.getPassword(), getName());
+        Subject currentUser = SecurityUtils.getSubject();
+        currentUser.getSession().setAttribute("user", sysUser);
+        return authenticationInfo; 
         
     }
 

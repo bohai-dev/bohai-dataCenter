@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
+import com.bohai.dataCenter.entity.SysUser;
 import com.bohai.dataCenter.service.PermissionService;
 import com.bohai.dataCenter.vo.TreeView;
 
@@ -65,6 +66,9 @@ public class LoginController {
         } catch ( AuthenticationException ae ) {
             logger.warn("AuthenticationException", ae);
         }
+        
+        SysUser sysUser = (SysUser) currentUser.getSession().getAttribute("user");
+        username = sysUser.getUsername();
         currentUser.getSession().setAttribute("username", username);
         
         //查询用户拥有的菜单权限
