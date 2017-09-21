@@ -39,7 +39,7 @@ public class ReportServiceTest extends AbstractJUnit4SpringContextTests{
 	public void countInvestorExchangeRebate() throws BohaiException{
 	    
 	    CountExchangeRebateParamVO paramVO = new CountExchangeRebateParamVO();
-        paramVO.setMonth("2017-07");
+        paramVO.setMonth("2017-08");
 	    
         this.reportService.countInvestorExchangeRebate(paramVO);
 	}
@@ -52,7 +52,7 @@ public class ReportServiceTest extends AbstractJUnit4SpringContextTests{
 	public void reportSpecialReturn() throws BohaiException{
 	    
 	    CountExchangeRebateParamVO paramVO = new CountExchangeRebateParamVO();
-        paramVO.setMonth("2017-07");
+        paramVO.setMonth("2017-08");
 	    this.reportService.reportSpecialReturn(paramVO);
 	    
 	}
@@ -73,7 +73,7 @@ public class ReportServiceTest extends AbstractJUnit4SpringContextTests{
 	public void countRebatReport() throws BohaiException{
 	    CountRebatReportParamVO paramVO = new CountRebatReportParamVO();
 	    paramVO.setYear("2017");
-	    paramVO.setMonth("07");
+	    paramVO.setMonth("08");
 	    this.reportService.countRebatReport(paramVO);
 	}
 	
@@ -87,7 +87,7 @@ public class ReportServiceTest extends AbstractJUnit4SpringContextTests{
 	    
 	    CountRebatReportParamVO paramVO = new CountRebatReportParamVO();
 	    paramVO.setYear("2017");
-	    paramVO.setMonth("07");
+	    paramVO.setMonth("08");
 	    this.reportService.reportInvestorInterest(paramVO);
 	    
 	}
