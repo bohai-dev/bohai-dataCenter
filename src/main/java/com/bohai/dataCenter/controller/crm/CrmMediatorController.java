@@ -15,6 +15,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -234,4 +235,12 @@ public class CrmMediatorController {
         return this.crmMediatorService.queryMediatorOverview(paramVO);
         
     }
+    
+    @RequestMapping(value="publicity/{mediatorNo}")
+    @ResponseBody
+    public void publicity(@PathVariable String mediatorNo) throws BohaiException{
+        
+        this.crmMediatorService.publicityMediator(mediatorNo);
+    }
+    
 }

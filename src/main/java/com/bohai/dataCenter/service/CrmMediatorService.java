@@ -28,4 +28,11 @@ public interface CrmMediatorService {
      * @throws BohaiException
      */
     public QueryMediatorOverviewResultVO queryMediatorOverview(QueryCrmMediatorParamVO paramVO) throws BohaiException;
+    
+    /**
+     * 居间人公示
+     * @param mediatorNo
+     * @throws BohaiException
+     */
+    public void publicityMediator(String mediatorNo) throws BohaiException;
 }

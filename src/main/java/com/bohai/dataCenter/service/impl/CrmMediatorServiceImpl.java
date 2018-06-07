@@ -7,6 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bohai.dataCenter.controller.exception.BohaiException;
+import com.bohai.dataCenter.dao.CrmCustomerDao;
+import com.bohai.dataCenter.dao.CrmMarketerDao;
+import com.bohai.dataCenter.dao.CrmMediatorDao;
+import com.bohai.dataCenter.entity.CrmCustomer;
+import com.bohai.dataCenter.entity.CrmMarketer;
 import com.bohai.dataCenter.entity.CrmMediator;
 import com.bohai.dataCenter.entity.RebateList;
 import com.bohai.dataCenter.entity.SpecialReturn;
@@ -16,6 +21,7 @@ import com.bohai.dataCenter.persistence.CrmMediatorMapper;
 import com.bohai.dataCenter.persistence.RebateListMapper;
 import com.bohai.dataCenter.persistence.SpecialReturnMapper;
 import com.bohai.dataCenter.service.CrmMediatorService;
+import com.bohai.dataCenter.vo.QueryCrmCustomerParamVO;
 import com.bohai.dataCenter.vo.QueryCrmMediatorParamVO;
 import com.bohai.dataCenter.vo.QueryMediatorOverviewResultVO;
 
@@ -38,7 +44,15 @@ public class CrmMediatorServiceImpl implements CrmMediatorService {
     
     @Autowired
     private SpecialReturnMapper specialReturnMapper;
-
+    
+    @Autowired
+    private CrmCustomerDao crmCustomerDao;
+    
+    @Autowired
+    private CrmMediatorDao crmMediatorDao;
+    
+    @Autowired
+    private CrmMarketerDao crmMarketerDao;
     @Override
     public void modifyCrmMediator(CrmMediator mediator) throws BohaiException {
         
@@ -140,6 +154,42 @@ public class CrmMediatorServiceImpl implements CrmMediatorService {
         
         
         return resultVO;
+    }
+
+    @Override
+    public void publicityMediator(String mediatorNo) throws BohaiException {
+        
+        CrmMediator mediator = this.crmMediatorMapper.selectByPrimaryKey(mediatorNo);
+        if(mediator == null){
+            return;
+        }
+        
+        String belongType = mediator.getBelongType();
+        if(belongType.equals("1")){
+            //营销人员名下居间
+            CrmMarketer marketer = this.crmMarketerMapper.selectByPrimaryKey(mediator.getBelongTo());
+            if(marketer != null){
+                //复制营销人员到系统二（在系统二中先删除后插入）
+                this.crmMarketerDao.deleteByMarketerNo(marketer.getMarketerNo());
+                this.crmMarketerDao.insert(marketer);
+            }
+        }
+        //复制居间人信息到系统二（先删除后插入）
+        this.crmMediatorDao.deleteByMediatorNo(mediatorNo);
+        this.crmMediatorDao.insert(mediator);
+        
+        //查询居间人名下客户
+        QueryCrmCustomerParamVO paramVO = new QueryCrmCustomerParamVO();
+        paramVO.setBelongType("2");
+        paramVO.setBelongTo(mediatorNo);
+        List<CrmCustomer> customers = this.crmCustomerMapper.selectByCondition(paramVO);
+        if(customers != null && customers.size() >0){
+            for (CrmCustomer crmCustomer : customers) {
+                this.crmCustomerDao.deleteByCustomerNo(crmCustomer.getInvestorNo());
+                this.crmCustomerDao.insert(crmCustomer);
+            }
+        }
+        
     }
 
 }
