@@ -62,6 +62,10 @@
                      
                      + '<button type="button" id="trash'+row.mediatorNo+'" class="btn btn-default btn-sm" title="删除">'
                          + '<i class="glyphicon glyphicon-trash"></i>'
+                     + '</button> &nbsp;'
+                     
+                     + '<button type="button" id="publicity'+row.mediatorNo+'" class="btn btn-default btn-sm" title="公示">'
+                     + '<i class="glyphicon glyphicon-eye-open"></i>'
                      + '</button>';
                      
                      $("#mediatorTable").off("click","#cog"+row.mediatorNo);
@@ -73,6 +77,12 @@
                      $("#mediatorTable").off("click","#trash"+row.mediatorNo);
                      $("#mediatorTable").on("click","#trash"+row.mediatorNo,row,function(event){
                          trash(row);
+                     });
+                     
+                     //添加居间人公示事件
+                     $("#mediatorTable").off("click","#publicity"+row.mediatorNo);
+                     $("#mediatorTable").on("click","#publicity"+row.mediatorNo,row,function(event){
+                         publicity(row);
                      });
             return html;
         }
@@ -155,6 +165,21 @@
                         $("#mediatorTable").bootstrapTable('refresh');
                     }
                 });
+            }
+        }
+        
+        /* 居间人公示 */
+        function publicity(row){
+            if(confirm("确定要公示居间人："+row.mediatorName+"("+row.mediatorNo+")吗？")){
+	            $.ajax({
+	                type: "post",
+	                url: "publicity/"+row.mediatorNo,
+	                //dataType: 'json',
+	                contentType: "application/json;charset=UTF-8",
+	                success: function (date, status){
+	                    alert("公示成功");
+	                }
+	            });
             }
         }
         
