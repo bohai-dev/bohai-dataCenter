@@ -555,26 +555,26 @@
                 
                 </div>
                 
-                <div class="col-sm-12 col-md-6" id="barChart6" style="height:400px;">
+                <div class="col-sm-12 col-md-6 row pre-scrollable" id="barChart6" style="height:400px;">
                     <label for="tableApp">存量客户权益排名</label>
                     <table id="tableApp" align="center" class="table table-bordered">
                         <thead>
                             <tr>
                                 <th width="10%" style="text-align: center;">排名</th >
                                 <th width="50%" style="text-align: center;">营业部</th >
-                                <th width="30%" style="text-align: center;">总权益</th >
+                                <th width="30%" style="text-align: center;">总权益(万元)</th >
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="item in items">
                                 <td style="text-align: center;">
-                                    {{item.ranking}}
+                                    {{item.RANKING}}
                                 </td>
                                 <td style="text-align: center;">
-                                    {{item.depName}}
+                                    {{item.DEP_NAME}}
                                 </td>
                                 <td style="text-align: center;">
-                                    {{item.money}}
+                                    {{item.RIGHTS}}
                                 </td>
                             </tr>
                         </tbody>

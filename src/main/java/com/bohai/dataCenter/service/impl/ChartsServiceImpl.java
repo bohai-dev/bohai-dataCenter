@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bohai.dataCenter.persistence.ChartsMapper;
 import com.bohai.dataCenter.persistence.CrmCustomerMapper;
 import com.bohai.dataCenter.persistence.CtpTradeDataMapper;
 import com.bohai.dataCenter.service.ChartsService;
@@ -25,6 +26,9 @@ public class ChartsServiceImpl implements ChartsService {
     
     @Autowired
     private CrmCustomerMapper crmCustomerMapper;
+    
+    @Autowired
+    private ChartsMapper chartsMapper;
     
     @Override
     public ChartsOptoin queryTrunoverBarChart() {
@@ -212,12 +216,7 @@ public class ChartsServiceImpl implements ChartsService {
 
     @Override
     public List rightsRanking() {
-        List<JSONObject> list = new ArrayList<>();
-        JSONObject jsonObject =new JSONObject();
-        jsonObject.put("ranking", 1);
-        jsonObject.put("depName", "上海营业部");
-        jsonObject.put("money", 320);
-        list.add(jsonObject);
+        List<Map<String, Object>> list = this.chartsMapper.selectOrderByRanking();
         return list;
     }
 
