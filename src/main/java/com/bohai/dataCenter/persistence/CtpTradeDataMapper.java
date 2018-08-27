@@ -1,5 +1,10 @@
 package com.bohai.dataCenter.persistence;
 
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Select;
+
 import com.bohai.dataCenter.entity.CtpTradeData;
 
 public interface CtpTradeDataMapper {
@@ -18,4 +23,20 @@ public interface CtpTradeDataMapper {
      * @mbggenerated Mon May 08 15:46:02 CST 2017
      */
     int insertSelective(CtpTradeData record);
+    
+    @Select("select substr(t.TRADE_DATE,0,6) as TRADE_DATE,t.EXCHANGE_NAME as EXCHANGE_NAME,round(sum(t.TRUNOVER)/power(10,8),2) as TRUNOVER"
+            + " from T_CTPTRADE_DATA t "
+            + "where substr(t.TRADE_DATE,0,4) = to_char(sysdate,'yyyy') "
+            + "group by substr(t.TRADE_DATE,0,6),t.EXCHANGE_NAME "
+            + "order by substr(t.TRADE_DATE,0,6)")
+    List<Map<String, Object>> selectTrunover();
+    
+    @Select("select substr(t.TRADE_DATE,0,6) as TRADE_DATE,sum(t.EXCHANGE_CHARGE) as EXCHANGE_CHARGE , sum(t.CHARGE) as CHARGE  "
+            + "from T_CTPTRADE_DATA t "
+            + "where substr(t.TRADE_DATE,0,4) = to_char(sysdate,'yyyy') "
+            + "group by substr(t.TRADE_DATE,0,6) "
+            + "order by substr(t.TRADE_DATE,0,6)")
+    List<Map<String, Object>> selectCharge();
+    
+    
 }

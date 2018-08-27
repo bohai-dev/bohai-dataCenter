@@ -54,6 +54,10 @@ public class CapitalStatementCSVUploadServiceImpl implements FileUploadService {
 			int availableIndex = 0;
 			//投资者权益所在列
 			int investorRightsIndex = 0;
+			//入金所在列
+			int depositIndex = 0;
+			//出金所在列
+			int turnoutIndex = 0;
 			for (final CSVRecord record : parser) {
 		    	
 				int s = record.size();
@@ -78,7 +82,11 @@ public class CapitalStatementCSVUploadServiceImpl implements FileUploadService {
 							availableIndex = i;
 						}else if (colName.replace(" ", "").equals("投资者权益")) {
 							investorRightsIndex = i;
-						}
+						}else if (colName.replace(" ", "").equals("入金")) {
+                            depositIndex = i;
+                        }else if (colName.replace(" ", "").equals("出金")) {
+                            turnoutIndex = i;
+                        }
 					}
 				}
 				
@@ -121,7 +129,10 @@ public class CapitalStatementCSVUploadServiceImpl implements FileUploadService {
 					capitalStatement.setAvailableFunds(record.get(availableIndex).replaceAll(",", ""));
 					//客户权益
 					capitalStatement.setInvestorRights(record.get(investorRightsIndex).replaceAll(",", ""));
-					
+					//入金
+					capitalStatement.setDeposit(record.get(depositIndex).replace(",", ""));
+					//出金
+					capitalStatement.setTurnout(record.get(turnoutIndex).replace(",", ""));
 					capitalStatementService.saveOrUpdate(capitalStatement);
 			    	
 			    }

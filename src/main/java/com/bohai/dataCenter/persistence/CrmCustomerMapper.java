@@ -124,4 +124,10 @@ public interface CrmCustomerMapper {
     
     @Select("select PROVINCE AS name,COUNT(*) AS value FROM(select T_CRM_CUSTOMER.*,T_CRM_DEPT.* FROM T_CRM_CUSTOMER,  T_CRM_DEPT WHERE T_CRM_CUSTOMER.DEPT_CODE=T_CRM_DEPT.DEPT_CODE) GROUP BY PROVINCE")
     List<Map<String, Object>> querySumByProvince();
+    
+    @Select("select substr(t.OPEN_DATE,0,7) as OPEN_DATE ,count(1) as OPEN_COUNT from T_CRM_CUSTOMER t where substr(t.OPEN_DATE,0,4) = to_char(sysdate-365,'yyyy')  group by substr(t.OPEN_DATE,0,7) order by substr(t.OPEN_DATE,0,7)")
+    List<Map<String, Object>> querySumByMonth();
+    
+    @Select("select count(1) from T_CRM_CUSTOMER")
+    Long count();
 }

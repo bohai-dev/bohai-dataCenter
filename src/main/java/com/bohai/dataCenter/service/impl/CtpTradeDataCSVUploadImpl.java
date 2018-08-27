@@ -64,6 +64,8 @@ public class CtpTradeDataCSVUploadImpl implements FileUploadService {
 			int chargeIndex = 0;
 			//交易所手续费
 			int exchangeChargeIndex = 0;
+			//成交编号
+			int tradeNoIndex = 0;
 			
 			
 			for (final CSVRecord record : parser) {
@@ -103,7 +105,9 @@ public class CtpTradeDataCSVUploadImpl implements FileUploadService {
 								chargeIndex = i;
 							}else if (colName.replace(" ", "").equals("交易所手续费")) {
 								exchangeChargeIndex = i;
-							}
+							}else if (colName.replace(" ", "").equals("成交编号")) {
+                                tradeNoIndex = i;
+                            }
 						}
 					}
 				}
@@ -144,6 +148,8 @@ public class CtpTradeDataCSVUploadImpl implements FileUploadService {
 					String charge = record.get(chargeIndex).replace(",", "");
 					//交易所手续费
 					String exchangeCharge = record.get(exchangeChargeIndex).replace(",", "");
+					//成交编号
+					String tradeNo = record.get(tradeNoIndex);
 					
 					if(StringUtils.isEmpty(investorNo)||StringUtils.isEmpty(investorName)){
 						continue;
@@ -164,6 +170,7 @@ public class CtpTradeDataCSVUploadImpl implements FileUploadService {
 					tradeData.setTrunover(trunover);
 					tradeData.setCharge(charge);
 					tradeData.setExchangeCharge(exchangeCharge);
+					tradeData.setTradeNo(tradeNo);
 					try {
 						ctpTradeDataMapper.insertSelective(tradeData);
 					} catch (Exception e) {
