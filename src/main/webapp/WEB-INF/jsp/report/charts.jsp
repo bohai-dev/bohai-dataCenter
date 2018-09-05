@@ -54,6 +54,11 @@
         <!-- VUE -->
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     
+    <style type="text/css">
+        .red{color:red}
+        .green{color:green}
+    </style>
+    
     <script type="text/javascript">
         $(function(){
             var treeObj = ${sessionScope.treeView};
@@ -203,96 +208,109 @@
             });
             
             
-            option = {
-                    title: {
-                        text: '月出入金金额（万元）'/* ,
-                        subtext: 'From ExcelHome',
-                        sublink: 'http://e.weibo.com/1341556070/Aj1J2x5a5' */
-                    },
-                    tooltip : {
-                        trigger: 'axis',
-                        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-                            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                        },
-                        formatter: function (params) {
-                            var tar;
-                            if (params[1].value != '-') {
-                                tar = params[1];
-                            }
-                            else {
-                                tar = params[2];
-                            }
-                            return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value;
-                        }
-                    },
-                    legend: {
-                        data:['净入金','净出金']
-                    },
-                    grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
-                        containLabel: true
-                    },
-                    xAxis: {
-                        type : 'category',
-                        splitLine: {show:false},
-                        data :  function (){
-                            var list = [];
-                            for (var i = 1; i <= 11; i++) {
-                                list.push('11月' + i + '日');
-                            }
-                            return list;
-                        }()
-                    },
-                    yAxis: {
-                        type : 'value'
-                    },
-                    series: [
-                        {
-                            name: '辅助',
-                            type: 'bar',
-                            stack: '总量',
-                            itemStyle: {
-                                normal: {
-                                    barBorderColor: 'rgba(0,0,0,0)',
-                                    color: 'rgba(0,0,0,0)'
-                                },
-                                emphasis: {
-                                    barBorderColor: 'rgba(0,0,0,0)',
-                                    color: 'rgba(0,0,0,0)'
-                                }
-                            },
-                            data: [0, 900, 1245, 1530, 1376, 1376, 1511, 1689, 1856, 1495, 1292]
-                        },
-                        {
-                            name: '净入金',
-                            type: 'bar',
-                            stack: '总量',
-                            label: {
-                                normal: {
-                                    show: true,
-                                    position: 'top'
-                                }
-                            },
-                            data: [900, 345, 393, '-', '-', 135, 178, 286, '-', '-', '-']
-                        },
-                        {
-                            name: '净出金',
-                            type: 'bar',
-                            stack: '总量',
-                            label: {
-                                normal: {
-                                    show: true,
-                                    position: 'bottom'
-                                }
-                            },
-                            data: ['-', '-', '-', 108, 154, '-', '-', '-', 119, 361, 203]
-                        }
-                    ]
-                };
-            var myChart2 = echarts.init(document.getElementById('barChart2'));
-            myChart2.setOption(option);
+            $.ajax({
+                url: 'queryCashInAndOut',
+                type: 'get',
+                dataType: 'json',
+                contentType: "application/json;charset=UTF-8",
+                success: function (result) {
+                    
+		            option = {
+		                    title: {
+		                        text: '月出入金金额（万元）'/* ,
+		                        subtext: 'From ExcelHome',
+		                        sublink: 'http://e.weibo.com/1341556070/Aj1J2x5a5' */
+		                    },
+		                    tooltip : {
+		                        trigger: 'axis',
+		                        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+		                            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+		                        },
+		                        formatter: function (params) {
+		                            var tar;
+		                            if (params[1].value != undefined) {
+		                                tar = params[1];
+		                            }
+		                            else {
+		                                tar = params[2];
+		                            }
+		                            return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value;
+		                        }
+		                    },
+		                    legend: {
+		                        data:['净入金','净出金']
+		                    },
+		                    grid: {
+		                        left: '3%',
+		                        right: '4%',
+		                        bottom: '3%',
+		                        containLabel: true
+		                    },
+		                    xAxis: {
+		                        type : 'category',
+		                        splitLine: {show:false},
+		                        data :  function (){
+		                            var list = [];
+		                            for (var i = 1; i <= 11; i++) {
+		                                list.push('11月' + i + '日');
+		                            }
+		                            return list;
+		                        }()
+		                    },
+		                    yAxis: {
+		                        type : 'value'
+		                    },
+		                    series: [
+		                        {
+		                            name: '辅助',
+		                            type: 'bar',
+		                            stack: '总量',
+		                            itemStyle: {
+		                                normal: {
+		                                    barBorderColor: 'rgba(0,0,0,0)',
+		                                    color: 'rgba(0,0,0,0)'
+		                                },
+		                                emphasis: {
+		                                    barBorderColor: 'rgba(0,0,0,0)',
+		                                    color: 'rgba(0,0,0,0)'
+		                                }
+		                            },
+		                            data: [0, 900, 1245, 1530, 1376, 1376, 1511, 1689, 1856, 1495, 1292]
+		                        },
+		                        {
+		                            name: '净入金',
+		                            type: 'bar',
+		                            stack: '总量',
+		                            label: {
+		                                normal: {
+		                                    show: true,
+		                                    position: 'top'
+		                                }
+		                            },
+		                            data: [900, 345, 393, null, '-', 135, 178, 286, '-', '-', '-']
+		                        },
+		                        {
+		                            name: '净出金',
+		                            type: 'bar',
+		                            stack: '总量',
+		                            label: {
+		                                normal: {
+		                                    show: true,
+		                                    position: 'bottom'
+		                                }
+		                            },
+		                            data: ['-', '-', '-', 108, 154, '-', '-', '-', 119, 361, 203]
+		                        }
+		                    ]
+		                };
+		            option.series[0].data = result.series[0].data;
+		            option.series[1].data = result.series[1].data;
+		            option.series[2].data = result.series[2].data;
+		            option.xAxis.data = result.xAxis.data;
+		            var myChart2 = echarts.init(document.getElementById('barChart2'));
+		            myChart2.setOption(option);
+                }
+            });
             
             
             $.ajax({
@@ -566,11 +584,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="item in items">
-                                <td style="text-align: center;">
-                                    {{item.RANKING}}
+                            <tr v-for="item in items" v-bind:class="[item.RANKING > item.LAST_RANKING ? 'red' : '',item.RANKING < item.LAST_RANKING ? 'green' : '']">
+                                <td style="text-align: center;" >
+                                    <span v-if="item.RANKING > item.LAST_RANKING">↑</span><span v-else-if="item.RANKING < item.LAST_RANKING">↓</span>{{item.RANKING}}
                                 </td>
-                                <td style="text-align: center;">
+                                <td style="text-align: center;" >
                                     {{item.DEP_NAME}}
                                 </td>
                                 <td style="text-align: center;">

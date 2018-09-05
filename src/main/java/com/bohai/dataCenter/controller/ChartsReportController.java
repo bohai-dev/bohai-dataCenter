@@ -47,6 +47,16 @@ public class ChartsReportController {
     }
     
     /**
+     * 新增权益
+     * @return
+     */
+    @RequestMapping(value="queryCashInAndOut")
+    @ResponseBody
+    public ChartsOptoin queryCashInAndOut(){
+        return this.chartsService.queryCashInAndOut();
+    }
+    
+    /**
      * 佣金
      * @return
      */
@@ -66,6 +76,10 @@ public class ChartsReportController {
         return this.chartsService.queryInvestorAndRight();
     }
     
+    /**
+     * 权益排名
+     * @return
+     */
     @RequestMapping(value="rightsRanking")
     @ResponseBody
     public List rightsRanking(){

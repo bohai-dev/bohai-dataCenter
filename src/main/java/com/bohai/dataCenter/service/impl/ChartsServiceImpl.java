@@ -152,8 +152,35 @@ public class ChartsServiceImpl implements ChartsService {
 
     @Override
     public ChartsOptoin queryCashInAndOut() {
-        // TODO Auto-generated method stub
-        return null;
+        ChartsOptoin optoin = new ChartsOptoin();
+        List<Map<String, Object>> list = this.chartsMapper.selectRights();
+        if(list != null){
+            List<Series> seriesList = new ArrayList<>();
+            Series series1 = new Series();
+            List<BigDecimal> data1 = new ArrayList<>();
+            series1.setData(data1);
+            seriesList.add(series1);
+            Series series2 = new Series();
+            List<BigDecimal> data2 = new ArrayList<>();
+            series2.setData(data2);
+            seriesList.add(series2);
+            Series series3 = new Series();
+            List<BigDecimal> data3 = new ArrayList<>();
+            series3.setData(data3);
+            seriesList.add(series3);
+            XAxis axis = new XAxis();
+            List<String> axisData = new ArrayList<>();
+            axis.setData(axisData);
+            optoin.setxAxis(axis);
+            for (Map<String, Object> map: list) {
+                data1.add((BigDecimal) map.get("ASSIST"));
+                data2.add((BigDecimal) map.get("DEPOSIT"));
+                data3.add((BigDecimal) map.get("TURNOUT"));
+                axisData.add((String) map.get("MONTH"));
+            }
+            optoin.setSeries(seriesList);
+        }
+        return optoin;
     }
 
     @Override
