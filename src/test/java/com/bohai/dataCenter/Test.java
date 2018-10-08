@@ -15,15 +15,17 @@ public class Test {
 	    /*double d = 5;
 	    
 		System.out.println(d/2);*/
+	    double a = 1;
+		double d = 4.6;
+		System.out.println(a+d);
 		
-		
-		for (int i = 0; i < 100; i++) {
-            
+		/*for (int i = 0; i < 100; i++) {
+
 		    double dd = 100;
 		    BigDecimal b = new BigDecimal(dd);
-		    
+
 		    System.out.println(b);
-		    
-        }
+
+        }*/
 	}
 }

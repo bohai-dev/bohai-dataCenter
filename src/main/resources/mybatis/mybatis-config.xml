@@ -114,6 +114,7 @@
         
         <!-- 视图 -->
         <mapper resource="mybatis/mapper/VTradeDetailMapper.xml"/>
+        <mapper resource="mybatis/mapper/InvestorCommissionMapper.xml"/>
 
     </mappers>
 

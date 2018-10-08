@@ -1,6 +1,8 @@
 package com.bohai.dataCenter.persistence;
 
 import com.bohai.dataCenter.entity.InvestorCommission;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Param;
 
 public interface InvestorCommissionMapper {
     /**
@@ -18,4 +20,7 @@ public interface InvestorCommissionMapper {
      * @mbggenerated Wed Sep 05 14:37:07 CST 2018
      */
     int insertSelective(InvestorCommission record);
+
+    @Delete("delete from T_INVESTOR_COMMISSION where INVESTOR_NO=#{0} and TRADE_DATE=#{1} and INSTRUMENT_ID=#{2}")
+    int deleteByInvestorAndDate(String investorNum,String tradeDate,String instrumentId);
 }

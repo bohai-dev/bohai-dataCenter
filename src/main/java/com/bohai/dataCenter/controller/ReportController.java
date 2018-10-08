@@ -89,6 +89,12 @@ public class ReportController {
 	public String toInvestorReport(){
 	    return "report/investor";
 	}
+
+	@RequestMapping(value="toCommission")
+	@RequiresPermissions(value="report:commission:view")
+	public String toCommission(){
+		return "report/commission";
+	}
 	
 	@RequestMapping(value="toRetainedReport")
 	public String toRetainedReport(){

@@ -3,6 +3,7 @@ package com.bohai.dataCenter.persistence;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import com.bohai.dataCenter.entity.TradingDate;
@@ -65,4 +66,13 @@ public interface TradingDateMapper {
      */
     @Select("select max(t.tdate) from T_TRADING_DATE t where t.tdate < #{0} and t.type = '1'")
     Date selectPreTraDateByDate(Date date);
+
+    /**
+     * 查询两个日期之间的节假日
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @Select("select * from T_TRADING_DATE t where to_char(t.TDATE,'yyyymmdd') between #{0} and #{1} and t.TYPE = 1 order by t.TDATE")
+    List<TradingDate> selectByStartAndEnd(String startTime,String endTime);
 }

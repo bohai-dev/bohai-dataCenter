@@ -9,13 +9,13 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSONObject;
+import com.bohai.dataCenter.service.InvestorCommissionService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bohai.dataCenter.controller.exception.BohaiException;
@@ -27,6 +27,7 @@ import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
+import sun.applet.Main;
 
 @Controller
 public class FileUploadController {
@@ -44,6 +45,9 @@ public class FileUploadController {
 	
 	@Autowired
 	private ReportService reportService;
+
+	@Autowired
+	InvestorCommissionService investorCommissionService;
 	
 	@RequestMapping(value="fileUpload",method=RequestMethod.POST)
 	@ResponseBody
@@ -155,8 +159,26 @@ public class FileUploadController {
 	    	 
 	     }  
 	}
-	
-	
 
-	
+	@RequestMapping(value="uploadCommission",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String,String> uploadCommission(@RequestParam("file_data")MultipartFile file,@RequestParam("startTime")String startTime,@RequestParam("endTime") String endTime     ){
+		Map<String,String> map=new HashMap<>();
+		if (StringUtils.isEmpty(startTime)||StringUtils.isEmpty(endTime)){
+		 	map.put("error","开始时间和结束时间不能为空");
+		}
+		//解析表格
+		try {
+			investorCommissionService.parseExcel(file,startTime,endTime);
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("error",e.getMessage());
+		}
+
+
+		return map;
+
+	}
+
+
 }
