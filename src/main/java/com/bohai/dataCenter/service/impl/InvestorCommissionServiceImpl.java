@@ -45,7 +45,13 @@ public class InvestorCommissionServiceImpl implements InvestorCommissionService 
             int rows = commissionSheet.getRows();
             List<InvestorCommission> list = new ArrayList<>();
             for (int i = 3; i < rows; i++) {
+                
+                if(commissionSheet.getRow(i).length <4){
+                    continue;
+                }
+                
                 String investorNum = commissionSheet.getRow(i)[3].getContents();
+                
                 if (!StringUtils.isEmpty(investorNum)) {
                     InvestorCommission commission = new InvestorCommission();
                     //交易所代码
