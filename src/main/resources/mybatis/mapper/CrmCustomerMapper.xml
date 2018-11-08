@@ -380,6 +380,7 @@
       when '1' then (select b.MARKETER_NAME from t_crm_marketer b where b.marketer_no = t.belong_to) 
       when '2' then (select c.MEDIATOR_NAME from t_crm_mediator c where c.MEDIATOR_NO = t.belong_to) end as BELONG_TO_NAME
     from T_CRM_CUSTOMER t left join T_CRM_DEPT t1 on t.DEPT_CODE = t1.DEPT_CODE
+    order by t.OPEN_DATE desc
     <where>
         <if test="deptCode != null and deptCode != ''">
             t.DEPT_CODE = #{deptCode}
