@@ -494,6 +494,7 @@
                                 <th data-field="MEDIATOR_NAME" data-align="center" >居间人姓名姓名</th>
                                 <th data-field="DEPT_NAME" data-align="center" >营业部</th>
                                 <th data-field="AVAILABLE_FUNDS" data-align="center" data-formatter="numberFormate">可用资金</th>
+                                <th data-field="EXPIRE_DATE" data-align="center" data-formatter="dateFormate">居间到期日期</th>
                                 <th data-field="INTEREST_AMOUNT" data-align="center" data-footer-formatter="rebateTableFooter" data-formatter="numberFormate">利息</th>
                             </tr>
                             </thead>

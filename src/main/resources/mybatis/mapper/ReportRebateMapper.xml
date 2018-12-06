@@ -361,20 +361,23 @@
   </select>
   
   <select id="selectReport" resultType="java.util.Map" parameterType="com.bohai.dataCenter.vo.QueryRebateReportParamVO">
-    select t.INVESTOR_NO,t.INVESTOR_NAME,t.MEDIATOR_NAME,t.DEPT_NAME,sum(t.AVAILABLE_FUNDS) as AVAILABLE_FUNDS,
-    to_char(sum(t.INTEREST_AMOUNT),'fm9999999999990.0099') as INTEREST_AMOUNT 
-    from T_REPORT_REBATE t
-    <where>
-        <if test="month != null and month != ''">
-            to_char(t.TRADE_DATE,'yyyy-mm') = #{month, jdbcType=VARCHAR}
-        </if>
-        <if test="depName != null and depName != ''">
-            and DEPT_NAME like '%'||#{depName, jdbcType=VARCHAR}||'%'
-        </if>
-    </where>
-    group by t.INVESTOR_NO,t.INVESTOR_NAME,t.MEDIATOR_NAME,t.DEPT_NAME
-  </select>
-  
+	  select a.*,b.EXPIRE_DATE from (
+	    select t.INVESTOR_NO,t.INVESTOR_NAME,t.MEDIATOR_NO,t.MEDIATOR_NAME,t.DEPT_NAME,sum(t.AVAILABLE_FUNDS) as AVAILABLE_FUNDS,
+	    to_char(sum(t.INTEREST_AMOUNT),'fm9999999999990.0099') as INTEREST_AMOUNT 
+	    from T_REPORT_REBATE t 
+	    <where>
+	        <if test="month != null and month != ''">
+	            to_char(t.TRADE_DATE,'yyyy-mm') = #{month, jdbcType=VARCHAR}
+	        </if>
+	        <if test="depName != null and depName != ''">
+	            and DEPT_NAME like '%'||#{depName, jdbcType=VARCHAR}||'%'
+	        </if>
+	    </where>
+	    group by t.INVESTOR_NO,t.MEDIATOR_NO,t.INVESTOR_NAME,t.MEDIATOR_NAME,t.DEPT_NAME) a
+      left join t_crm_mediator b 
+      on a.MEDIATOR_NO = b.MEDIATOR_NO
+	  </select>
+	  
   <select id="selectMarketReport" resultType="java.util.Map" parameterType="com.bohai.dataCenter.vo.QueryRebateReportParamVO">
     select t.DEPT_NAME,sum(t.AVAILABLE_FUNDS) as AVAILABLE_FUNDS,
     to_char(sum(t.INTEREST_AMOUNT),'fm9999999999990.0099') as INTEREST_AMOUNT,
