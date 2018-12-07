@@ -36,9 +36,10 @@
     <!-- table插件 -->
     <link rel="stylesheet" href="resources/bootstrap-table/bootstrap-table.css">
     <script src="resources/bootstrap-table/bootstrap-table.js"></script>
-    <script src="resources/bootstrap-table/extensions/export/bootstrap-table-export.js"></script>
     <!-- <script src="//rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script> -->
     <!-- put your locale files after bootstrap-table.js -->
+    <script src="resources/bootstrap-table/extensions/export/tableExport.min.js"></script>
+    <script src="resources/bootstrap-table/extensions/export/bootstrap-table-export.js"></script>
     <script src="resources/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
     
     <!-- 文件上传插件fileInput -->
@@ -481,7 +482,7 @@
                                data-detail-formatter="detailFormatter"
                                data-pagination="true"
                                data-method="post"
-                               data-page-list="[5, 10, 20, 50]"
+                               data-page-list="[5, 10, 20, 50, 500]"
                                data-search="true"
                                data-height="566"
                                data-show-footer="true"
@@ -494,7 +495,7 @@
                                 <th data-field="MEDIATOR_NAME" data-align="center" >居间人姓名姓名</th>
                                 <th data-field="DEPT_NAME" data-align="center" >营业部</th>
                                 <th data-field="AVAILABLE_FUNDS" data-align="center" data-formatter="numberFormate">可用资金</th>
-                                <th data-field="EXPIRE_DATE" data-align="center" data-formatter="dateFormate">居间到期日期</th>
+                                <th data-field="EXPIRE_DATE" data-align="center" >居间到期日期</th>
                                 <th data-field="INTEREST_AMOUNT" data-align="center" data-footer-formatter="rebateTableFooter" data-formatter="numberFormate">利息</th>
                             </tr>
                             </thead>
