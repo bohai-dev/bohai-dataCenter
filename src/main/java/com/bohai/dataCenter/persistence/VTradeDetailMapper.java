@@ -55,17 +55,27 @@ public interface VTradeDetailMapper {
 	 * @param exchangeId
 	 * @return
 	 */
-	@Select("select t.INVESTOR_NO,t.INVESTOR_NAME,sum(decode(t.HEDGE_FLAG,'投',t.EXCHANGE_CHARGE*0.4,'保',t.EXCHANGE_CHARGE*0.8)) as CHARGE from T_CTPTRADE_DATA t "
+	/*@Select("select t.INVESTOR_NO,t.INVESTOR_NAME,sum(decode(t.HEDGE_FLAG,'投',t.EXCHANGE_CHARGE*0.4,'保',t.EXCHANGE_CHARGE*0.8)) as CHARGE from T_CTPTRADE_DATA t "
 	        + "where t.EXCHANGE_NAME = '上期所' "
 	        + "and substr(TRADE_DATE,0,6) = #{0} "
-	        + "group by t.INVESTOR_NO,t.INVESTOR_NAME")
+	        + "group by t.INVESTOR_NO,t.INVESTOR_NAME")*/
+	@Select("select t.INVESTOR_NO,t.INVESTOR_NAME,sum(t.EXCHANGE_CHARGE*0.462) as CHARGE from T_CTPTRADE_DATA t "
+			+ "where t.EXCHANGE_NAME = '上期所' "
+			+ "and substr(TRADE_DATE,0,6) = #{0} "
+			+ "group by t.INVESTOR_NO,t.INVESTOR_NAME")
 	List<Map<String,Object>> selectInvestorChargeShanghai(String month);
 	
-	@Select("select t.INVESTOR_NO,t.INVESTOR_NAME,sum(t.EXCHANGE_CHARGE*0.2) as CHARGE from T_CTPTRADE_DATA t "
-            + "where t.EXCHANGE_NAME = '郑商所' "
-            + "and substr(TRADE_DATE,0,6) = #{0} "
-            + "group by t.INVESTOR_NO,t.INVESTOR_NAME")
+	@Select("select t.INVESTOR_NO,t.INVESTOR_NAME,sum(t.EXCHANGE_CHARGE*0.3) as CHARGE from T_CTPTRADE_DATA t "
+			+ "where t.EXCHANGE_NAME = '郑商所' "
+			+ "and substr(TRADE_DATE,0,6) = #{0} "
+			+ "group by t.INVESTOR_NO,t.INVESTOR_NAME")  
     List<Map<String,Object>> selectInvestorChargeZhengzhou(String month);
+	
+	@Select("select t.INVESTOR_NO,t.INVESTOR_NAME,sum(t.EXCHANGE_CHARGE*0.4) as CHARGE from T_CTPTRADE_DATA t "
+			+ "where t.EXCHANGE_NAME = '能源中心' "
+			+ "and substr(TRADE_DATE,0,6) = #{0} "
+			+ "group by t.INVESTOR_NO,t.INVESTOR_NAME")  
+    List<Map<String,Object>> selectInvestorChargeNengYuan(String month);
 	
 	/**
 	 * 查询客户月上交手续费
@@ -74,6 +84,9 @@ public interface VTradeDetailMapper {
 	 */
 	@Select("select sum(EXCHANGE_CHARGE) from T_CTPTRADE_DATA t where substr(t.TRADE_DATE,0,6) = #{0} and t.INVESTOR_NO = #{1} and t.EXCHANGE_NAME = #{2}")
 	BigDecimal selectInvestorChargeByMonth(String month, String investorNo, String exchangeName);
+	
+	@Select("select sum(EXCHANGE_CHARGE) from T_CTPTRADE_DATA t where (substr(t.TRADE_DATE,0,6) = #{0} or substr(t.TRADE_DATE,0,6) = #{1}) and t.INVESTOR_NO = #{2} and t.EXCHANGE_NAME = #{3}")
+	BigDecimal selectInvestorChargeByMonth2(String month, String month1, String investorNo, String exchangeName);
 	
 	/**
 	 * 查询居间人名下客户月上交手续费
@@ -84,6 +97,9 @@ public interface VTradeDetailMapper {
 	 */
 	@Select("select sum(t.EXCHANGE_CHARGE) from T_CTPTRADE_DATA t,T_SPECIAL_RETURN t1 where t.INVESTOR_NO = t1.INVESTOR_NO and substr(t.TRADE_DATE,0,6) = #{0} and t1.MEDIATOR_NO = #{1} and t.EXCHANGE_NAME = #{2}")
 	BigDecimal selectMediatorChargeByMonthAndExchange(String month, String mediatorNo, String exchangeName);
+	
+	@Select("select sum(t.EXCHANGE_CHARGE) from T_CTPTRADE_DATA t,T_SPECIAL_RETURN t1 where t.INVESTOR_NO = t1.INVESTOR_NO and (substr(t.TRADE_DATE,0,6) = #{0} or substr(t.TRADE_DATE,0,6) = #{1}) and t1.MEDIATOR_NO = #{2} and t.EXCHANGE_NAME = #{3}")
+	BigDecimal selectMediatorChargeByMonthAndExchange2(String month, String month1, String mediatorNo, String exchangeName);
 	
 	
 }

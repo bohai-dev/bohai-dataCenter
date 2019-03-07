@@ -14,6 +14,7 @@
     <result column="SREBATE" property="srebate" jdbcType="VARCHAR" />
     <result column="ZREBATE" property="zrebate" jdbcType="VARCHAR" />
     <result column="DREBATE" property="drebate" jdbcType="VARCHAR" />
+    <result column="IREBATE" property="irebate" jdbcType="VARCHAR" />
     <result column="FIX_PROPORTION" property="fixProportion" jdbcType="VARCHAR" />
     <result column="CUSTOM_PROPORTION" property="customProportion" jdbcType="VARCHAR" />
     <result column="AMOUNT" property="amount" jdbcType="VARCHAR" />
@@ -92,6 +93,9 @@
       <if test="drebate != null" >
         DREBATE,
       </if>
+      <if test="irebate != null" >
+        IREBATE,
+      </if>
       <if test="fixProportion != null" >
         FIX_PROPORTION,
       </if>
@@ -126,6 +130,9 @@
       </if>
       <if test="drebate != null" >
         #{drebate,jdbcType=VARCHAR},
+      </if>
+      <if test="irebate != null" >
+        #{irebate,jdbcType=VARCHAR},
       </if>
       <if test="fixProportion != null" >
         #{fixProportion,jdbcType=VARCHAR},
@@ -166,6 +173,9 @@
       </if>
       <if test="drebate != null" >
         DREBATE = #{drebate,jdbcType=VARCHAR},
+      </if>
+      <if test="irebate != null" >
+        IREBATE = #{irebate,jdbcType=VARCHAR},
       </if>
       <if test="fixProportion != null" >
         FIX_PROPORTION = #{fixProportion,jdbcType=VARCHAR},
