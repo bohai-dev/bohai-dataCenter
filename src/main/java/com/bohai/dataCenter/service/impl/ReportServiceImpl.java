@@ -461,7 +461,7 @@ public class ReportServiceImpl implements ReportService {
 	    this.reportInvestorRebateService.removeByMonth(paramVO.getMonth());
 	    
 	    //统计上期所返还到客户
-	    List<Map<String, Object>> slist = this.vTradeDetailMapper.selectInvestorChargeShanghai("201708");
+	    List<Map<String, Object>> slist = this.vTradeDetailMapper.selectInvestorChargeShanghai("201812");
 	    if(slist != null){
             for(Map<String, Object> map : slist){
                 ReporteInvestorRebate investorRebate = new ReporteInvestorRebate();
@@ -480,7 +480,7 @@ public class ReportServiceImpl implements ReportService {
         }
 	    
 	    //统计郑商所返还到客户
-        List<Map<String, Object>> zlist = this.vTradeDetailMapper.selectInvestorChargeZhengzhou("201707");
+        List<Map<String, Object>> zlist = this.vTradeDetailMapper.selectInvestorChargeZhengzhou("201901");
         if(slist != null){
             for(Map<String, Object> map : zlist){
                 ReporteInvestorRebate investorRebate = new ReporteInvestorRebate();
@@ -494,6 +494,24 @@ public class ReportServiceImpl implements ReportService {
                 BigDecimal zcharge = (BigDecimal) map.get("CHARGE");
                 //zcharge = zcharge.multiply(new BigDecimal("0.2")).setScale(2, RoundingMode.HALF_UP);
                 investorRebate.setZrebate(zcharge.toString());
+                this.reportInvestorRebateService.saveOrUpdate(investorRebate);
+            }
+        }
+        
+        //统计能源中心返还到客户
+        List<Map<String, Object>> ilist = this.vTradeDetailMapper.selectInvestorChargeNengYuan("201901");
+        if(slist != null){
+            for(Map<String, Object> map : ilist){
+                ReporteInvestorRebate investorRebate = new ReporteInvestorRebate();
+                //统计年月
+                investorRebate.setMonth(paramVO.getMonth());
+                //投资者编号
+                investorRebate.setInvestorNo((String) map.get("INVESTOR_NO"));
+                //投资者名称
+                investorRebate.setInvestorName((String) map.get("INVESTOR_NAME"));
+                //手续费
+                BigDecimal icharge = (BigDecimal) map.get("CHARGE");
+                investorRebate.setIrebate(icharge.toString());
                 this.reportInvestorRebateService.saveOrUpdate(investorRebate);
             }
         }
@@ -709,7 +727,7 @@ public class ReportServiceImpl implements ReportService {
         
         
         //分段计算交易所返还   20170626  begin
-        List<Map<String,Object>> dlist = this.vTradeDetailMapper.selectInvestorTradeInfoByDate("20170701", "20170724");
+        List<Map<String,Object>> dlist = this.vTradeDetailMapper.selectInvestorTradeInfoByDate("20181201", "20181231");
         if(dlist != null){
             for(Map<String, Object> map : dlist){
                 //投资者编号
@@ -736,7 +754,7 @@ public class ReportServiceImpl implements ReportService {
                     closeToday = new BigDecimal("0");
                 }
                 
-                //根据合约名称查询合约属性
+                /*//根据合约名称查询合约属性
                 InstrumentAttribute attribute = this.instrumentAttributeMapper.selectByPrimaryKey(instrument);
                 if(attribute == null){
                     logger.warn("查询合约手续费失败");
@@ -763,18 +781,25 @@ public class ReportServiceImpl implements ReportService {
                 BigDecimal rebate = new BigDecimal("0");
                 
                 //扣交割暂时需要手动维护
-                /*if(investorNo.equals("80119999") && instrument.equals("cs") && hadgeFlag.equals("投")){
+                if(investorNo.equals("80119999") && instrument.equals("cs") && hadgeFlag.equals("投")){
                     volume = volume.subtract(new BigDecimal("200"));
                 }
                 if(investorNo.equals("80111999") && instrument.equals("c") && hadgeFlag.equals("投")){
                     volume = volume.subtract(new BigDecimal("1500"));
-                }*/
+                }
                 if(investorNo.equals("86000026") && instrument.equals("cs") && hadgeFlag.equals("投")){
                     volume = volume.subtract(new BigDecimal("214"));
                 }
-                /*if(investorNo.equals("86000026") && instrument.equals("cs") && hadgeFlag.equals("投")){
+                if(investorNo.equals("86000026") && instrument.equals("cs") && hadgeFlag.equals("投")){
                     volume = volume.subtract(new BigDecimal("850"));
-                }*/
+                }
+                if(investorNo.equals("86000026") && instrument.equals("jd") && hadgeFlag.equals("投")){
+                	turnover = turnover.subtract(new BigDecimal("116970"));
+                }
+                if(investorNo.equals("86000026") && instrument.equals("m") && hadgeFlag.equals("投")){
+                    volume = volume.subtract(new BigDecimal("321"));
+                }
+                
                 
               //鸡蛋和两版
                 if(instrument.equals("jd")||instrument.equals("bb")||instrument.equals("fb")){
@@ -802,12 +827,12 @@ public class ReportServiceImpl implements ReportService {
                         //套保日内 92.5%  非日内  98.5%
                         if(!StringUtils.isEmpty(openCharge) && !StringUtils.isEmpty(closetCharge)){
                             inday = new BigDecimal(closetCharge).multiply(closeTodayVolume).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.925"));
-                            outday = (volume.subtract(closeTodayVolume.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openCharge)).multiply(new BigDecimal("0.985"));
+                            outday = (volume.subtract(closeTodayVolume.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openCharge)).multiply(new BigDecimal("0.9"));
                         }else if (!StringUtils.isEmpty(openChargeRate) && !StringUtils.isEmpty(closetChargeRate)) {
                             //inday = 
                             inday = new BigDecimal(closetChargeRate).multiply(closeToday).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.925"));
                             //outday = 
-                            outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.985"));
+                            outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.9"));
                         }
                     }else if (hadgeFlag.equals("投")) {
                         //非套保日内 25%     非日内 85%
@@ -822,11 +847,12 @@ public class ReportServiceImpl implements ReportService {
                     }
                 }
                 
-                rebate = inday.add(outday);
+                rebate = inday.add(outday);*/
                 
                 ReporteInvestorRebate investorRebate = new ReporteInvestorRebate();
                 investorRebate.setMonth(paramVO.getMonth());
-                investorRebate.setDrebate(rebate.toString());
+                //investorRebate.setDrebate(rebate.toString());
+                investorRebate.setDrebate("0");
                 investorRebate.setInvestorNo(investorNo);
                 investorRebate.setInvestorName(investorName);
                 this.reportInvestorRebateService.updateRebate(investorRebate);
@@ -834,24 +860,24 @@ public class ReportServiceImpl implements ReportService {
         }
         
         //第二段
-        Map<String, String> commissionMap = new HashMap<String, String>(){
+/*        Map<String, String> commissionMap = new HashMap<String, String>(){
             {
                 put("iopen", "0.00006");
                 put("icloseT", "0.00012");
                 
-               /* put("jopen", "0.00006");
-                put("jcloseT", "0.00036");
+                put("jopen", "0.00006");
+                put("jcloseT", "0.0003");
                 
                 put("jmopen", "0.00006");
-                put("jmcloseT", "0.00036");*/
+                put("jmcloseT", "0.0003");
                 
                 put("ppopen", "0.00006");
                 put("ppcloseT", "0.00006");
             }
         };
         
-        List<Map<String,Object>> dlist2 = this.vTradeDetailMapper.selectInvestorTradeInfoByDate("20170725", "20170731");
-        if(dlist != null){
+        List<Map<String,Object>> dlist2 = this.vTradeDetailMapper.selectInvestorTradeInfoByDate("20171214", "20171229");
+        if(dlist2 != null){
             for(Map<String, Object> map : dlist2){
                 //投资者编号
                 String investorNo = (String) map.get("INVESTOR_NO");
@@ -931,17 +957,17 @@ public class ReportServiceImpl implements ReportService {
                             //inday = 
                             inday = new BigDecimal(commissionMap.get(instrument+"closeT")).multiply(closeToday).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.925"));
                             //outday = 
-                            outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(commissionMap.get(instrument+"open"))).multiply(new BigDecimal("0.985"));
+                            outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(commissionMap.get(instrument+"open"))).multiply(new BigDecimal("0.9"));
                             
                         }else {
                             if(!StringUtils.isEmpty(openCharge) && !StringUtils.isEmpty(closetCharge)){
                                 inday = new BigDecimal(closetCharge).multiply(closeTodayVolume).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.925"));
-                                outday = (volume.subtract(closeTodayVolume.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openCharge)).multiply(new BigDecimal("0.985"));
+                                outday = (volume.subtract(closeTodayVolume.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openCharge)).multiply(new BigDecimal("0.9"));
                             }else if (!StringUtils.isEmpty(openChargeRate) && !StringUtils.isEmpty(closetChargeRate)) {
                                 //inday = 
                                 inday = new BigDecimal(closetChargeRate).multiply(closeToday).multiply(new BigDecimal("2")).multiply(new BigDecimal("0.925"));
                                 //outday = 
-                                outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.985"));
+                                outday = (turnover.subtract(closeToday.multiply(new BigDecimal("2")))).multiply(new BigDecimal(openChargeRate)).multiply(new BigDecimal("0.9"));
                             }
                         }
                     }else if (hadgeFlag.equals("投")) {
@@ -971,7 +997,7 @@ public class ReportServiceImpl implements ReportService {
                 investorRebate.setInvestorName(investorName);
                 this.reportInvestorRebateService.updateRebate(investorRebate);
             }
-        }
+        }*/
         
         //分段计算交易所返还   20170626  end
         
@@ -992,7 +1018,7 @@ public class ReportServiceImpl implements ReportService {
 	    this.reportSpecialReturnService.removeByMonth(month);
 	    
 	    //先统计交易所返佣到客户
-	    this.countInvestorExchangeRebate(paramVO);
+	    //this.countInvestorExchangeRebate(paramVO);
 	    //查询交易所返佣特例名单
 	    List<SpecialReturn> list = this.specialReturnMapper.selectAll();
 	    if(list != null){
@@ -1020,6 +1046,7 @@ public class ReportServiceImpl implements ReportService {
                     reportSpecialReturn.setSrebate("0.00");
                     reportSpecialReturn.setZrebate("0.00");
                     reportSpecialReturn.setDrebate("0.00");
+                    reportSpecialReturn.setIrebate("0.00");
                     reportSpecialReturn.setAmount("0.00");
                     if(StringUtils.isEmpty(specialReturn.getFixProportion())){
                         reportSpecialReturn.setCustomProportion("0.00");
@@ -1028,10 +1055,12 @@ public class ReportServiceImpl implements ReportService {
                     String s = investorRebate.getSrebate() == null ? "0.00" : investorRebate.getSrebate();
                     String z = investorRebate.getZrebate() == null ? "0.00" : investorRebate.getZrebate();
                     String d = investorRebate.getDrebate() == null ? "0.00" : investorRebate.getDrebate();
+                    String i = investorRebate.getIrebate() == null ? "0.00" : investorRebate.getIrebate();
                     
                     reportSpecialReturn.setSrebate(s);
                     reportSpecialReturn.setZrebate(z);
                     reportSpecialReturn.setDrebate(d);
+                    reportSpecialReturn.setIrebate(i);
                     //交易所返还总金额
                     BigDecimal amount = new BigDecimal(s).add(new BigDecimal(z)).add(new BigDecimal(d));
                     
@@ -1041,15 +1070,15 @@ public class ReportServiceImpl implements ReportService {
                     }
                     
                     //查询客户月上交手续费
-                    BigDecimal zcharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201707", investorNo, "郑商所");
+                    BigDecimal zcharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201901", investorNo, "郑商所");
                     if(zcharge == null){
                         zcharge = new BigDecimal("0");
                     }
-                    BigDecimal dcharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201707", investorNo, "大商所");
+                    BigDecimal dcharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201812", investorNo, "大商所");
                     if(dcharge == null){
                         dcharge = new BigDecimal("0");
                     }
-                    BigDecimal scharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201708", investorNo, "上期所");
+                    BigDecimal scharge = this.vTradeDetailMapper.selectInvestorChargeByMonth("201812", investorNo, "上期所");
                     if(scharge == null){
                         scharge = new BigDecimal("0");
                     }
@@ -1071,17 +1100,17 @@ public class ReportServiceImpl implements ReportService {
                         JSONObject json = JSONObject.parseObject(specialReturn.getCustomInterval());
                         
                         if("居间人".equals(specialReturn.getType())){
-                            BigDecimal mediatorZcharge = this.vTradeDetailMapper.selectMediatorChargeByMonthAndExchange("201707", specialReturn.getMediatorNo(), "郑商所");
+                            BigDecimal mediatorZcharge = this.vTradeDetailMapper.selectMediatorChargeByMonthAndExchange("201901", specialReturn.getMediatorNo(), "郑商所");
                             if(mediatorZcharge == null){
                                 mediatorZcharge = new BigDecimal("0");
                             }
                             
-                            BigDecimal mediatorDcharge = this.vTradeDetailMapper.selectMediatorChargeByMonthAndExchange("201707", specialReturn.getMediatorNo(), "大商所");
+                            BigDecimal mediatorDcharge = this.vTradeDetailMapper.selectMediatorChargeByMonthAndExchange("201812", specialReturn.getMediatorNo(), "大商所");
                             if(mediatorDcharge == null){
                                 mediatorDcharge = new BigDecimal("0");
                             }
                             
-                            BigDecimal mediatorScharge = this.vTradeDetailMapper.selectMediatorChargeByMonthAndExchange("201708", specialReturn.getMediatorNo(), "上期所");
+                            BigDecimal mediatorScharge = this.vTradeDetailMapper.selectMediatorChargeByMonthAndExchange("201812", specialReturn.getMediatorNo(), "上期所");
                             if(mediatorScharge == null){
                                 mediatorScharge = new BigDecimal("0");
                             }
