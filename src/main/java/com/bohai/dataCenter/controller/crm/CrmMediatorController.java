@@ -107,7 +107,7 @@ public class CrmMediatorController {
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet=wb.createSheet("居间人信息");
         
-        String[] mediatorHead = {"所属营业部","居间人编号","居间人名称","归属类型","归属代码","归属名称","证件类型","证件号码","生效日期","失效日期","默认分配比例","联系电话","IB居间区分"};
+        String[] mediatorHead = {"所属营业部","居间人编号","居间人名称","归属类型","归属代码","归属名称","证件类型","证件号码","生效日期","失效日期","默认分配比例","地址","IB居间区分"};
         
         XSSFRow row = sheet.createRow(0);
         //初始化表头
@@ -163,7 +163,7 @@ public class CrmMediatorController {
                 //默认分配比例
                 row2.createCell(10).setCellValue(list.get(i).getAllocationProportion());
                 //联系电话
-                row2.createCell(11).setCellValue(list.get(i).getTelephone());
+                row2.createCell(11).setCellValue(list.get(i).getAddress());
                 
                 //IB居间区分
                 String isIb=list.get(i).getIsIb();
