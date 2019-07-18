@@ -364,7 +364,7 @@
 			t.IB_DEP,
 			t.OPEN_BANK,
 			t.ACCOUNT_NO,
-			t.CONTRACT_DATE
+			t.CONTRACT_DATE,
       case t.belong_type 
       when '0' then (select dept_name from t_crm_dept a  where a.dept_code = t.belong_to) 
       when '1' then (select b.MARKETER_NAME from t_crm_marketer b where b.marketer_no = t.belong_to) end as BELONG_TO_NAME
