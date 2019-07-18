@@ -31,6 +31,11 @@
     <result column="BELONG_TO_NAME" property="belongToName" jdbcType="VARCHAR" />
     <result column="DELETE_FLAG" property="deleteFlag" jdbcType="VARCHAR" />
     <result column="IS_IB" property="isIb" jdbcType="VARCHAR" />
+    <result column="GZRK" property="gzrk" jdbcType="VARCHAR" />
+    <result column="IB_DEP" property="ibDep" jdbcType="VARCHAR" />
+    <result column="OPEN_BANK" property="openBank" jdbcType="VARCHAR" />
+    <result column="ACCOUNT_NO" property="accountNo" jdbcType="VARCHAR" />
+    <result column="CONTRACT_DATE" property="contractDate" jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="Base_Column_List" >
@@ -41,7 +46,8 @@
     -->
     MEDIATOR_NO, MEDIATOR_NAME, MEDIATOR_SHORT_NAME, STATUS, DEP_CODE, DEP_NAME, ALLOCATION_PROPORTION, 
     PAY_TYPE, TELEPHONE, FAX, ADDRESS, EMAIL, CERT_NO, REMARK, CREATE_TIME, UPDATE_TIME, 
-    EFFECT_DATE, EXPIRE_DATE, CERT_TYPE,BELONG_TYPE,BELONG_TO, DELETE_FLAG, IS_IB
+    EFFECT_DATE, EXPIRE_DATE, CERT_TYPE,BELONG_TYPE,BELONG_TO, DELETE_FLAG, IS_IB, GZRK, 
+    IB_DEP, OPEN_BANK, ACCOUNT_NO, CONTRACT_DATE
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     <!--
@@ -75,14 +81,16 @@
       FAX, ADDRESS, EMAIL, 
       CERT_NO, REMARK, CREATE_TIME, 
       UPDATE_TIME, EFFECT_DATE, EXPIRE_DATE, 
-      CERT_TYPE,BELONG_TYPE,BELONG_TO,IS_IB)
+      CERT_TYPE,BELONG_TYPE,BELONG_TO,IS_IB,
+      GZRK, IB_DEP, OPEN_BANK, ACCOUNT_NO, CONTRACT_DATE)
     values (#{mediatorNo,jdbcType=VARCHAR}, #{mediatorName,jdbcType=VARCHAR}, #{mediatorShortName,jdbcType=VARCHAR}, 
       #{status,jdbcType=VARCHAR}, #{depCode,jdbcType=VARCHAR}, #{depName,jdbcType=VARCHAR}, 
       #{allocationProportion,jdbcType=VARCHAR}, #{payType,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, 
       #{fax,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
       #{certNo,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{effectDate,jdbcType=VARCHAR}, #{expireDate,jdbcType=VARCHAR}, 
-      #{certType,jdbcType=VARCHAR},#{belongType,jdbcType=VARCHAR},#{belongTo,jdbcType=VARCHAR},#{isIb,jdbcType=VARCHAR})
+      #{certType,jdbcType=VARCHAR},#{belongType,jdbcType=VARCHAR},#{belongTo,jdbcType=VARCHAR},#{isIb,jdbcType=VARCHAR}, 
+      #{gzrk,jdbcType=VARCHAR},#{ibDep,jdbcType=VARCHAR},#{openBank,jdbcType=VARCHAR},#{accountNo,jdbcType=VARCHAR},#{contractDate,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.bohai.dataCenter.entity.CrmMediator" >
     <!--
@@ -320,7 +328,12 @@
       CERT_TYPE = #{certType,jdbcType=VARCHAR},
       BELONG_TYPE = #{belongType,jdbcType=VARCHAR},
       BELONG_TO = #{belongTo,jdbcType=VARCHAR},
-      IS_IB=#{isIb,jdbcType=VARCHAR}
+      IS_IB=#{isIb,jdbcType=VARCHAR},
+      GZRK=#{gzrk,jdbcType=VARCHAR},
+      IB_DEP=#{ibDep,jdbcType=VARCHAR},
+      OPEN_BANK=#{openBank,jdbcType=VARCHAR},
+      ACCOUNT_NO=#{accountNo,jdbcType=VARCHAR},
+      CONTRACT_DATE=#{contractDate,jdbcType=VARCHAR}
     where MEDIATOR_NO = #{mediatorNo,jdbcType=VARCHAR}
   </update>
   
@@ -347,6 +360,11 @@
 			t.BELONG_TYPE,
 			t.BELONG_TO,
 			t.IS_IB,
+			t.GZRK,
+			t.IB_DEP,
+			t.OPEN_BANK,
+			t.ACCOUNT_NO,
+			t.CONTRACT_DATE
       case t.belong_type 
       when '0' then (select dept_name from t_crm_dept a  where a.dept_code = t.belong_to) 
       when '1' then (select b.MARKETER_NAME from t_crm_marketer b where b.marketer_no = t.belong_to) end as BELONG_TO_NAME

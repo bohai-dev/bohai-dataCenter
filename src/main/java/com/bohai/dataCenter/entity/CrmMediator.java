@@ -165,7 +165,56 @@ public class CrmMediator {
     
     private String isIb;
     
+    private String gzrk;
     
+    private String ibDep;
+    
+    private String openBank;
+    
+    private String accountNo;
+    
+    private String contractDate;
+    
+    public String getGzrk() {
+        return gzrk;
+    }
+
+    public void setGzrk(String gzrk) {
+        this.gzrk = gzrk;
+    }
+
+    public String getIbDep() {
+        return ibDep;
+    }
+
+    public void setIbDep(String ibDep) {
+        this.ibDep = ibDep;
+    }
+
+    public String getOpenBank() {
+        return openBank;
+    }
+
+    public void setOpenBank(String openBank) {
+        this.openBank = openBank;
+    }
+
+    public String getAccountNo() {
+        return accountNo;
+    }
+
+    public void setAccountNo(String accountNo) {
+        this.accountNo = accountNo;
+    }
+
+    public String getContractDate() {
+        return contractDate;
+    }
+
+    public void setContractDate(String contractDate) {
+        this.contractDate = contractDate;
+    }
+
     public String getIsIb() {
         return isIb;
     }

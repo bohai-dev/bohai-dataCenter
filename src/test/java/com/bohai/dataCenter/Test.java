@@ -1,31 +1,42 @@
 package com.bohai.dataCenter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Test {
+    
+    public static class Tes{
+        
+        private String name;
+        
+        private int qty;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getQty() {
+            return qty;
+        }
+
+        public void setQty(int qty) {
+            this.qty = qty;
+        }
+        
+        
+    }
 
 	public static void main(String[] args) {
 		
+		List<Tes> tes = new ArrayList<Tes>();
+		Map<String,List<Tes>> map=tes.stream().collect(Collectors.groupingBy(Tes::getName));
 		
-		/*System.out.println("10000000-20000000".indexOf("-"));
-		System.out.println("10000000-20000000".substring(0, "10000000-20000000".indexOf("-")));
-		System.out.println("0008trddata20170301".substring(11,19));
-		*/
-		
-	    /*double d = 5;
-	    
-		System.out.println(d/2);*/
-	    double a = 1;
-		double d = 4.6;
-		System.out.println(a+d);
-		
-		/*for (int i = 0; i < 100; i++) {
-
-		    double dd = 100;
-		    BigDecimal b = new BigDecimal(dd);
-
-		    System.out.println(b);
-
-        }*/
 	}
 }

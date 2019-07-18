@@ -104,6 +104,13 @@
             $("#expireDate1").val(row.expireDate);
             
             $('#isIb1').selectpicker('val', row.isIb);
+            //20190718梦梦新增字段
+            $('#gzrk1').selectpicker('val', row.gzrk);
+            $('#ibDep1').val(row.ibDep);
+            $('#openBank1').val(row.openBank);
+            $('#accountNo1').val(row.accountNo);
+            $('#contractDate1').val(row.contractDate);
+            
             //设置bootstrap-select的值
             $('#belongType1').selectpicker('val', row.belongType);
             
@@ -213,6 +220,18 @@
                   todayHighlight: true
             });
             
+            $('#contractDate').datepicker({
+                format: "yyyy-mm-dd",
+                  startView: 0,
+                  minViewMode: 0,
+                  maxViewMode: 2,
+                  todayBtn: "linked",
+                  clearBtn: true,
+                  language: "zh-CN",
+                  autoclose: true,
+                  todayHighlight: true
+            });
+            
             $('#effectDate1').datepicker({
                 format: "yyyy-mm-dd",
                   startView: 0,
@@ -226,6 +245,18 @@
             });
             
             $('#expireDate1').datepicker({
+                format: "yyyy-mm-dd",
+                  startView: 0,
+                  minViewMode: 0,
+                  maxViewMode: 2,
+                  todayBtn: "linked",
+                  clearBtn: true,
+                  language: "zh-CN",
+                  autoclose: true,
+                  todayHighlight: true
+            });
+            
+            $('#contractDate1').datepicker({
                 format: "yyyy-mm-dd",
                   startView: 0,
                   minViewMode: 0,
@@ -424,7 +455,12 @@
                     expireDate:$('#expireDate').val(),
             		belongType:$('#belongType').val(),
             		belongTo:$('#belongTo').val(),
-            		isIb:$('#isIb').val()
+            		isIb:$('#isIb').val(),
+            		gzrk:$('#gzrk').val(),
+            		ibDep:$('#ibDep').val(),
+            		openBank:$('#openBank').val(),
+            		accountNo:$('#accountNo').val(),
+            		contractDate:$('#contractDate').val()
                     }
              $.ajax({
                  url: 'saveCrmMediator',
@@ -456,7 +492,12 @@
                     expireDate:$('#expireDate1').val(),
                     belongType:$('#belongType1').val(),
                     belongTo:$('#belongTo1').val(),
-                    isIb:$('#isIb1').val()
+                    isIb:$('#isIb1').val(),
+                    gzrk:$('#gzrk1').val(),
+                    ibDep:$('#ibDep1').val(),
+                    openBank:$('#openBank1').val(),
+                    accountNo:$('#accountNo1').val(),
+                    contractDate:$('#contractDate1').val()
                     }
              $.ajax({
                  url: 'updateCrmMediator',
@@ -780,18 +821,46 @@
                     </div>
                   </div>
                   
-                  <!-- <div class="form-group">
-                    <label for="gender" class="col-sm-3 control-label">返佣周期</label>
+                  <hr>
+                  <!-- 20190718梦梦新加5个字段 -->
+                  <div class="form-group">
+                    <label for="gzrk" class="col-sm-3 control-label">盖章入库</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" id="gender" placeholder="">
-                      <label class="btn btn-default col-sm-3">
-					    <input type="radio" name="genderOptions" autocomplete="off" checked="checked"> 按月返佣
-					  </label>
-					  <label class="btn btn-default col-sm-3 col-sm-offset-1">
-					    <input type="radio" name="genderOptions" autocomplete="off"> 按年返佣
-					  </label>
+                      <select class="selectpicker form-control" id="gzrk" >
+                        <option value="0">否</option>
+                        <option value="1">是</option>
+                      </select>
                     </div>
-                  </div> -->
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="ibDep" class="col-sm-3 control-label">IB所在营业部</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="ibDep" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="openBank" class="col-sm-3 control-label">开户行</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="openBank" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="accountNo" class="col-sm-3 control-label">银行卡号</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="accountNo" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="contractDate" class="col-sm-3 control-label">合同接收日期</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="contractDate" placeholder="">
+                    </div>
+                  </div>
+                  <!-- 20190718梦梦新加5个字段结束 -->
                   
                   <hr>
                   
@@ -938,18 +1007,46 @@
                     </div>
                   </div>
                   
-                  <!-- <div class="form-group">
-                    <label for="gender" class="col-sm-3 control-label">返佣周期</label>
+                  <hr>
+                  <!-- 20190718梦梦新加5个字段 -->
+                  <div class="form-group">
+                    <label for="gzrk1" class="col-sm-3 control-label">盖章入库</label>
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" id="gender" placeholder="">
-                      <label class="btn btn-default col-sm-3">
-                        <input type="radio" name="genderOptions1" autocomplete="off" checked="checked"> 按月返佣
-                      </label>
-                      <label class="btn btn-default col-sm-3 col-sm-offset-1">
-                        <input type="radio" name="genderOptions1" autocomplete="off"> 按年返佣
-                      </label>
+                      <select class="selectpicker form-control" id="gzrk1" >
+                        <option value="0">否</option>
+                        <option value="1">是</option>
+                      </select>
                     </div>
-                  </div> -->
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="ibDep1" class="col-sm-3 control-label">IB所在营业部</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="ibDep1" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="openBank1" class="col-sm-3 control-label">开户行</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="openBank1" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="accountNo1" class="col-sm-3 control-label">银行卡号</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="accountNo1" placeholder="">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="contractDate1" class="col-sm-3 control-label">合同接收日期</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="contractDate1" placeholder="">
+                    </div>
+                  </div>
+                  <!-- 20190718梦梦新加5个字段结束 -->
                   
                   <hr>
                   

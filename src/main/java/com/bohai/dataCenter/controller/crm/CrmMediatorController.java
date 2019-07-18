@@ -107,7 +107,7 @@ public class CrmMediatorController {
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet=wb.createSheet("居间人信息");
         
-        String[] mediatorHead = {"所属营业部","居间人编号","居间人名称","归属类型","归属代码","归属名称","证件类型","证件号码","生效日期","失效日期","默认分配比例","地址","IB居间区分"};
+        String[] mediatorHead = {"所属营业部","居间人编号","居间人名称","归属类型","归属代码","归属名称","证件类型","证件号码","生效日期","失效日期","默认分配比例","IB居间区分","IB所在营业部","盖章入库","开户行","银行卡号","合同接收日期"};
         
         XSSFRow row = sheet.createRow(0);
         //初始化表头
@@ -162,8 +162,6 @@ public class CrmMediatorController {
                 row2.createCell(9).setCellValue(list.get(i).getExpireDate());
                 //默认分配比例
                 row2.createCell(10).setCellValue(list.get(i).getAllocationProportion());
-                //联系电话
-                row2.createCell(11).setCellValue(list.get(i).getAddress());
                 
                 //IB居间区分
                 String isIb=list.get(i).getIsIb();
@@ -174,7 +172,22 @@ public class CrmMediatorController {
                 }else if (isIb.equals("1")) {
                 	isIb = "是";
                 }
-                row2.createCell(12).setCellValue(isIb);
+                row2.createCell(11).setCellValue(isIb);
+                //IB所在营业部
+                row2.createCell(12).setCellValue(list.get(i).getIbDep());
+                //盖章入库 0:否 1:是
+                String gzrk = list.get(i).getGzrk();
+                if(StringUtils.isEmpty(gzrk)){
+                    gzrk = "";
+                }else if (gzrk.equals("0")) {
+                    gzrk = "否";
+                }else if (gzrk.equals("1")) {
+                    gzrk = "是";
+                }
+                row2.createCell(13).setCellValue(gzrk);
+                row2.createCell(14).setCellValue(list.get(i).getOpenBank());
+                row2.createCell(15).setCellValue(list.get(i).getAccountNo());
+                row2.createCell(16).setCellValue(list.get(i).getContractDate());
                 
             }
         }

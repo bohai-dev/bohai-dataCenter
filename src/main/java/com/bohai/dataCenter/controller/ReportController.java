@@ -101,6 +101,12 @@ public class ReportController {
 	    return "report/retained";
 	}
 	
+	@RequiresPermissions(value="report:specialList:view")
+	@RequestMapping(value="toSpecialList")
+    public String toSpecialList(){
+        return "report/specialList";
+    }
+	
 	/**
 	 * 查询客户贡献
 	 * @param paramVO
