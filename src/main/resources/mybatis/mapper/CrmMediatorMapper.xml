@@ -420,7 +420,7 @@
        	   t.MEDIATOR_NO = t1.BELONG_TO
 	       and t1.BELONG_TYPE = '2'
            <if test="mediatorNo != null and mediatorNo != ''" >
-               t.MEDIATOR_NO = #{mediatorNo,jdbcType=VARCHAR}
+               and t.MEDIATOR_NO = #{mediatorNo,jdbcType=VARCHAR}
            </if>
            <if test="mediatorName != null and mediatorName != ''" >
                and t.MEDIATOR_NAME like '%'||#{mediatorName,jdbcType=VARCHAR}||'%'
