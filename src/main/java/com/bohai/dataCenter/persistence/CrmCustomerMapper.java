@@ -130,4 +130,8 @@ public interface CrmCustomerMapper {
     
     @Select("select count(1) from T_CRM_CUSTOMER")
     Long count();
+    
+    @Select("select t.* from T_CRM_CUSTOMER t where belong_type = '2' and belong_to = #{0} "
+            + "and not exists (select 1 from T_SPECIAL_LIST t1 where t.INVESTOR_NO = t1.INVESTOR_NO and t1.STATUS = '1')")
+    List<CrmCustomer> selectByMediator(String mediatorNO);
 }

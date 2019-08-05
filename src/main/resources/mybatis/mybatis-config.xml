@@ -19,11 +19,12 @@
       <setting name="defaultStatementTimeout" value="500"/>
       <setting name="defaultFetchSize" value="100"/>
       <setting name="safeRowBoundsEnabled" value="false"/>
-      <setting name="mapUnderscoreToCamelCase" value="false"/>
+      <setting name="mapUnderscoreToCamelCase" value="true"/>
       <setting name="localCacheScope" value="SESSION"/>
       <setting name="jdbcTypeForNull" value="OTHER"/>
       <setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString"/>
       <setting name="logImpl" value="LOG4J"/>
+      
     </settings>
     
     
@@ -115,6 +116,8 @@
         <!-- 视图 -->
         <mapper resource="mybatis/mapper/VTradeDetailMapper.xml"/>
         <mapper resource="mybatis/mapper/InvestorCommissionMapper.xml"/>
+        
+        <mapper resource="mybatis/mapper/SpecialListMapper.xml"/>
 
     </mappers>
 

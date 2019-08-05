@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bohai.dataCenter.persistence.SpecialListMapper" >
+    <select id="selectByCondition" resultType="java.util.Map" parameterType="java.util.Map">
+        select t.*,t1.INVESTOR_NAME,t2.MEDIATOR_NAME from T_SPECIAL_LIST t
+        left join T_CRM_CUSTOMER t1
+        on t.INVESTOR_NO = t1.INVESTOR_NO
+        left join T_CRM_MEDIATOR t2
+        on t.MEDIATOR_NO = t2.MEDIATOR_NO
+        <where>
+            t.STATUS = '1'
+            <if test="INVESTOR_NO != null">
+                and t.INVESTOR_NO = #{INVESTOR_NO}
+            </if>
+            <if test="MEDIATOR_NO != null">
+                and t.MEDIATOR_NO = #{MEDIATOR_NO}
+            </if>
+            <if test="RETURN_TYPE != null">
+                and t.RETURN_TYPE = #{RETURN_TYPE}
+            </if>
+            <if test="IS_ALL != null">
+                and t.IS_ALL = #{IS_ALL}
+            </if>
+            <if test="RETURN_WAY != null">
+                and t.RETURN_WAY = #{RETURN_WAY}
+            </if>
+            <if test="BEGIN_EXPIRE_DATE != null">
+                and t.EXPIRE_DATE <![CDATA[ >= ]]> #{BEGIN_EXPIRE_DATE}
+            </if>
+            <if test="END_EXPIRE_DATE != null">
+                and t.EXPIRE_DATE <![CDATA[ <= ]]> #{END_EXPIRE_DATE}
+            </if>
+        </where>
+        order by t.RETURN_TYPE,t.MEDIATOR_NO,t.EXPIRE_DATE,t.ROWID
+    </select>
+    
+    <update id="updateById" parameterType="java.util.Map">
+        update T_SPECIAL_LIST
+        set INVESTOR_NO = #{INVESTOR_NO,jdbcType=VARCHAR},
+            MEDIATOR_NO = #{MEDIATOR_NO,jdbcType=VARCHAR},
+            RETURN_TYPE = #{RETURN_TYPE,jdbcType=VARCHAR},
+            IS_ALL = #{IS_ALL,jdbcType=VARCHAR},
+            SHFE = #{SHFE,jdbcType=VARCHAR},
+            DCE = #{DCE,jdbcType=VARCHAR},
+            CZCE = #{CZCE,jdbcType=VARCHAR},
+            INE = #{INE,jdbcType=VARCHAR},
+            CFFEX = #{CFFEX,jdbcType=VARCHAR},
+            RETURN_WAY = #{RETURN_WAY,jdbcType=VARCHAR},
+            EFFECT_DATE = #{EFFECT_DATE,jdbcType=VARCHAR},
+            EXPIRE_DATE = #{EXPIRE_DATE,jdbcType=VARCHAR},
+            REMARK = #{REMARK,jdbcType=VARCHAR}
+        where ID = #{ID,jdbcType=VARCHAR}
+    </update>
+    
+    <update id="updateByMediator" parameterType="java.util.Map">
+        update T_SPECIAL_LIST
+        set SHFE = #{SHFE,jdbcType=VARCHAR},
+            DCE = #{DCE,jdbcType=VARCHAR},
+            CZCE = #{CZCE,jdbcType=VARCHAR},
+            INE = #{INE,jdbcType=VARCHAR},
+            CFFEX = #{CFFEX,jdbcType=VARCHAR},
+            RETURN_WAY = #{RETURN_WAY,jdbcType=VARCHAR},
+            EFFECT_DATE = #{EFFECT_DATE,jdbcType=VARCHAR},
+            EXPIRE_DATE = #{EXPIRE_DATE,jdbcType=VARCHAR},
+            REMARK = #{REMARK,jdbcType=VARCHAR}
+        where MEDIATOR_NO = #{MEDIATOR_NO,jdbcType=VARCHAR}
+    </update>
+</mapper>
