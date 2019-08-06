@@ -225,6 +225,28 @@
                         }else if(row.RETURN_WAY == '2'){
                             return '客户银行卡';
                         }
+                    },
+                    syncCustomer:function(){
+                        console.log('同步居间客户');
+                        var self = this;
+                        axios.get('syncCustomer')
+                          .then(function (response) {
+                              if(response.data.code == '00000'){
+                                  toastr.success('同步居间客户成功');
+                              }else{
+                                  toastr.error('同步居间客户失败:'+response.data.msg);
+                              }
+                          })
+                          .catch(function (error) {
+                              toastr.error('同步居间客户失败');
+                          })
+                          .then(function () {
+                            // always executed
+                              self.onSubmit();
+                          });
+                    },
+                    exportZip:function(){
+                        console.log('导出营业部数据');
                     }
                }
           });
@@ -348,11 +370,22 @@
                 </el-row>
                 
                 <el-row :gutter="60">
-                  <el-col :span="6" :offset="6">
+                  <el-col :span="12" :offset="4">
                     <div class="grid-content bg-purple">
                         <el-button type="primary" @click="onSubmit">查询</el-button>
                         <a href="exportSpecial"><el-button type="danger" >导出</el-button></a>
                         <el-button type="success" @click="saveDialogVisible = true">新增</el-button>
+                    </div>
+                  </el-col>
+                </el-row>
+                
+                <br/>
+                
+                <el-row :gutter="60">
+                  <el-col :span="12" :offset="4">
+                    <div class="grid-content bg-purple">
+                        <el-button type="primary" @click="syncCustomer">同步居间客户</el-button>
+                        <el-button type="danger" @click="exportZip">导出营业部交返</el-button>
                     </div>
                   </el-col>
                 </el-row>

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 /**
@@ -29,4 +30,10 @@ public interface SpecialListMapper {
     
     @Update("update T_SPECIAL_LIST set STATUS = '0' where ID = #{id,jdbcType=VARCHAR}")
     int removeById(String id);
+    
+    @Select("select DISTINCT MEDIATOR_NO from T_SPECIAL_LIST where RETURN_TYPE = '2' and IS_ALL = '1' and STATUS = '1'")
+    List<String> distinctIsAll();
+    
+    @Select("select * from T_SPECIAL_LIST where STATUS = '1' and MEDIATOR_NO = #{mediatorNo,jdbcType=VARCHAR} and rownum = 1")
+    Map<String, String> selectOneByMediatorNo(String mediatorNo);
 }

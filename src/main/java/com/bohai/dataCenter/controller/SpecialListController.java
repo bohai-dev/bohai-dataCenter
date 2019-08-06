@@ -73,6 +73,17 @@ public class SpecialListController {
         response.setHeader("Content-Disposition", "attachment;filename="+URLEncoder.encode(FileName, "UTF-8")+".xlsx");
         wb.write(output);  
         output.close(); 
+    }
+    
+    @RequestMapping(value = "syncCustomer", method = RequestMethod.GET)
+    public ResponseBody syncCustomer(){
+        this.specialListService.syncCustomer();
+        return new ResponseBody();
+    }
+    
+    @RequestMapping(value = "exportZip", method = RequestMethod.GET)
+    public void exportZip(@RequestParam("month") String month){
+        
         
     }
 }

@@ -1,7 +1,5 @@
 package com.bohai.dataCenter.service.impl;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +11,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bohai.dataCenter.controller.exception.BohaiException;
 import com.bohai.dataCenter.entity.CrmCustomer;
@@ -164,6 +161,25 @@ public class SpecialListServiceImpl {
         }
         
         return wb;
+        
+    }
+    
+    public void syncCustomer(){
+        //先查询所有客户的居间人
+        List<String> mediators = this.specialListMapper.distinctIsAll();
+        for (String string : mediators) {
+            //查询居间人属性
+            Map<String, String> map = this.specialListMapper.selectOneByMediatorNo(string);
+            //查询居间人名下客户
+            List<CrmCustomer> customers = this.customerMapper.selectByMediator(string);
+            for (CrmCustomer crmCustomer : customers) {
+                map.put("INVESTOR_NO", crmCustomer.getInvestorNo());
+                this.specialListMapper.insert(map);
+            }
+        }
+    }
+    
+    public void exportZip(){
         
     }
     
