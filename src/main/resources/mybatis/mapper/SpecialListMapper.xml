@@ -9,25 +9,25 @@
         on t.MEDIATOR_NO = t2.MEDIATOR_NO
         <where>
             t.STATUS = '1'
-            <if test="INVESTOR_NO != null">
+            <if test="INVESTOR_NO != null and INVESTOR_NO != ''">
                 and t.INVESTOR_NO = #{INVESTOR_NO}
             </if>
-            <if test="MEDIATOR_NO != null">
+            <if test="MEDIATOR_NO != null and MEDIATOR_NO != ''">
                 and t.MEDIATOR_NO = #{MEDIATOR_NO}
             </if>
-            <if test="RETURN_TYPE != null">
+            <if test="RETURN_TYPE != null and RETURN_TYPE != ''">
                 and t.RETURN_TYPE = #{RETURN_TYPE}
             </if>
-            <if test="IS_ALL != null">
+            <if test="IS_ALL != null and IS_ALL != ''">
                 and t.IS_ALL = #{IS_ALL}
             </if>
-            <if test="RETURN_WAY != null">
+            <if test="RETURN_WAY != null and RETURN_WAY != ''">
                 and t.RETURN_WAY = #{RETURN_WAY}
             </if>
-            <if test="BEGIN_EXPIRE_DATE != null">
+            <if test="BEGIN_EXPIRE_DATE != null and BEGIN_EXPIRE_DATE != ''">
                 and t.EXPIRE_DATE <![CDATA[ >= ]]> #{BEGIN_EXPIRE_DATE}
             </if>
-            <if test="END_EXPIRE_DATE != null">
+            <if test="END_EXPIRE_DATE != null and END_EXPIRE_DATE != ''">
                 and t.EXPIRE_DATE <![CDATA[ <= ]]> #{END_EXPIRE_DATE}
             </if>
         </where>
