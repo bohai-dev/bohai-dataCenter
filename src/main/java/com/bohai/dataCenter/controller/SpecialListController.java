@@ -1,5 +1,6 @@
 package com.bohai.dataCenter.controller;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
@@ -82,8 +83,9 @@ public class SpecialListController {
     }
     
     @RequestMapping(value = "exportZip", method = RequestMethod.GET)
-    public void exportZip(@RequestParam("month") String month){
+    public void exportZip(@RequestParam("month") String month, HttpServletResponse response) throws FileNotFoundException, IOException{
         
+        this.specialListService.exportZip(month, response);
         
     }
 }

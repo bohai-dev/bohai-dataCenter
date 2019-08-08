@@ -247,6 +247,20 @@
                     },
                     exportZip:function(){
                         console.log('导出营业部数据');
+                        this.$prompt('请输入导出月份,格式：yyyy-MM', '提示', {
+                          confirmButtonText: '确定',
+                          cancelButtonText: '取消', 
+                          inputPattern: /^(20[1-2][0-9])-((0[1-9])|(1[0-2]))$/,
+                          inputErrorMessage: '日期格式不正确'
+                        }).then(function (value){
+                               let url = 'exportZip/?month='+value.value;
+                               let link = document.createElement('a');
+                               link.style.display = 'none';
+                               link.href = url;
+                               document.body.appendChild(link);
+                               link.click();
+                        }).catch(function (error) {
+                        });
                     }
                }
           });
