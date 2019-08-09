@@ -77,18 +77,14 @@
                     onSubmit:function(){
                         this.query(1,10);
                     },
-                    onBlur:function(){
-                        this.saveForm.DCE = this.saveForm.SHFE;
-                        this.saveForm.CZCE = this.saveForm.SHFE;
-                        //this.saveForm.INE = this.saveForm.SHFE;
-                        //this.saveForm.CFFEX = this.saveForm.SHFE;
-                    },
                     onExport:function(){
                         console.log('export!');
                         axios.post('exportSpecial', this.queryForm, {responseType:'blob' })
                     },
                     onInsert:function(){
-                        
+                        //清空表单
+                        self.saveForm = {};
+                        this.saveDialogVisible = true;
                     },
                     handleSizeChange:function(val) {
                         console.log('每页 ${val} 条');
@@ -388,7 +384,7 @@
                     <div class="grid-content bg-purple">
                         <el-button type="primary" @click="onSubmit">查询</el-button>
                         <a href="exportSpecial"><el-button type="danger" >导出</el-button></a>
-                        <el-button type="success" @click="saveDialogVisible = true">新增</el-button>
+                        <el-button type="success" @click="onInsert">新增</el-button>
                     </div>
                   </el-col>
                 </el-row>
@@ -493,7 +489,7 @@
                     <el-col :span="10" :offset="2">
                         <div class="grid-content bg-purple">
                             <el-form-item label="上期返还" >
-                                <el-input placeholder="小数格式如0.5" style="width :217px;" v-model="saveForm.SHFE" @blur="onBlur" clearable></el-input>
+                                <el-input placeholder="小数格式如0.5" style="width :217px;" v-model="saveForm.SHFE" clearable></el-input>
                             </el-form-item>
                         </div>
                     </el-col>
