@@ -83,7 +83,7 @@
                     },
                     onInsert:function(){
                         //清空表单
-                        self.saveForm = {};
+                        this.saveForm = {};
                         this.saveDialogVisible = true;
                     },
                     handleSizeChange:function(val) {
