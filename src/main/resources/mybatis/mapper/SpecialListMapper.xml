@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.bohai.dataCenter.persistence.SpecialListMapper" >
     <select id="selectByCondition" resultType="java.util.Map" parameterType="java.util.Map">
-        select t.*,t1.INVESTOR_NAME,t2.MEDIATOR_NAME from T_SPECIAL_LIST t
+        select t.*,t1.INVESTOR_NAME,t2.MEDIATOR_NAME,F_GETDEPNAME(t.INVESTOR_NO) as DEP_NAME from T_SPECIAL_LIST t
         left join T_CRM_CUSTOMER t1
         on t.INVESTOR_NO = t1.INVESTOR_NO
         left join T_CRM_MEDIATOR t2
