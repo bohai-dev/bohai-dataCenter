@@ -124,7 +124,7 @@ public class SpecialListServiceImpl {
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet=wb.createSheet("交返特例名单");
         
-        String[] customerHead = {"返还类型","是否名下所有客户","居间人编号","居间人名称","投资者编号","投资者名称","上期返还比例","大商返还比例","郑商返还比例","能源返还比例","中金返还比例","返还方式","生效日期","失效日期","备注"};
+        String[] customerHead = {"营业部","返还类型","是否名下所有客户","居间人编号","居间人名称","投资者编号","投资者名称","上期返还比例","大商返还比例","郑商返还比例","能源返还比例","中金返还比例","返还方式","生效日期","失效日期","备注"};
         
         XSSFRow row = sheet.createRow(0);
         //初始化表头
@@ -140,6 +140,8 @@ public class SpecialListServiceImpl {
             
             for (int i = 0 ; i < list.size(); i++) {
                 XSSFRow row2 = sheet.createRow(i+1);
+                
+                row2.createCell(0).setCellValue(list.get(i).get("DEP_NAME"));
                 //返还类型
                 String returnType = list.get(i).get("RETURN_TYPE");
                 if("1".equals(returnType)){
@@ -147,7 +149,7 @@ public class SpecialListServiceImpl {
                 }else {
                     returnType = "居间人";
                 }
-                row2.createCell(0).setCellValue(returnType);
+                row2.createCell(1).setCellValue(returnType);
                 //是否名下所有客户
                 String isAll = list.get(i).get("IS_ALL");
                 if("0".equals(isAll)){
@@ -155,25 +157,25 @@ public class SpecialListServiceImpl {
                 }else if("1".equals(isAll)){
                     isAll = "是";
                 }
-                row2.createCell(1).setCellValue(isAll);
+                row2.createCell(2).setCellValue(isAll);
                 //居间人编号
-                row2.createCell(2).setCellValue(list.get(i).get("MEDIATOR_NO"));
+                row2.createCell(3).setCellValue(list.get(i).get("MEDIATOR_NO"));
                 //居间人名称
-                row2.createCell(3).setCellValue(list.get(i).get("MEDIATOR_NAME"));
+                row2.createCell(4).setCellValue(list.get(i).get("MEDIATOR_NAME"));
                 //投资者编号
-                row2.createCell(4).setCellValue(list.get(i).get("INVESTOR_NO"));
+                row2.createCell(5).setCellValue(list.get(i).get("INVESTOR_NO"));
                 //投资者名称
-                row2.createCell(5).setCellValue(list.get(i).get("INVESTOR_NAME"));
+                row2.createCell(6).setCellValue(list.get(i).get("INVESTOR_NAME"));
                 //上期返还比例
-                row2.createCell(6).setCellValue(list.get(i).get("SHFE"));
+                row2.createCell(7).setCellValue(list.get(i).get("SHFE"));
                 //大商返还比例
-                row2.createCell(7).setCellValue(list.get(i).get("DCE"));
+                row2.createCell(8).setCellValue(list.get(i).get("DCE"));
                 //郑商返还比例
-                row2.createCell(8).setCellValue(list.get(i).get("CZCE"));
+                row2.createCell(9).setCellValue(list.get(i).get("CZCE"));
                 //能源返还比例
-                row2.createCell(9).setCellValue(list.get(i).get("INE"));
+                row2.createCell(10).setCellValue(list.get(i).get("INE"));
                 //中金返还比例
-                row2.createCell(10).setCellValue(list.get(i).get("CFFEX"));
+                row2.createCell(11).setCellValue(list.get(i).get("CFFEX"));
                 //返还方式
                 String returnWay = list.get(i).get("RETURN_WAY");
                 if("1".equals(returnWay)){
@@ -181,13 +183,13 @@ public class SpecialListServiceImpl {
                 }else if("2".equals(returnWay)){
                     returnWay = "客户银行卡";
                 }
-                row2.createCell(11).setCellValue(returnWay);
+                row2.createCell(12).setCellValue(returnWay);
                 //生效日期
-                row2.createCell(12).setCellValue(list.get(i).get("EFFECT_DATE"));
+                row2.createCell(13).setCellValue(list.get(i).get("EFFECT_DATE"));
                 //失效日期
-                row2.createCell(13).setCellValue(list.get(i).get("EXPIRE_DATE"));
+                row2.createCell(14).setCellValue(list.get(i).get("EXPIRE_DATE"));
                 //备注
-                row2.createCell(14).setCellValue(list.get(i).get("REMARK"));
+                row2.createCell(15).setCellValue(list.get(i).get("REMARK"));
             }
         }
         
