@@ -84,4 +84,7 @@ public interface SpecialListMapper {
     
     @Select("select DISTINCT F_GETDEPNAME(INVESTOR_NO) from T_SPECIAL_LIST where status = '1'")
     List<String> selectDepName();
+    
+    @Select("select to_char(ADD_MONTHS(to_date(#{month,jdbcType=VARCHAR},'yyyy-mm'),-1),'yyyy-mm') from dual")
+    String selectPreviousMonth(String month);
 }

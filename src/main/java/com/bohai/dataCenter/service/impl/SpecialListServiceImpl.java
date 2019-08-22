@@ -245,7 +245,7 @@ public class SpecialListServiceImpl {
     }
     
     public XSSFWorkbook exportDepartment(String month,String depName) throws FileNotFoundException, IOException{
-        String[] head= {"客户号","客户名","返还方式","比例","上交手续费","交易所返还","客户返还","剔税返还","营业税风险金","净得"};//10
+        String[] head= {"客户号","客户名","返还方式","比例","上交手续费","交易所返还","客户返还","剔税返还6%","营业税风险金","净得"};//10
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet SHFESheet=wb.createSheet("上期");
         XSSFSheet CZCESheet=wb.createSheet("郑商");
@@ -329,7 +329,8 @@ public class SpecialListServiceImpl {
             XSSFRow row = DCESheet.createRow(0);
             XSSFCell cell = row.createCell(0, CellType.STRING);
             cell.setCellStyle(labelStyle);
-            cell.setCellValue(depName+month+"大商所返还明细表");
+            String previousMonth = this.specialListMapper.selectPreviousMonth(month);
+            cell.setCellValue(depName+previousMonth+"大商所返还明细表");
             //设置表头
             Row headRow = DCESheet.createRow(1);
             for(int i=0;i<10;i++) {
@@ -1106,9 +1107,15 @@ public class SpecialListServiceImpl {
             sheetRow.createCell(9, CellType.NUMERIC).setCellValue(jd.divide(new BigDecimal("2"),RoundingMode.HALF_UP).doubleValue());
             
             Row footRow= SHFESheet.createRow(SHFESheet.getLastRowNum()+3);
-            footRow.createCell(0, CellType.STRING).setCellValue("业务部门经理： ");
-            footRow.createCell(4, CellType.STRING).setCellValue("审核人： ");
-            footRow.createCell(8, CellType.STRING).setCellValue("制表人： ");
+            if("营销总部".equals(depName)){
+                footRow.createCell(0, CellType.STRING).setCellValue("营销总部复核人： ");
+                footRow.createCell(4, CellType.STRING).setCellValue("审核人： ");
+                footRow.createCell(8, CellType.STRING).setCellValue("制表人： ");
+            }else {
+                footRow.createCell(0, CellType.STRING).setCellValue("业务部门经理： ");
+                footRow.createCell(4, CellType.STRING).setCellValue("审核人： ");
+                footRow.createCell(8, CellType.STRING).setCellValue("制表人： ");
+            }
         }
         //郑商合计
         {
@@ -1139,9 +1146,15 @@ public class SpecialListServiceImpl {
             sheetRow.createCell(9, CellType.NUMERIC).setCellValue(jd.divide(new BigDecimal("2"),RoundingMode.HALF_UP).doubleValue());
             
             Row footRow= CZCESheet.createRow(CZCESheet.getLastRowNum()+3);
-            footRow.createCell(0, CellType.STRING).setCellValue("业务部门经理： ");
-            footRow.createCell(4, CellType.STRING).setCellValue("审核人： ");
-            footRow.createCell(8, CellType.STRING).setCellValue("制表人： ");
+            if("营销总部".equals(depName)){
+                footRow.createCell(0, CellType.STRING).setCellValue("营销总部复核人： ");
+                footRow.createCell(4, CellType.STRING).setCellValue("审核人： ");
+                footRow.createCell(8, CellType.STRING).setCellValue("制表人： ");
+            }else {
+                footRow.createCell(0, CellType.STRING).setCellValue("业务部门经理： ");
+                footRow.createCell(4, CellType.STRING).setCellValue("审核人： ");
+                footRow.createCell(8, CellType.STRING).setCellValue("制表人： ");
+            }
         }
         //大商合计
         {
@@ -1172,9 +1185,15 @@ public class SpecialListServiceImpl {
             sheetRow.createCell(9, CellType.NUMERIC).setCellValue(jd.divide(new BigDecimal("2"),RoundingMode.HALF_UP).doubleValue());
             
             Row footRow= DCESheet.createRow(DCESheet.getLastRowNum()+3);
-            footRow.createCell(0, CellType.STRING).setCellValue("业务部门经理： ");
-            footRow.createCell(4, CellType.STRING).setCellValue("审核人： ");
-            footRow.createCell(8, CellType.STRING).setCellValue("制表人： ");
+            if("营销总部".equals(depName)){
+                footRow.createCell(0, CellType.STRING).setCellValue("营销总部复核人： ");
+                footRow.createCell(4, CellType.STRING).setCellValue("审核人： ");
+                footRow.createCell(8, CellType.STRING).setCellValue("制表人： ");
+            }else {
+                footRow.createCell(0, CellType.STRING).setCellValue("业务部门经理： ");
+                footRow.createCell(4, CellType.STRING).setCellValue("审核人： ");
+                footRow.createCell(8, CellType.STRING).setCellValue("制表人： ");
+            }
         }
         //能源合计
         {
@@ -1205,9 +1224,15 @@ public class SpecialListServiceImpl {
             sheetRow.createCell(9, CellType.NUMERIC).setCellValue(jd.divide(new BigDecimal("2"),RoundingMode.HALF_UP).doubleValue());
             
             Row footRow= INESheet.createRow(INESheet.getLastRowNum()+3);
-            footRow.createCell(0, CellType.STRING).setCellValue("业务部门经理： ");
-            footRow.createCell(4, CellType.STRING).setCellValue("审核人： ");
-            footRow.createCell(8, CellType.STRING).setCellValue("制表人： ");
+            if("营销总部".equals(depName)){
+                footRow.createCell(0, CellType.STRING).setCellValue("营销总部复核人： ");
+                footRow.createCell(4, CellType.STRING).setCellValue("审核人： ");
+                footRow.createCell(8, CellType.STRING).setCellValue("制表人： ");
+            }else {
+                footRow.createCell(0, CellType.STRING).setCellValue("业务部门经理： ");
+                footRow.createCell(4, CellType.STRING).setCellValue("审核人： ");
+                footRow.createCell(8, CellType.STRING).setCellValue("制表人： ");
+            }
         }
         
         //表格样式
@@ -1259,6 +1284,11 @@ public class SpecialListServiceImpl {
                     }
                 }
             }
+        }
+        
+        //删除空的能源sheet
+        if(INESheet.getLastRowNum() <=5 ){
+            wb.removeSheetAt(3);
         }
         
         return wb;
