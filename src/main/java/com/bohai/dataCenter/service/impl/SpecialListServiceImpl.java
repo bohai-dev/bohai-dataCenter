@@ -22,10 +22,12 @@ import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -222,6 +224,17 @@ public class SpecialListServiceImpl {
             workbook.write(new FileOutputStream(file));
             fileList.add(file);
         }
+        
+        //汇总
+        {
+            File file = new File("汇总.xlsx");
+            XSSFWorkbook workbook = this.exportSummary(exportMonth, depNames);
+            workbook.write(new FileOutputStream(file));
+            fileList.add(file);
+        }
+        
+        //加帐户汇总
+        
         
         OutputStream output=response.getOutputStream();
         response.reset();
@@ -1310,6 +1323,235 @@ public class SpecialListServiceImpl {
          style.setRightBorderColor(new XSSFColor(Color.black));
          
          return style;
+    }
+    
+    /**
+     * 交返汇总
+     * @param month
+     * @return
+     */
+    public XSSFWorkbook exportSummary(String month,List<String> depNames){
+        
+        XSSFWorkbook wb = new XSSFWorkbook();
+        //标题样式
+        XSSFCellStyle labelStyle = wb.createCellStyle();
+        XSSFFont font = wb.createFont(); 
+        //font.setBold(true);//粗体显示    
+        font.setFontHeightInPoints((short) 24);//设置字体大小
+        font.setFontName("宋体");
+        labelStyle.setFont(font);
+        labelStyle.setAlignment(HorizontalAlignment.CENTER);
+        labelStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        setStyle(labelStyle);
+        //内容样式
+        XSSFCellStyle contextStyle = wb.createCellStyle();
+        XSSFFont font1 = wb.createFont(); 
+        //font.setBold(true);//粗体显示    
+        font1.setFontHeightInPoints((short) 18);//设置字体大小
+        font1.setFontName("宋体");
+        contextStyle.setFont(font1);
+        contextStyle.setAlignment(HorizontalAlignment.CENTER);
+        contextStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        setStyle(contextStyle);
+        
+        //数字格式
+        DataFormat format = wb.createDataFormat();
+        XSSFCellStyle bodyStyle = wb.createCellStyle();
+        XSSFFont font5 = wb.createFont(); 
+        //font.setBold(true);//粗体显示    
+        font5.setFontHeightInPoints((short) 18);//设置字体大小
+        font5.setFontName("宋体");
+        bodyStyle.setFont(font5);
+        bodyStyle.setAlignment(HorizontalAlignment.CENTER);
+        bodyStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        bodyStyle.setDataFormat(format.getFormat("#,##0.00"));
+        setStyle(bodyStyle);
+        
+        //在sheet里增加合并单元格  
+        CellRangeAddress cra=new CellRangeAddress(0, 0, 1, 2);   //合并单元格
+        
+        XSSFSheet sh = wb.createSheet("上期");
+        {
+            sh.addMergedRegion(cra);
+            XSSFRow firstRow = sh.createRow(0);
+            firstRow.setHeight((short) (40*20));
+            XSSFCell titleCell = firstRow.createCell(1, CellType.STRING);
+            titleCell.setCellStyle(labelStyle);
+            titleCell.setCellValue("渤海期货"+month+"上期所返还汇总表");
+            sh.setColumnWidth(1, 256*58);
+            sh.setColumnWidth(2, 256*58);
+            
+            //表头
+            XSSFRow newRow =  sh.createRow(sh.getLastRowNum()+1);
+            newRow.setHeight((short) (40*20));
+            newRow.createCell(1).setCellStyle(contextStyle);
+            newRow.getCell(1).setCellValue("营业部");
+            newRow.createCell(2).setCellStyle(contextStyle);
+            newRow.getCell(2).setCellValue("上期所");
+            
+        }
+        
+        XSSFSheet zz = wb.createSheet("郑商");
+        {
+            zz.addMergedRegion(cra);
+            XSSFRow firstRow = zz.createRow(0);
+            firstRow.setHeight((short) (40*20));
+            XSSFCell titleCell = firstRow.createCell(1, CellType.STRING);
+            titleCell.setCellStyle(labelStyle);
+            titleCell.setCellValue("渤海期货"+month+"郑商所返还汇总表");
+            zz.setColumnWidth(1, 256*58);
+            zz.setColumnWidth(2, 256*58);
+          //表头
+            XSSFRow newRow =  zz.createRow(zz.getLastRowNum()+1);
+            newRow.setHeight((short) (40*20));
+            newRow.createCell(1).setCellStyle(contextStyle);
+            newRow.getCell(1).setCellValue("营业部");
+            newRow.createCell(2).setCellStyle(contextStyle);
+            newRow.getCell(2).setCellValue("郑商所");
+        }
+        
+        XSSFSheet dl = wb.createSheet("大商");
+        {
+            dl.addMergedRegion(cra);
+            XSSFRow firstRow = dl.createRow(0);
+            firstRow.setHeight((short) (40*20));
+            XSSFCell titleCell = firstRow.createCell(1, CellType.STRING);
+            titleCell.setCellStyle(labelStyle);
+            String previousMonth = this.specialListMapper.selectPreviousMonth(month);
+            titleCell.setCellValue("渤海期货"+previousMonth+"大商所返还汇总表");
+            dl.setColumnWidth(1, 256*58);
+            dl.setColumnWidth(2, 256*58);
+          //表头
+            XSSFRow newRow =  dl.createRow(dl.getLastRowNum()+1);
+            newRow.setHeight((short) (40*20));
+            newRow.createCell(1).setCellStyle(contextStyle);
+            newRow.getCell(1).setCellValue("营业部");
+            newRow.createCell(2).setCellStyle(contextStyle);
+            newRow.getCell(2).setCellValue("大商所");
+        }
+        
+        XSSFSheet ny = wb.createSheet("能源中心");
+        {
+            ny.addMergedRegion(cra);
+            XSSFRow firstRow = ny.createRow(0);
+            firstRow.setHeight((short) (40*20));
+            XSSFCell titleCell = firstRow.createCell(1, CellType.STRING);
+            titleCell.setCellStyle(labelStyle);
+            String previousMonth = this.specialListMapper.selectPreviousMonth(month);
+            titleCell.setCellValue("渤海期货"+previousMonth+"能源中心返还汇总表");
+            ny.setColumnWidth(1, 256*58);
+            ny.setColumnWidth(2, 256*58);
+          //表头
+            XSSFRow newRow =  ny.createRow(ny.getLastRowNum()+1);
+            newRow.setHeight((short) (40*20));
+            newRow.createCell(1).setCellStyle(contextStyle);
+            newRow.getCell(1).setCellValue("营业部");
+            newRow.createCell(2).setCellStyle(contextStyle);
+            newRow.getCell(2).setCellValue("能源中心");
+        }
+        
+        for (String depName : depNames) {
+            XSSFWorkbook depWb = null;
+            try {
+                depWb = new XSSFWorkbook(depName+".xlsx");
+                {
+                    XSSFSheet sheet = depWb.getSheetAt(0);
+                    XSSFRow row = sheet.getRow(sheet.getLastRowNum()-3);
+                    XSSFCell cell = row.getCell(row.getLastCellNum()-1);
+                    double net = cell.getNumericCellValue();
+                    XSSFRow newRow =  sh.createRow(sh.getLastRowNum()+1);
+                    newRow.setHeight((short) (40*20));
+                    newRow.createCell(1).setCellStyle(contextStyle);
+                    newRow.getCell(1).setCellValue(depName);
+                    newRow.createCell(2,CellType.NUMERIC).setCellStyle(bodyStyle);
+                    newRow.getCell(2).setCellValue(net);
+                }
+                {
+                    XSSFSheet sheet = depWb.getSheetAt(1);
+                    XSSFRow row = sheet.getRow(sheet.getLastRowNum()-3);
+                    XSSFCell cell = row.getCell(row.getLastCellNum()-1);
+                    double net = cell.getNumericCellValue();
+                    XSSFRow newRow =  zz.createRow(zz.getLastRowNum()+1);
+                    newRow.setHeight((short) (40*20));
+                    newRow.createCell(1).setCellStyle(contextStyle);
+                    newRow.getCell(1).setCellValue(depName);
+                    newRow.createCell(2,CellType.NUMERIC).setCellStyle(bodyStyle);
+                    newRow.getCell(2).setCellValue(net);
+                }
+                {
+                    XSSFSheet sheet = depWb.getSheetAt(2);
+                    XSSFRow row = sheet.getRow(sheet.getLastRowNum()-3);
+                    XSSFCell cell = row.getCell(row.getLastCellNum()-1);
+                    double net = cell.getNumericCellValue();
+                    XSSFRow newRow =  dl.createRow(dl.getLastRowNum()+1);
+                    newRow.setHeight((short) (40*20));
+                    newRow.createCell(1).setCellStyle(contextStyle);
+                    newRow.getCell(1).setCellValue(depName);
+                    newRow.createCell(2,CellType.NUMERIC).setCellStyle(bodyStyle);
+                    newRow.getCell(2).setCellValue(net);
+                }
+                if(depWb.getNumberOfSheets()>3){
+                    XSSFSheet sheet = depWb.getSheetAt(3);
+                    if(sheet != null){
+                        XSSFRow row = sheet.getRow(sheet.getLastRowNum()-3);
+                        XSSFCell cell = row.getCell(row.getLastCellNum()-1);
+                        double net = cell.getNumericCellValue();
+                        XSSFRow newRow =  ny.createRow(ny.getLastRowNum()+1);
+                        newRow.setHeight((short) (40*20));
+                        newRow.createCell(1).setCellStyle(contextStyle);
+                        newRow.getCell(1).setCellValue(depName);
+                        newRow.createCell(2,CellType.NUMERIC).setCellStyle(bodyStyle);
+                        newRow.getCell(2).setCellValue(net);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }finally {
+                try {
+                    if(depWb != null){
+                        depWb.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        for (int i = 0; i < 4; i++) {
+            XSSFSheet sheet = wb.getSheetAt(i);
+            XSSFRow newRow =  sheet.createRow(sheet.getLastRowNum()+1);
+            newRow.setHeight((short) (40*20));
+            newRow.createCell(1).setCellStyle(contextStyle);
+            newRow.getCell(1).setCellValue("公司合计");
+            newRow.createCell(2,CellType.NUMERIC).setCellStyle(bodyStyle);
+            
+            BigDecimal sum = BigDecimal.ZERO;
+            for(int j = 2; j<=sheet.getLastRowNum(); j++){
+                sum = sum.add(new BigDecimal(sheet.getRow(j).getCell(2).getNumericCellValue()));
+            }
+            newRow.getCell(2).setCellValue(sum.doubleValue());
+        }
+        
+        
+        //签名样式
+        XSSFCellStyle footStyle = wb.createCellStyle();
+        XSSFFont font2 = wb.createFont(); 
+        //font.setBold(true);//粗体显示    
+        font2.setFontHeightInPoints((short) 16);//设置字体大小
+        font2.setFontName("宋体");
+        footStyle.setFont(font2);
+        footStyle.setAlignment(HorizontalAlignment.CENTER);
+        for (int i = 0; i < 4; i++) {
+            XSSFSheet sheet = wb.getSheetAt(i);
+            CellRangeAddress cra1=new CellRangeAddress(sheet.getLastRowNum()+3, sheet.getLastRowNum()+3, 0, 3);
+            sheet.addMergedRegion(cra1);
+            XSSFRow newRow =  sheet.createRow(sheet.getLastRowNum()+3);
+            newRow.createCell(0).setCellStyle(footStyle);
+            newRow.getCell(0).setCellValue("总经理：        分管领导：         财务总监：         财务部经理：          经纪业务部审核人：");
+        }
+        
+        
+        return wb;
     }
     
 }
