@@ -228,6 +228,10 @@
         		        
         			   };
         	
+        	if(param.beginDate == null){
+        	    param.beginDate = '2020-01-01';
+        	}
+        	
         	$("#rebateDetailTable").bootstrapTable(
                     'refresh',{url:"queryRebateDetail",
                                query: param
