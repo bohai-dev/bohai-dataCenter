@@ -50,7 +50,8 @@ public class InvestorCommissionServiceImpl implements InvestorCommissionService 
                     continue;
                 }
                 
-                String investorNum = commissionSheet.getRow(i)[3].getContents();
+                //投资者代码
+                String investorNum = commissionSheet.getRow(i)[2].getContents();
                 
                 if (!StringUtils.isEmpty(investorNum)) {
                     InvestorCommission commission = new InvestorCommission();
@@ -60,50 +61,50 @@ public class InvestorCommissionServiceImpl implements InvestorCommissionService 
                     commission.setInstrumentId(commissionSheet.getRow(i)[1].getContents());
                     //投资者范围 2
 
-                    //投资者代码 3
+                    //投资者代码 2
                     commission.setInvestorNo(investorNum);
-                    //开仓手续费(按金额) 4
-                    NumberCell numberCell = (NumberCell)commissionSheet.getRow(i)[4];
+                    //开仓手续费(按金额) 3
+                    NumberCell numberCell = (NumberCell)commissionSheet.getRow(i)[3];
                     BigDecimal openRationNum = new BigDecimal(numberCell.getValue()).setScale(10,RoundingMode.HALF_UP);
                     commission.setOpenRatio(openRationNum);
 
                     //平仓手续费(按金额)
-                    double closeRatio = ((NumberCell)commissionSheet.getRow(i)[5]).getValue();
+                    double closeRatio = ((NumberCell)commissionSheet.getRow(i)[4]).getValue();
                     BigDecimal closeRatioNum = new BigDecimal(closeRatio).setScale(10,RoundingMode.HALF_UP);
                     commission.setCloseRatio(closeRatioNum);
                     //日内开仓手续费(按金额)
-                    double indayOpenRatio =((NumberCell)commissionSheet.getRow(i)[6]).getValue();
+                    double indayOpenRatio =((NumberCell)commissionSheet.getRow(i)[5]).getValue();
                     BigDecimal indayOpenRatioNum = new BigDecimal(indayOpenRatio).setScale(10,RoundingMode.HALF_UP);
                     commission.setIndayOpenRatio(indayOpenRatioNum);
 
                     // 平今手续费(按金额)
-                    double indatCloseRatio = ((NumberCell)commissionSheet.getRow(i)[7]).getValue();
+                    double indatCloseRatio = ((NumberCell)commissionSheet.getRow(i)[6]).getValue();
                     BigDecimal indatCloseRatioNum = new BigDecimal(indatCloseRatio).setScale(10,RoundingMode.HALF_UP);
                     commission.setIndatCloseRatio(indatCloseRatioNum);
                     // 开仓手续费(按手数)
-                    double open =((NumberCell)commissionSheet.getRow(i)[8]).getValue();
+                    double open =((NumberCell)commissionSheet.getRow(i)[7]).getValue();
                     BigDecimal openNum = new BigDecimal(open).setScale(10,RoundingMode.HALF_UP);
                     commission.setOpen(openNum);
                     // 平仓手续费(按手数)
-                    double close =((NumberCell) commissionSheet.getRow(i)[9]).getValue();
+                    double close =((NumberCell) commissionSheet.getRow(i)[8]).getValue();
                     BigDecimal closeNum = new BigDecimal(close).setScale(10,RoundingMode.HALF_UP);
                     commission.setClose(closeNum);
 
                     // 日内开仓手续费(按手数)
-                    double indayOpen = ((NumberCell)commissionSheet.getRow(i)[10]).getValue();
+                    double indayOpen = ((NumberCell)commissionSheet.getRow(i)[9]).getValue();
                     BigDecimal indayOPenNum = new BigDecimal(indayOpen).setScale(10,RoundingMode.HALF_UP);
                     commission.setIndayOpen(indayOPenNum);
 
                     // 平今手续费(按手数)
-                    double indayClose =  ((NumberCell)commissionSheet.getRow(i)[11]).getValue();
+                    double indayClose =  ((NumberCell)commissionSheet.getRow(i)[10]).getValue();
                     BigDecimal indayCloseNum = new BigDecimal(indayClose).setScale(10,RoundingMode.HALF_UP);
                     commission.setIndayClose(indayCloseNum);
                     // 交割手续费费(按金额)
-                    double deliveryRatio = ((NumberCell) commissionSheet.getRow(i)[12]).getValue();
+                    double deliveryRatio = ((NumberCell) commissionSheet.getRow(i)[11]).getValue();
                     BigDecimal deliveryRatioNum = new BigDecimal(deliveryRatio).setScale(10,RoundingMode.HALF_UP);
                     commission.setDeliveryRatio(deliveryRatioNum);
                     // 交割手续费(按手数)
-                    double delivery =  ((NumberCell)commissionSheet.getRow(i)[13]).getValue();
+                    double delivery =  ((NumberCell)commissionSheet.getRow(i)[12]).getValue();
                     BigDecimal deliveryNum = new BigDecimal(delivery).setScale(10,RoundingMode.HALF_UP);
                     commission.setDelivery(deliveryNum);
                     // 交易日
