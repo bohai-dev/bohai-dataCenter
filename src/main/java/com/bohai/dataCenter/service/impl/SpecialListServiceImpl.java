@@ -342,8 +342,8 @@ public class SpecialListServiceImpl {
             XSSFRow row = DCESheet.createRow(0);
             XSSFCell cell = row.createCell(0, CellType.STRING);
             cell.setCellStyle(labelStyle);
-            String previousMonth = this.specialListMapper.selectPreviousMonth(month);
-            cell.setCellValue(depName+previousMonth+"大商所返还明细表");
+            //String previousMonth = this.specialListMapper.selectPreviousMonth(month);
+            cell.setCellValue(depName+month+"大商所返还明细表");
             //设置表头
             Row headRow = DCESheet.createRow(1);
             for(int i=0;i<10;i++) {
@@ -1417,8 +1417,8 @@ public class SpecialListServiceImpl {
             firstRow.setHeight((short) (40*20));
             XSSFCell titleCell = firstRow.createCell(1, CellType.STRING);
             titleCell.setCellStyle(labelStyle);
-            String previousMonth = this.specialListMapper.selectPreviousMonth(month);
-            titleCell.setCellValue("渤海期货"+previousMonth+"大商所返还汇总表");
+            //String previousMonth = this.specialListMapper.selectPreviousMonth(month);
+            titleCell.setCellValue("渤海期货"+month+"大商所返还汇总表");
             dl.setColumnWidth(1, 256*58);
             dl.setColumnWidth(2, 256*58);
           //表头
@@ -1437,8 +1437,8 @@ public class SpecialListServiceImpl {
             firstRow.setHeight((short) (40*20));
             XSSFCell titleCell = firstRow.createCell(1, CellType.STRING);
             titleCell.setCellStyle(labelStyle);
-            String previousMonth = this.specialListMapper.selectPreviousMonth(month);
-            titleCell.setCellValue("渤海期货"+previousMonth+"能源中心返还汇总表");
+            //String previousMonth = this.specialListMapper.selectPreviousMonth(month);
+            titleCell.setCellValue("渤海期货"+month+"能源中心返还汇总表");
             ny.setColumnWidth(1, 256*58);
             ny.setColumnWidth(2, 256*58);
           //表头
