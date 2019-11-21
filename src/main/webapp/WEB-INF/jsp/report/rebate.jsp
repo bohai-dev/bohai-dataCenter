@@ -588,7 +588,6 @@
                                data-show-toggle="true"
                                data-show-columns="true"
                                data-height="542"
-                               data-url="queryRebateDetail"
                                data-pagination="true"
                                data-method="post"
                                data-page-list="[5, 10, 20, 50]"
