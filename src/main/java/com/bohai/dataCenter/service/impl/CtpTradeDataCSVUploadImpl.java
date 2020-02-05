@@ -125,7 +125,8 @@ public class CtpTradeDataCSVUploadImpl implements FileUploadService {
 					//合约
 					String instrument = record.get(instrumentIndex);
 					//大商所期权也返
-					if(!"大商所".equals(exchangeName)){
+					//20200205 只有证商所期权不返
+					if("郑商所".equals(exchangeName)){
 					    if(StringUtils.isEmpty(instrument) || instrument.indexOf("-") > -1){
 					        //期权不返
 					        continue;
